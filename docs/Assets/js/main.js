@@ -4,10 +4,18 @@ function createDealerMap(dealers) {
   return dealerMap;
 }
 
-function displayInventory(inventory, dealerMap) {
-  const inventoryContainer = document.getElementById('inventory-container');
+const vehiclesPerPage = 10;
+let currentPage = 1;
 
-  inventory.forEach(vehicle => {
+function displayInventoryPage(inventory, dealerMap, page) {
+  const inventoryContainer = document.getElementById('inventory-container');
+  inventoryContainer.innerHTML = '';
+
+  const startIndex = (page - 1) * vehiclesPerPage;
+  const endIndex = startIndex + vehiclesPerPage;
+
+  for (let i = startIndex; i < endIndex && i < inventory.length; i++) {
+    const vehicle = inventory[i];
     const dealer = dealerMap.get(vehicle.DealerID);
 
     const vehicleCard = document.createElement('div');
@@ -37,7 +45,37 @@ function displayInventory(inventory, dealerMap) {
     vehicleCard.appendChild(viewDetailsBtn);
 
     inventoryContainer.appendChild(vehicleCard);
-  });
+  }
+}
+
+function setupPagination(inventory, dealerMap) {
+  const totalPages = Math.ceil(inventory.length / vehiclesPerPage);
+
+  const paginationContainer = document.getElementById('pagination-container');
+  const prevBtn = document.createElement('button');
+  prevBtn.textContent = 'Previous';
+  prevBtn.onclick = () => {
+    if (currentPage > 1) {
+      currentPage--;
+      displayInventoryPage(inventory, dealerMap, currentPage);
+    }
+  };
+  paginationContainer.appendChild(prevBtn);
+
+  const pageInfo = document.createElement('span');
+  pageInfo.id = 'page-info';
+  pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+  paginationContainer.appendChild(pageInfo);
+
+  const nextBtn = document.createElement('button');
+  nextBtn.textContent = 'Next';
+  nextBtn.onclick = () => {
+    if (currentPage < totalPages) {
+      currentPage++;
+      displayInventoryPage(inventory, dealerMap, currentPage);
+    }
+  };
+  paginationContainer.appendChild(nextBtn);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -45,10 +83,12 @@ document.addEventListener('DOMContentLoaded', function() {
     fetch('https://dl.dropboxusercontent.com/s/8oke8b9sz8lvo57/dtcinventory.csv').then(response => response.text()),
     fetch('https://dl.dropboxusercontent.com/s/qy1r1of8z1pf5iu/dtcdealers.csv').then(response => response.text())
   ])
-    .then(([csvInventoryData, csvDealerData]) => {
-      const dealerMap = createDealerMap(Papa.parse(csvDealerData, {header: true, skipEmptyLines: true, dynamicTyping: true}).data);
-      const parsedInventoryData = Papa.parse(csvInventoryData, {header: true, skipEmptyLines: true, dynamicTyping: true});
-      displayInventory(parsedInventoryData.data, dealerMap);
-    })
-    .catch(error => console.error('Error fetching CSV:', error));
+  .then(([csvInventoryData, csvDealerData]) => {
+    const dealerMap = createDealerMap(Papa.parse(csvDealerData, {header: true, skipEmptyLines: true, dynamicTyping: true}).data);
+    const parsedInventoryData = Papa.parse(csvInventoryData, {header: true, skipEmptyLines: true, dynamicTyping: true});
+
+displayInventoryPage(parsedInventoryData.data, dealerMap, currentPage);
+setupPagination(parsedInventoryData.data, dealerMap);
+})
+.catch(error => console.error('Error fetching CSV:', error));
 });
