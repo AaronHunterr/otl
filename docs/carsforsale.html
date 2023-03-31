@@ -1,0 +1,68 @@
+---
+---
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <link rel="stylesheet" href="./Assets/styles.css">
+</head>
+
+<body>
+  <div class="wrapper">
+    <header>
+      <h1>Rydeshopper On The Lot</h1>
+    </header>
+    <div class="content">
+      <div class="placement">
+        <div class="feeder-container">
+          <div id="pop-up-form" class="dt-actionable" data-make="Chevrolet" data-model="Silverado 1500"></div>
+        </div>
+        <br>
+        <br>
+        <div id="adBlock1" class="ad-block">
+          <!-- This is where the ad will display -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Get URL Query Parameters
+    function getQueryParam(name) {
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      return urlParams.get(name);
+    }
+
+    const zip = getQueryParam("Zip") || "60435"; // Default Zip is "60435"
+    const make = getQueryParam("Make") || "honda"; // Default Make is "honda"
+    const model = getQueryParam("Model") || "civic"; // Default Model is "civic"
+
+    // Instantiate Command Queue
+    window.VinAds = window.VinAds || [];
+    // Set Page Options
+    window.VinAds.push({
+      op: "setPage",
+      pubid: "201000",
+      zip: zip,
+      make: make,
+      model: model
+    });
+    // Set Template Ad Options
+    for (let i = 1; i <= 5; i++) {
+      window.VinAds.push({
+        op: "buildAd",
+        numresults: 10,
+        width: 960,
+        height: 100,
+        template: "blue01",
+        container: "adBlock" + i,
+      });
+    }
+  </script>
+  <script src="Assets/script.js"></script>
+  <script type="text/javascript" src="https://www.rydeshopper.com/app/shoppingtools/scripts/widget-inline.js?gid=0000-4880"></script>
+</body>
+
+</html>
