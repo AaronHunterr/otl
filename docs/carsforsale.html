@@ -58,63 +58,63 @@ cfg: { // Application Insights Configuration
 	<main>
 
 
-    <div class="inventory-page">
-    	<form id="inventoryFilter" data-form-element="inventoryFilter" class="show-new show-used bs-All">
-    	<h1>Local Inventory</h1>
-    	<div class="form-group">
-    		<div class="form-item form-select label-above">
-    			<label for="bodyStyle">Body Style</label>
-    			<select id="bodyStyle" data-form-element="bodyStyle" data-action="change">
+<div class="inventory-page">
+	<form id="inventoryFilter" data-form-element="inventoryFilter" class="show-new show-used bs-All">
+	<h1>Local Inventory</h1>
+	<div class="form-group">
+		<div class="form-item form-select label-above">
+			<label for="bodyStyle">Body Style</label>
+			<select id="bodyStyle" data-form-element="bodyStyle" data-action="change">
+				<option value="">Loading ...</option>
+			</select>
+		</div>
+		<div class="form-item form-select label-above">
+			<label for="makes">Make</label>
+			<select id="makes" class="filterable" data-form-element="makes" data-action="change">
+				<option value="">Loading ...</option>
+			</select>
+		</div>
+		<div class="form-item form-select label-above">
+			<label for="models">Model</label>
+			<select id="models" class="filterable" data-form-element="models" data-action="change">
+				<option value="">Select Model</option>
+			</select>
+		</div>
+	</div>
 
-    			<option value="">Select Body Style</option><option value="Convertible">Convertible</option><option value="Coupe">Coupe</option><option value="Wagon">Crossover / Wagon</option><option value="Hatchback">Hatchback</option><option value="Mini-Van">Mini-Van</option><option value="SUV">SUV</option><option value="Sedan">Sedan</option><option value="Pickup">Truck</option><option value="Full-Size">Van</option></select>
-    		</div>
-    		<div class="form-item form-select label-above">
-    			<label for="makes">Make</label>
-    			<select id="makes" class="filterable" data-form-element="makes" data-action="change">
+	<div class="form-group">
+		<div class="form-item label-above">
+			<label for="zipCode">Zip Code</label>
+			<input type="text" id="zipCode" data-form-element="zipCode" placeholder="Zip Code" data-action="blur" value="Loading ...">
+		</div>
+	</div>
 
-    			<option value="">Select Make</option><option value="AM General">AM General</option><option value="Acura">Acura</option><option value="Alfa Romeo">Alfa Romeo</option><option value="Aston Martin">Aston Martin</option><option value="Audi">Audi</option><option value="BMW">BMW</option><option value="Bentley">Bentley</option><option value="Buick">Buick</option><option value="Cadillac">Cadillac</option><option value="Chevrolet">Chevrolet</option><option value="Chrysler">Chrysler</option><option value="Dodge">Dodge</option><option value="FIAT">FIAT</option><option value="Ferrari">Ferrari</option><option value="Fisker">Fisker</option><option value="Ford">Ford</option><option value="GMC">GMC</option><option value="Genesis">Genesis</option><option value="Geo">Geo</option><option value="HUMMER">HUMMER</option><option value="Honda">Honda</option><option value="Hyundai">Hyundai</option><option value="INFINITI">INFINITI</option><option value="Isuzu">Isuzu</option><option value="Jaguar">Jaguar</option><option value="Jeep">Jeep</option><option value="Karma">Karma</option><option value="Kia">Kia</option><option value="Lamborghini">Lamborghini</option><option value="Land Rover">Land Rover</option><option value="Lexus">Lexus</option><option value="Lincoln">Lincoln</option><option value="Lotus">Lotus</option><option value="Lucid">Lucid</option><option value="MINI">MINI</option><option value="Maserati">Maserati</option><option value="Maybach">Maybach</option><option value="Mazda">Mazda</option><option value="McLaren">McLaren</option><option value="Mercedes-Benz">Mercedes-Benz</option><option value="Mercury">Mercury</option><option value="Merkur">Merkur</option><option value="Mitsubishi">Mitsubishi</option><option value="Nissan">Nissan</option><option value="Oldsmobile">Oldsmobile</option><option value="Plymouth">Plymouth</option><option value="Polestar">Polestar</option><option value="Pontiac">Pontiac</option><option value="Porsche">Porsche</option><option value="Ram">Ram</option><option value="Rivian">Rivian</option><option value="Rolls-Royce">Rolls-Royce</option><option value="Saab">Saab</option><option value="Saturn">Saturn</option><option value="Scion">Scion</option><option value="Smart">Smart</option><option value="Subaru">Subaru</option><option value="Suzuki">Suzuki</option><option value="Tesla">Tesla</option><option value="Toyota">Toyota</option><option value="VinFast">VinFast</option><option value="Volkswagen">Volkswagen</option><option value="Volvo">Volvo</option></select>
-    		</div>
-    		<div class="form-item form-select label-above">
-    			<label for="models">Model</label>
-    			<select id="models" class="filterable" data-form-element="models" data-action="change" disabled="">
+	<div class="form-group">
+		<div class="form-item">
+			<label for="conditionNew">
+				<input id="conditionNew" name="condtion" type="checkbox" value="new" data-form-element="conditionNew" data-action="click" checked />
+				<span class="dt-space-left">New</span>
+			</label>
+		</div>
+		<div class="form-item">
+			<label for="conditionUsed">
+				<input id="conditionUsed" name="condtion" type="checkbox" value="used" data-form-element="conditionUsed" data-action="click" checked />
+				<span class="dt-space-left">Used</span>
+			</label>
+		</div>
+	</div>
 
-    			<option value="">Select Model</option></select>
-    		</div>
-    	</div>
+	<div class="form-group">
+		<div class="form-item">
+			<button type="button" id="submit" class="button button-cta button-big loading" data-form-element="submit" data-action="click">Loading ...</button>
+		</div>
+	</div>
 
-    	<div class="form-group">
-    		<div class="form-item label-above">
-    			<label for="zipCode">Zip Code</label>
-    			<input type="text" id="zipCode" data-form-element="zipCode" placeholder="Zip Code" data-action="blur" value="Loading ...">
-    		</div>
-    	</div>
-
-    	<div class="form-group">
-    		<div class="form-item">
-    			<label for="conditionNew">
-    				<input id="conditionNew" name="condtion" type="checkbox" value="new" data-form-element="conditionNew" data-action="click" checked="">
-    				<span class="dt-space-left">New</span>
-    			</label>
-    		</div>
-    		<div class="form-item">
-    			<label for="conditionUsed">
-    				<input id="conditionUsed" name="condtion" type="checkbox" value="used" data-form-element="conditionUsed" data-action="click" checked="">
-    				<span class="dt-space-left">Used</span>
-    			</label>
-    		</div>
-    	</div>
-
-    	<div class="form-group">
-    		<div class="form-item">
-    			<button type="button" id="submit" class="button button-cta button-big loading" data-form-element="submit" data-action="click">Search 260 results</button>
-    		</div>
-    	</div>
-
-    	<div class="form-group">
-    		<input type="hidden" id="GID" value="0000-4512" data-form-element="GID">
-    		<input type="hidden" id="referralDataEncoded" value="" data-form-element="referralDataEncoded">
-    	</div>
-    </form>
+	<div class="form-group">
+		<input type="hidden" id="GID" value="0000-4512" data-form-element="GID" />
+		<input type="hidden" id="referralDataEncoded" value="" data-form-element="referralDataEncoded" />
+	</div>
+</form>
 
 	<div id="inventoryResults"></div>
 </div>
