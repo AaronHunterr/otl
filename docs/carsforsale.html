@@ -1,224 +1,27 @@
-
-
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Inventory</title>
-
-
-
-		<link rel="stylesheet" href="/css/site.min.css" />
-
-<script type="text/javascript">!function(T,l,y){var S=T.location,k="script",D="instrumentationKey",C="ingestionendpoint",I="disableExceptionTracking",E="ai.device.",b="toLowerCase",w="crossOrigin",N="POST",e="appInsightsSDK",t=y.name||"appInsights";(y.name||T[e])&&(T[e]=t);var n=T[t]||function(d){var g=!1,f=!1,m={initialize:!0,queue:[],sv:"5",version:2,config:d};function v(e,t){var n={},a="Browser";return n[E+"id"]=a[b](),n[E+"type"]=a,n["ai.operation.name"]=S&&S.pathname||"_unknown_",n["ai.internal.sdkVersion"]="javascript:snippet_"+(m.sv||m.version),{time:function(){var e=new Date;function t(e){var t=""+e;return 1===t.length&&(t="0"+t),t}return e.getUTCFullYear()+"-"+t(1+e.getUTCMonth())+"-"+t(e.getUTCDate())+"T"+t(e.getUTCHours())+":"+t(e.getUTCMinutes())+":"+t(e.getUTCSeconds())+"."+((e.getUTCMilliseconds()/1e3).toFixed(3)+"").slice(2,5)+"Z"}(),iKey:e,name:"Microsoft.ApplicationInsights."+e.replace(/-/g,"")+"."+t,sampleRate:100,tags:n,data:{baseData:{ver:2}}}}var h=d.url||y.src;if(h){function a(e){var t,n,a,i,r,o,s,c,u,p,l;g=!0,m.queue=[],f||(f=!0,t=h,s=function(){var e={},t=d.connectionString;if(t)for(var n=t.split(";"),a=0;a<n.length;a++){var i=n[a].split("=");2===i.length&&(e[i[0][b]()]=i[1])}if(!e[C]){var r=e.endpointsuffix,o=r?e.location:null;e[C]="https://"+(o?o+".":"")+"dc."+(r||"services.visualstudio.com")}return e}(),c=s[D]||d[D]||"",u=s[C],p=u?u+"/v2/track":d.endpointUrl,(l=[]).push((n="SDK LOAD Failure: Failed to load Application Insights SDK script (See stack for details)",a=t,i=p,(o=(r=v(c,"Exception")).data).baseType="ExceptionData",o.baseData.exceptions=[{typeName:"SDKLoadFailed",message:n.replace(/\./g,"-"),hasFullStack:!1,stack:n+"\nSnippet failed to load ["+a+"] -- Telemetry is disabled\nHelp Link: https://go.microsoft.com/fwlink/?linkid=2128109\nHost: "+(S&&S.pathname||"_unknown_")+"\nEndpoint: "+i,parsedStack:[]}],r)),l.push(function(e,t,n,a){var i=v(c,"Message"),r=i.data;r.baseType="MessageData";var o=r.baseData;return o.message='AI (Internal): 99 message:"'+("SDK LOAD Failure: Failed to load Application Insights SDK script (See stack for details) ("+n+")").replace(/\"/g,"")+'"',o.properties={endpoint:a},i}(0,0,t,p)),function(e,t){if(JSON){var n=T.fetch;if(n&&!y.useXhr)n(t,{method:N,body:JSON.stringify(e),mode:"cors"});else if(XMLHttpRequest){var a=new XMLHttpRequest;a.open(N,t),a.setRequestHeader("Content-type","application/json"),a.send(JSON.stringify(e))}}}(l,p))}function i(e,t){f||setTimeout(function(){!t&&m.core||a()},500)}var e=function(){var n=l.createElement(k);n.src=h;var e=y[w];return!e&&""!==e||"undefined"==n[w]||(n[w]=e),n.onload=i,n.onerror=a,n.onreadystatechange=function(e,t){"loaded"!==n.readyState&&"complete"!==n.readyState||i(0,t)},n}();y.ld<0?l.getElementsByTagName("head")[0].appendChild(e):setTimeout(function(){l.getElementsByTagName(k)[0].parentNode.appendChild(e)},y.ld||0)}try{m.cookie=l.cookie}catch(p){}function t(e){for(;e.length;)!function(t){m[t]=function(){var e=arguments;g||m.queue.push(function(){m[t].apply(m,e)})}}(e.pop())}var n="track",r="TrackPage",o="TrackEvent";t([n+"Event",n+"PageView",n+"Exception",n+"Trace",n+"DependencyData",n+"Metric",n+"PageViewPerformance","start"+r,"stop"+r,"start"+o,"stop"+o,"addTelemetryInitializer","setAuthenticatedUserContext","clearAuthenticatedUserContext","flush"]),m.SeverityLevel={Verbose:0,Information:1,Warning:2,Error:3,Critical:4};var s=(d.extensionConfig||{}).ApplicationInsightsAnalytics||{};if(!0!==d[I]&&!0!==s[I]){var c="onerror";t(["_"+c]);var u=T[c];T[c]=function(e,t,n,a,i){var r=u&&u(e,t,n,a,i);return!0!==r&&m["_"+c]({message:e,url:t,lineNumber:n,columnNumber:a,error:i}),r},d.autoExceptionInstrumented=!0}return m}(y.cfg);function a(){y.onInit&&y.onInit(n)}(T[t]=n).queue&&0===n.queue.length?(n.queue.push(a),n.trackPageView({})):a()}(window,document,{
-src: "https://js.monitor.azure.com/scripts/b/ai.2.min.js", // The SDK URL Source
-crossOrigin: "anonymous",
-cfg: { // Application Insights Configuration
-    connectionString: 'InstrumentationKey=f0f9779c-b49f-4316-9f5c-a36917709806'
-}});</script></head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vehicle Inventory</title>
+  <link rel="stylesheet" href="/Assets/css/styles.css">
+</head>
 <body>
-	<main>
+  <div id="inventory-container"></div>
 
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-	<title>Inventory | Search Used Cars For Sale by Owner - Automoblog</title>
-	<link rel="stylesheet" href="https://cars.automoblog.net/css/main.min.css" />
-	<link rel="stylesheet" href="https://cars.automoblog.net/css/automoblog.min.css" />
-<script type="text/javascript">!function(T,l,y){var S=T.location,k="script",D="instrumentationKey",C="ingestionendpoint",I="disableExceptionTracking",E="ai.device.",b="toLowerCase",w="crossOrigin",N="POST",e="appInsightsSDK",t=y.name||"appInsights";(y.name||T[e])&&(T[e]=t);var n=T[t]||function(d){var g=!1,f=!1,m={initialize:!0,queue:[],sv:"5",version:2,config:d};function v(e,t){var n={},a="Browser";return n[E+"id"]=a[b](),n[E+"type"]=a,n["ai.operation.name"]=S&&S.pathname||"_unknown_",n["ai.internal.sdkVersion"]="javascript:snippet_"+(m.sv||m.version),{time:function(){var e=new Date;function t(e){var t=""+e;return 1===t.length&&(t="0"+t),t}return e.getUTCFullYear()+"-"+t(1+e.getUTCMonth())+"-"+t(e.getUTCDate())+"T"+t(e.getUTCHours())+":"+t(e.getUTCMinutes())+":"+t(e.getUTCSeconds())+"."+((e.getUTCMilliseconds()/1e3).toFixed(3)+"").slice(2,5)+"Z"}(),iKey:e,name:"Microsoft.ApplicationInsights."+e.replace(/-/g,"")+"."+t,sampleRate:100,tags:n,data:{baseData:{ver:2}}}}var h=d.url||y.src;if(h){function a(e){var t,n,a,i,r,o,s,c,u,p,l;g=!0,m.queue=[],f||(f=!0,t=h,s=function(){var e={},t=d.connectionString;if(t)for(var n=t.split(";"),a=0;a<n.length;a++){var i=n[a].split("=");2===i.length&&(e[i[0][b]()]=i[1])}if(!e[C]){var r=e.endpointsuffix,o=r?e.location:null;e[C]="https://"+(o?o+".":"")+"dc."+(r||"services.visualstudio.com")}return e}(),c=s[D]||d[D]||"",u=s[C],p=u?u+"/v2/track":d.endpointUrl,(l=[]).push((n="SDK LOAD Failure: Failed to load Application Insights SDK script (See stack for details)",a=t,i=p,(o=(r=v(c,"Exception")).data).baseType="ExceptionData",o.baseData.exceptions=[{typeName:"SDKLoadFailed",message:n.replace(/\./g,"-"),hasFullStack:!1,stack:n+"\nSnippet failed to load ["+a+"] -- Telemetry is disabled\nHelp Link: https://go.microsoft.com/fwlink/?linkid=2128109\nHost: "+(S&&S.pathname||"_unknown_")+"\nEndpoint: "+i,parsedStack:[]}],r)),l.push(function(e,t,n,a){var i=v(c,"Message"),r=i.data;r.baseType="MessageData";var o=r.baseData;return o.message='AI (Internal): 99 message:"'+("SDK LOAD Failure: Failed to load Application Insights SDK script (See stack for details) ("+n+")").replace(/\"/g,"")+'"',o.properties={endpoint:a},i}(0,0,t,p)),function(e,t){if(JSON){var n=T.fetch;if(n&&!y.useXhr)n(t,{method:N,body:JSON.stringify(e),mode:"cors"});else if(XMLHttpRequest){var a=new XMLHttpRequest;a.open(N,t),a.setRequestHeader("Content-type","application/json"),a.send(JSON.stringify(e))}}}(l,p))}function i(e,t){f||setTimeout(function(){!t&&m.core||a()},500)}var e=function(){var n=l.createElement(k);n.src=h;var e=y[w];return!e&&""!==e||"undefined"==n[w]||(n[w]=e),n.onload=i,n.onerror=a,n.onreadystatechange=function(e,t){"loaded"!==n.readyState&&"complete"!==n.readyState||i(0,t)},n}();y.ld<0?l.getElementsByTagName("head")[0].appendChild(e):setTimeout(function(){l.getElementsByTagName(k)[0].parentNode.appendChild(e)},y.ld||0)}try{m.cookie=l.cookie}catch(p){}function t(e){for(;e.length;)!function(t){m[t]=function(){var e=arguments;g||m.queue.push(function(){m[t].apply(m,e)})}}(e.pop())}var n="track",r="TrackPage",o="TrackEvent";t([n+"Event",n+"PageView",n+"Exception",n+"Trace",n+"DependencyData",n+"Metric",n+"PageViewPerformance","start"+r,"stop"+r,"start"+o,"stop"+o,"addTelemetryInitializer","setAuthenticatedUserContext","clearAuthenticatedUserContext","flush"]),m.SeverityLevel={Verbose:0,Information:1,Warning:2,Error:3,Critical:4};var s=(d.extensionConfig||{}).ApplicationInsightsAnalytics||{};if(!0!==d[I]&&!0!==s[I]){var c="onerror";t(["_"+c]);var u=T[c];T[c]=function(e,t,n,a,i){var r=u&&u(e,t,n,a,i);return!0!==r&&m["_"+c]({message:e,url:t,lineNumber:n,columnNumber:a,error:i}),r},d.autoExceptionInstrumented=!0}return m}(y.cfg);function a(){y.onInit&&y.onInit(n)}(T[t]=n).queue&&0===n.queue.length?(n.queue.push(a),n.trackPageView({})):a()}(window,document,{
-src: "https://js.monitor.azure.com/scripts/b/ai.2.min.js", // The SDK URL Source
-crossOrigin: "anonymous",
-cfg: { // Application Insights Configuration
-    connectionString: 'InstrumentationKey=f0f9779c-b49f-4316-9f5c-a36917709806'
-}});</script></head>
-<body>
-	<header>
-		<div class="siteheader">
-			<a href="https://www.automoblog.net/" target="_blank"><img src="/img/automoblog/Automoblog-logo.png" alt="Automoblog"></a>
-		</div>
-		<div class="sub-header">
-			<ul class="menu">
-				<li><a href="https://www.automoblog.net/news/" target="_blank">News</a></li>
-				<li><a href="https://www.automoblog.net/reviews/" target="_blank">Reviews</a></li>
-				<li><a href="https://www.automoblog.net/guide/" target="_blank">Guides</a></li>
-				<li><a href="https://www.automoblog.net/magazine/" target="_blank">Magazine</a></li>
-				<li><a href="/" class="highlight">Car Deals</a></li>
-			</ul>
-			<div class="mobile-trigger">
-				<div></div>
-				<div></div>
-				<div></div>
-			</div>
-		</div>
-	</header>
-	<main>
+  <template id="inventory-item">
+    <div class="inventory-item">
+      <img class="inventory-image" src="#" alt="Vehicle Image">
+      <div class="inventory-info">
+        <h3 class="inventory-title"></h3>
+        <p class="inventory-mileage"></p>
+        <p class="inventory-dealer"></p>
+        <button class="inventory-detail">View Details</button>
+      </div>
+    </div>
+  </template>
 
-
-<div class="inventory-page">
-	<form id="inventoryFilter" data-form-element="inventoryFilter" class="show-new show-used bs-All">
-	<h1>Local Inventory</h1>
-	<div class="form-group">
-		<div class="form-item form-select label-above">
-			<label for="bodyStyle">Body Style</label>
-			<select id="bodyStyle" data-form-element="bodyStyle" data-action="change">
-				<option value="">Loading ...</option>
-			</select>
-		</div>
-		<div class="form-item form-select label-above">
-			<label for="makes">Make</label>
-			<select id="makes" class="filterable" data-form-element="makes" data-action="change">
-				<option value="">Loading ...</option>
-			</select>
-		</div>
-		<div class="form-item form-select label-above">
-			<label for="models">Model</label>
-			<select id="models" class="filterable" data-form-element="models" data-action="change">
-				<option value="">Select Model</option>
-			</select>
-		</div>
-	</div>
-
-	<div class="form-group">
-		<div class="form-item label-above">
-			<label for="zipCode">Zip Code</label>
-			<input type="text" id="zipCode" data-form-element="zipCode" placeholder="Zip Code" data-action="blur" value="Loading ...">
-		</div>
-	</div>
-
-	<div class="form-group">
-		<div class="form-item">
-			<label for="conditionNew">
-				<input id="conditionNew" name="condtion" type="checkbox" value="new" data-form-element="conditionNew" data-action="click" checked />
-				<span class="dt-space-left">New</span>
-			</label>
-		</div>
-		<div class="form-item">
-			<label for="conditionUsed">
-				<input id="conditionUsed" name="condtion" type="checkbox" value="used" data-form-element="conditionUsed" data-action="click" checked />
-				<span class="dt-space-left">Used</span>
-			</label>
-		</div>
-	</div>
-
-	<div class="form-group">
-		<div class="form-item">
-			<button type="button" id="submit" class="button button-cta button-big loading" data-form-element="submit" data-action="click">Loading ...</button>
-		</div>
-	</div>
-
-	<div class="form-group">
-		<input type="hidden" id="GID" value="0000-4512" data-form-element="GID" />
-		<input type="hidden" id="referralDataEncoded" value="" data-form-element="referralDataEncoded" />
-	</div>
-</form>
-
-	<div id="inventoryResults"></div>
-</div>
-
-
-	</main>
-	<script src="https://kit.fontawesome.com/3fdc425d8c.js"></script>
-	<script src="Assets/main.min.js?v=R2LxGJGW10sjEKNC_wFo_lXMzJnycjl0TReBoDyKV2Q"></script>
-	<script src="https://detroittrading.blob.core.windows.net/mycarmatch/scripts/tattletale.bundle.js"></script>
-
-
-	<script>
-		document.querySelector(".mobile-trigger").addEventListener("click", function () {
-			this.classList.toggle("active");
-			document.querySelector(".sub-header > ul.menu").classList.toggle("active");
-		});
-	</script>
-</body>
-</html>
-
-
-	</main>
-	<footer class="border-top footer text-muted">
-		<div class="legal">
-			<div class="items-list">
-				<a href="/TermsOfUse" target="_blank">Terms of Use</a>
-				<a href="/PrivacyPolicy" target="_blank">Privacy Policy</a>
-				<a href="/Unsubscribe" target="_blank">Unsubscribe</a>
-				<a href="/PrivacyPolicy#data-rights" target="_blank">Do Not Sell My Personal Information</a>
-			</div>
-			<div class="legal-text">
-				<style>
-    .dt-legal-app-copyright {
-        font-size: 10pt;
-    }
-</style>
-
-<div class="dt-legal-app-copyright">
-    &copy; 2023 Detroit Trading&trade;
-</div>
-				<br />
-				<style>
-    .dt-legal-ccpa-disclaimer {
-        font-size: 10pt;
-    }
-</style>
-
-<div class="dt-legal-ccpa-disclaimer">
-    Detroit Trading and  offers this service to help you shop for automobiles online. We will share the information you provide as a service provider under the California Consumer Privacy Act with the dealers and brands that you select. They will contact you to go over pricing and incentives for your vehicle selection(s). By using these services, you consent to us sharing the information you provide with these entities, and you accept the terms outlined in our <a target="_blank" href="/TermsOfUse">Terms of Use</a> and <a target="_blank" href="/PrivacyPolicy">Privacy Statement</a>.
-</div>
-				<br />
-				<style>
-    .dt-legal-dataone-copyright {
-        font-size: 10pt;
-    }
-</style>
-
-<div class="dt-legal-dataone-copyright">
-    &copy; Certain automotive content displayed within this website Copyright <a href="http://www.dataonesoftware.com"
-        target="_blank">DataOne Software</a> and are protected under the United States and international copyright law.
-    Any unauthorized use, reproduction, distribution, recording or modification of this content is strictly prohibited.
-</div>
-				<br />
-				<style>
-    .dt-legal-evox-copyright {
-        font-size: 10pt;
-    }
-</style>
-
-<div class="dt-legal-evox-copyright">
-    &copy; NOTICE: The automotive images or video contained here in are owned by EVOX Productions LLC and are protected under
-    United States and international copyright law.
-</div>
-			</div>
-		</div>
-
-	<footer>
-		<div class="automofooter">
-			<div class="automotopfooter">
-				<div class="logo">
-					<img src="/img/automoblog/Automoblog-logo.png" alt="Automoblog" />
-				</div>
-				<ul class="social">
-					<li><a target="_blank" href="https://www.facebook.com/automoblog"><i class="fab fa-facebook-f"></i></a></li>
-					<li><a target="_blank" href="https://www.twitter.com/automoblog"><i class="fab fa-twitter"></i></a></li>
-					<li><a target="_blank" href="https://www.instagram.com/automoblog"><i class="fab fa-instagram"></i></a></li>
-					<li><a target="_blank" href="https://www.pinterest.com/automoblog"><i class="fab fa-pinterest"></i></a></li>
-					<li><a target="_blank" href="https://www.linkedin.com/company/automoblog"><i class="fab fa-linkedin-in"></i></a></li>
-				</ul>
-			</div>
-			<div class="automobottomfooter">
-				<ul class="automobottomfootermenucouldthisnamebeanylonger">
-					<li>&copy; Gearhead Media 2006-2023</li>
-					<li><a target="_blank" href="https://creativecommons.org/licenses/by-nc/4.0/">Some Rights Reserved</a></li>
-					<li><a target="_blank" href="https://www.automoblog.net/about/privacy-policy/">Privacy Policy</a></li>
-				</ul>
-			</div>
-		</div>
-	</footer>
-
-	</footer>
-
-	<script src="Assets/main.min.js?v=R2LxGJGW10sjEKNC_wFo_lXMzJnycjl0TReBoDyKV2Q"></script>
-
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js"></script>
+  <script src="/Assets/js/main.js"></script>
 </body>
 </html>
