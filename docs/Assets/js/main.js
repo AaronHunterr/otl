@@ -1,94 +1,60 @@
-function createDealerMap(dealers) {
-  const dealerMap = new Map();
-  dealers.forEach(dealer => dealerMap.set(dealer.DealerID, dealer));
-  return dealerMap;
-}
-
-const vehiclesPerPage = 10;
-let currentPage = 1;
-
-function displayInventoryPage(inventory, dealerMap, page) {
+function displayInventory(data) {
   const inventoryContainer = document.getElementById('inventory-container');
-  inventoryContainer.innerHTML = '';
 
-  const startIndex = (page - 1) * vehiclesPerPage;
-  const endIndex = startIndex + vehiclesPerPage;
+  data.forEach((vehicle) => {
+    const inventoryItem = document.createElement('div');
+    inventoryItem.className = 'inventory-item';
 
-  for (let i = startIndex; i < endIndex && i < inventory.length; i++) {
-    const vehicle = inventory[i];
-    const dealer = dealerMap.get(vehicle.DealerID);
+    const inventoryImage = document.createElement('img');
+    inventoryImage.className = 'inventory-image';
+    inventoryImage.src = vehicle.image_url;
 
-    const vehicleCard = document.createElement('div');
-    vehicleCard.classList.add('vehicle-card');
+    const inventoryInfo = document.createElement('div');
+    inventoryInfo.className = 'inventory-info';
 
-    const vehicleTitle = document.createElement('h3');
-    vehicleTitle.textContent = `${vehicle.Year} ${vehicle.Make} ${vehicle.Model}`;
-    vehicleCard.appendChild(vehicleTitle);
+    const inventoryTitle = document.createElement('p');
+    inventoryTitle.className = 'inventory-title';
+    inventoryTitle.textContent = `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
 
-    const vehicleImg = document.createElement('img');
-    vehicleImg.src = vehicle.Images.split('|')[0];
-    vehicleCard.appendChild(vehicleImg);
+    const inventoryMileage = document.createElement('p');
+    inventoryMileage.className = 'inventory-mileage';
+    inventoryMileage.textContent = `Mileage: ${vehicle.mileage}`;
 
-    const vehicleMileage = document.createElement('p');
-    vehicleMileage.textContent = `Mileage: ${vehicle.Mileage}`;
-    vehicleCard.appendChild(vehicleMileage);
+    const inventoryDealer = document.createElement('p');
+    inventoryDealer.className = 'inventory-dealer';
+    inventoryDealer.textContent = `Dealer: ${vehicle.dealer_name}`;
 
-    const dealerInfo = document.createElement('p');
-    dealerInfo.textContent = `Dealer: ${dealer.Name}, ${dealer.City}, ${dealer.State}`;
-    vehicleCard.appendChild(dealerInfo);
+    const inventoryDetail = document.createElement('button');
+    inventoryDetail.className = 'inventory-detail';
+    inventoryDetail.textContent = 'View Details';
 
-    const viewDetailsBtn = document.createElement('button');
-    viewDetailsBtn.textContent = 'View Details';
-    viewDetailsBtn.onclick = () => {
-      // Implement vehicle display page navigation here
-    };
-    vehicleCard.appendChild(viewDetailsBtn);
+    inventoryInfo.appendChild(inventoryTitle);
+    inventoryInfo.appendChild(inventoryMileage);
+    inventoryInfo.appendChild(inventoryDealer);
+    inventoryInfo.appendChild(inventoryDetail);
 
-    inventoryContainer.appendChild(vehicleCard);
+    inventoryItem.appendChild(inventoryImage);
+    inventoryItem.appendChild(inventoryInfo);
+
+    inventoryContainer.appendChild(inventoryItem);
+  });
+}
+
+async function fetchData() {
+  const url = 'https://storage.googleapis.com/lotlinxdatabucket/master.json';
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error(`Error fetching data: ${response.statusText}`);
   }
+
+  const jsonData = await response.json();
+  console.log(jsonData);
+
+  // Use jsonData to populate your inventory results on the site
+  displayInventory(jsonData);
 }
 
-function setupPagination(inventory, dealerMap) {
-  const totalPages = Math.ceil(inventory.length / vehiclesPerPage);
-
-  const paginationContainer = document.getElementById('pagination-container');
-  const prevBtn = document.createElement('button');
-  prevBtn.textContent = 'Previous';
-  prevBtn.onclick = () => {
-    if (currentPage > 1) {
-      currentPage--;
-      displayInventoryPage(inventory, dealerMap, currentPage);
-    }
-  };
-  paginationContainer.appendChild(prevBtn);
-
-  const pageInfo = document.createElement('span');
-  pageInfo.id = 'page-info';
-  pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
-  paginationContainer.appendChild(pageInfo);
-
-  const nextBtn = document.createElement('button');
-  nextBtn.textContent = 'Next';
-  nextBtn.onclick = () => {
-    if (currentPage < totalPages) {
-      currentPage++;
-      displayInventoryPage(inventory, dealerMap, currentPage);
-    }
-  };
-  paginationContainer.appendChild(nextBtn);
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  Promise.all([
-    fetch('https://dl.dropboxusercontent.com/s/8oke8b9sz8lvo57/dtcinventory.csv').then(response => response.text()),
-    fetch('https://dl.dropboxusercontent.com/s/qy1r1of8z1pf5iu/dtcdealers.csv').then(response => response.text())
-  ])
-  .then(([csvInventoryData, csvDealerData]) => {
-    const dealerMap = createDealerMap(Papa.parse(csvDealerData, {header: true, skipEmptyLines: true, dynamicTyping: true}).data);
-    const parsedInventoryData = Papa.parse(csvInventoryData, {header: true, skipEmptyLines: true, dynamicTyping: true});
-
-displayInventoryPage(parsedInventoryData.data, dealerMap, currentPage);
-setupPagination(parsedInventoryData.data, dealerMap);
-})
-.catch(error => console.error('Error fetching CSV:', error));
+fetchData().catch((error) => {
+  console.error('Error:', error);
 });
