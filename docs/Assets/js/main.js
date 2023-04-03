@@ -126,7 +126,7 @@ document.getElementById('search-form').addEventListener('submit', async (event) 
   fetchData(filters).catch((error) => {
     console.error('Error:', error);
   });
-
+}); // Add this closing brace here
 
 async function fetchData(filters = {}) {
   const url = 'https://storage.googleapis.com/lotlinxdatabucket/master.json';
