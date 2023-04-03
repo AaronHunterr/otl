@@ -1,3 +1,21 @@
+// Add this code at the beginning of your JavaScript code
+document.getElementById('min-price').addEventListener('input', (event) => {
+  document.getElementById('min-price-display').textContent = event.target.value;
+});
+
+document.getElementById('max-price').addEventListener('input', (event) => {
+  document.getElementById('max-price-display').textContent = event.target.value;
+});
+
+document.getElementById('min-mileage').addEventListener('input', (event) => {
+  document.getElementById('min-mileage-display').textContent = event.target.value;
+});
+
+document.getElementById('max-mileage').addEventListener('input', (event) => {
+  document.getElementById('max-mileage-display').textContent = event.target.value;
+});
+
+// ... other code ...
 function filterData(data, filters) {
   return data.filter((vehicle) => {
     for (const key in filters) {
