@@ -66,6 +66,7 @@ function displayInventory(data) {
 document.getElementById('search-form').addEventListener('submit', async (event) => {
   event.preventDefault();
 
+  const zip = document.getElementById('zip').value;
   const make = document.getElementById('make').value;
   const model = document.getElementById('model').value;
   const minPrice = document.getElementById('min-price').value;
@@ -74,7 +75,7 @@ document.getElementById('search-form').addEventListener('submit', async (event) 
   const maxMileage = document.getElementById('max-mileage').value;
 
   const filters = {
-    zip: '90210',
+    zip,
     make,
     model,
     price: minPrice && maxPrice ? `${minPrice}-${maxPrice}` : undefined,
