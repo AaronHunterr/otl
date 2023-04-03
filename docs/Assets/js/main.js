@@ -21,8 +21,10 @@ function filterData(data, filters) {
     for (const key in filters) {
       if (filters[key]) {
         if (key === 'price' || key === 'mileage') {
-          const [min, max] = filters[key].split('-');
-          if (vehicle[key] < min || vehicle[key] > max) {
+          const [min, max] = filters[key].split('-').map(Number);
+          const value = Number(vehicle[key]);
+
+          if (value < min || value > max) {
             return false;
           }
         } else if (String(vehicle[key]) !== String(filters[key])) {
