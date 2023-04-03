@@ -1,16 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vehicle Inventory</title>
-  <link rel="stylesheet" href="Assets/css/styles.css">
-</head>
-<body>
-  <div id="pagination-container"></div>
-  <div id="inventory-container"></div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js"></script>
-  <script src="Assets/js/main.js"></script>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Vehicle Inventory</title>
+	<link rel="stylesheet" href="Assets/css/styles.css">
+</head>
+
+<body>
+	<form id="search-form">
+		<input type="text" id="make" placeholder="Make" />
+		<input type="text" id="model" placeholder="Model" />
+		<input type="text" id="min-price" placeholder="Min Price" />
+		<input type="text" id="max-price" placeholder="Max Price" />
+		<input type="text" id="min-mileage" placeholder="Min Mileage" />
+		<input type="text" id="max-mileage" placeholder="Max Mileage" />
+		<button type="submit">Search</button>
+	</form>
+
+	<div id="pagination-container"></div>
+	<div id="inventory-container"></div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js"></script>
+	<script src="Assets/js/main.js"></script>
 </body>
+
 </html>
