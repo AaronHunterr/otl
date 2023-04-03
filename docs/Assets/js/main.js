@@ -49,7 +49,7 @@ function displayInventory(data) {
 
     const inventoryImage = document.createElement('img');
     inventoryImage.className = 'inventory-image';
-    inventoryImage.src = vehicle.image_url;
+    inventoryImage.src = vehicle.image_urls;
 
     const inventoryInfo = document.createElement('div');
     inventoryInfo.className = 'inventory-info';
@@ -64,7 +64,7 @@ function displayInventory(data) {
 
     const inventoryDealer = document.createElement('p');
     inventoryDealer.className = 'inventory-dealer';
-    inventoryDealer.textContent = `Dealer: ${vehicle.dealer_name}`;
+    inventoryDealer.textContent = `Dealer: ${vehicle.dealername}`;
 
     const inventoryDetail = document.createElement('button');
     inventoryDetail.className = 'inventory-detail';
