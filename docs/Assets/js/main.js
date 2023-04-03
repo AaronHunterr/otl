@@ -1,3 +1,27 @@
+function filterData(data, filters) {
+  return data.filter((vehicle) => {
+    for (const key in filters) {
+      if (filters[key]) {
+        if (key === 'price' || key === 'mileage') {
+          const [min, max] = filters[key].split('-');
+          if (vehicle[key] < min || vehicle[key] > max) {
+            return false;
+          }
+        } else if (String(vehicle[key]) !== String(filters[key])) {
+          return false;
+        }
+      }
+    }
+    return true;
+  });
+}
+(async function () {
+  try {
+    await fetchData({ zip: '90210' });
+  } catch (error) {
+    console.error('Error:', error);
+  }
+})();
 function displayInventory(data) {
   const inventoryContainer = document.getElementById('inventory-container');
 
@@ -39,8 +63,30 @@ function displayInventory(data) {
     inventoryContainer.appendChild(inventoryItem);
   });
 }
+document.getElementById('search-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
 
-async function fetchData() {
+  const make = document.getElementById('make').value;
+  const model = document.getElementById('model').value;
+  const minPrice = document.getElementById('min-price').value;
+  const maxPrice = document.getElementById('max-price').value;
+  const minMileage = document.getElementById('min-mileage').value;
+  const maxMileage = document.getElementById('max-mileage').value;
+
+  const filters = {
+    zip: '90210',
+    make,
+    model,
+    price: minPrice && maxPrice ? `${minPrice}-${maxPrice}` : undefined,
+    mileage: minMileage && maxMileage ? `${minMileage}-${maxMileage}` : undefined,
+  };
+
+  fetchData(filters).catch((error) => {
+    console.error('Error:', error);
+  });
+});
+
+async function fetchData(filters = {}) {
   const url = 'https://storage.googleapis.com/lotlinxdatabucket/master.json';
   const response = await fetch(url);
 
@@ -51,8 +97,14 @@ async function fetchData() {
   const jsonData = await response.json();
   console.log(jsonData);
 
-  // Use jsonData to populate your inventory results on the site
-  displayInventory(jsonData);
+  // Filter data based on the filters provided
+  const filteredData = filterData(jsonData, filters);
+
+  // Clear the inventory container before displaying the filtered data
+  document.getElementById('inventory-container').innerHTML = '';
+
+  // Use filteredData to populate your inventory results on the site
+  displayInventory(filteredData);
 }
 
 fetchData().catch((error) => {
