@@ -15,8 +15,32 @@ document.getElementById('max-mileage').addEventListener('input', (event) => {
   document.getElementById('max-mileage-display').textContent = event.target.value;
 });
 
-// ... other code ...
-function filterData(data, filters) {
+function updatePagination(dataLength, itemsPerPage, currentPage, onPageChange) {
+  const totalPages = Math.ceil(dataLength / itemsPerPage);
+  const paginationContainer = document.getElementById('pagination-container');
+  paginationContainer.innerHTML = '';
+
+  for (let i = 1; i <= totalPages; i++) {
+    const pageButton = document.createElement('button');
+    pageButton.textContent = i;
+    pageButton.className = 'page-button';
+    if (i === currentPage) {
+      pageButton.classList.add('active');
+    }
+
+    pageButton.addEventListener('click', () => {
+      onPageChange(i);
+    });
+
+    paginationContainer.appendChild(pageButton);
+  }
+}
+
+function filterData(data, filters, page) {
+  const itemsPerPage = 20;
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
   return data.filter((vehicle) => {
     for (const key in filters) {
       if (filters[key]) {
@@ -33,16 +57,18 @@ function filterData(data, filters) {
       }
     }
     return true;
-  });
+  }).slice(startIndex, endIndex);
 }
+
 (async function () {
   try {
-    await fetchData({ zip: '90210' });
+    await fetchData({ zip: '90210' }, 1);
   } catch (error) {
     console.error('Error:', error);
   }
 })();
-async function fetchData(filters = {}) {
+
+async function fetchData(filters = {}, page = 1) {
   const url = 'https://storage.googleapis.com/lotlinxdatabucket/master.json';
   const response = await fetch(url);
 
@@ -51,6 +77,7 @@ async function fetchData(filters = {}) {
   }
 
   const jsonData = await response.json();
+  const filteredData = filterData(jsonData, filters, page);
 
   // Log the keys of the first item in the JSON data array
   if (jsonData.length > 0) {
@@ -59,7 +86,18 @@ async function fetchData(filters = {}) {
     console.log('The JSON data array is empty.');
   }
 
-  // ... rest of the code
+  // Update the pagination container
+  updatePagination(jsonData.length, 20, page, (newPage) => {
+    fetchData(filters, newPage).catch((error) => {
+      console.error('Error:', error);
+    });
+  });
+
+  // Clear the inventory container before displaying the filtered data
+  document.getElementById('inventory-container').innerHTML = '';
+
+  // Use filteredData to populate your inventory results on the site
+  displayInventory(filteredData);
 }
 
 function displayInventory(data) {
@@ -123,31 +161,10 @@ document.getElementById('search-form').addEventListener('submit', async (event) 
     mileage: minMileage && maxMileage ? `${minMileage}-${maxMileage}` : undefined,
   };
 
-  fetchData(filters).catch((error) => {
+  fetchData(filters, 1).catch((error) => {
     console.error('Error:', error);
   });
-}); // Add this closing brace here
-
-async function fetchData(filters = {}) {
-  const url = 'https://storage.googleapis.com/lotlinxdatabucket/master.json';
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    throw new Error(`Error fetching data: ${response.statusText}`);
-  }
-
-  const jsonData = await response.json();
-  console.log(jsonData);
-
-  // Filter data based on the filters provided
-  const filteredData = filterData(jsonData, filters);
-
-  // Clear the inventory container before displaying the filtered data
-  document.getElementById('inventory-container').innerHTML = '';
-
-  // Use filteredData to populate your inventory results on the site
-  displayInventory(filteredData);
-}
+});
 
 fetchData().catch((error) => {
   console.error('Error:', error);
