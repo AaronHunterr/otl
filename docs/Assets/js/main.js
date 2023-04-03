@@ -71,22 +71,22 @@ function displayInventory(data) {
 
     const inventoryImage = document.createElement('img');
     inventoryImage.className = 'inventory-image';
-    inventoryImage.src = vehicle.image_url; // Corrected property name
+    inventoryImage.src = vehicle.ImageUrls;
 
     const inventoryInfo = document.createElement('div');
     inventoryInfo.className = 'inventory-info';
 
     const inventoryTitle = document.createElement('p');
     inventoryTitle.className = 'inventory-title';
-    inventoryTitle.textContent = `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
+    inventoryTitle.textContent = `${vehicle.Year} ${vehicle.Make} ${vehicle.Model}`;
 
     const inventoryMileage = document.createElement('p');
     inventoryMileage.className = 'inventory-mileage';
-    inventoryMileage.textContent = `Mileage: ${vehicle.mileage}`;
+    inventoryMileage.textContent = `Mileage: ${vehicle.Miles}`;
 
     const inventoryDealer = document.createElement('p');
     inventoryDealer.className = 'inventory-dealer';
-    inventoryDealer.textContent = `Dealer: ${vehicle.dealer_name}`; // Corrected property name
+    inventoryDealer.textContent = `Dealer: ${vehicle.DealerName}`;
 
     const inventoryDetail = document.createElement('button');
     inventoryDetail.className = 'inventory-detail';
@@ -116,9 +116,9 @@ document.getElementById('search-form').addEventListener('submit', async (event) 
   const maxMileage = document.getElementById('max-mileage').value;
 
   const filters = {
-    zip,
-    make,
-    model,
+    zip: zip,
+    make: make,
+    model: model,
     price: minPrice && maxPrice ? `${minPrice}-${maxPrice}` : undefined,
     mileage: minMileage && maxMileage ? `${minMileage}-${maxMileage}` : undefined,
   };
@@ -126,7 +126,7 @@ document.getElementById('search-form').addEventListener('submit', async (event) 
   fetchData(filters).catch((error) => {
     console.error('Error:', error);
   });
-});
+
 
 async function fetchData(filters = {}) {
   const url = 'https://storage.googleapis.com/lotlinxdatabucket/master.json';
