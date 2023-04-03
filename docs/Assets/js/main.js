@@ -42,6 +42,26 @@ function filterData(data, filters) {
     console.error('Error:', error);
   }
 })();
+async function fetchData(filters = {}) {
+  const url = 'https://storage.googleapis.com/lotlinxdatabucket/master.json';
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error(`Error fetching data: ${response.statusText}`);
+  }
+
+  const jsonData = await response.json();
+
+  // Log the keys of the first item in the JSON data array
+  if (jsonData.length > 0) {
+    console.log('JSON Data Keys:', Object.keys(jsonData[0]));
+  } else {
+    console.log('The JSON data array is empty.');
+  }
+
+  // ... rest of the code
+}
+
 function displayInventory(data) {
   const inventoryContainer = document.getElementById('inventory-container');
 
@@ -51,7 +71,7 @@ function displayInventory(data) {
 
     const inventoryImage = document.createElement('img');
     inventoryImage.className = 'inventory-image';
-    inventoryImage.src = vehicle.image_urls;
+    inventoryImage.src = vehicle.image_url; // Corrected property name
 
     const inventoryInfo = document.createElement('div');
     inventoryInfo.className = 'inventory-info';
@@ -66,7 +86,7 @@ function displayInventory(data) {
 
     const inventoryDealer = document.createElement('p');
     inventoryDealer.className = 'inventory-dealer';
-    inventoryDealer.textContent = `Dealer: ${vehicle.dealername}`;
+    inventoryDealer.textContent = `Dealer: ${vehicle.dealer_name}`; // Corrected property name
 
     const inventoryDetail = document.createElement('button');
     inventoryDetail.className = 'inventory-detail';
@@ -83,6 +103,7 @@ function displayInventory(data) {
     inventoryContainer.appendChild(inventoryItem);
   });
 }
+
 document.getElementById('search-form').addEventListener('submit', async (event) => {
   event.preventDefault();
 
