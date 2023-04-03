@@ -36,14 +36,28 @@ function updatePagination(dataLength, itemsPerPage, currentPage, onPageChange) {
   }
 }
 
-function filterData(data, filters, page) {
-  const itemsPerPage = 20;
-  const startIndex = (page - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const R = 3958.8; // Earth's radius in miles
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+function filterData(data, filters) {
+  const consumerLocation = zipcodes.lookup(filters.zip);
+  if (!consumerLocation) {
+    console.error(`Zip code ${filters.zip} not found.`);
+    return [];
+  }
 
   return data.filter((vehicle) => {
+    // Check the other filters first
     for (const key in filters) {
-      if (filters[key]) {
+      if (filters[key] && key !== 'zip') {
         if (key === 'price' || key === 'mileage') {
           const [min, max] = filters[key].split('-').map(Number);
           const value = Number(vehicle[key]);
@@ -56,9 +70,25 @@ function filterData(data, filters, page) {
         }
       }
     }
-    return true;
-  }).slice(startIndex, endIndex);
+
+    // Check the radius filter
+    const dealerLocation = zipcodes.lookup(vehicle.DealerZip);
+    if (!dealerLocation) {
+      console.error(`Zip code ${vehicle.DealerZip} not found.`);
+      return false;
+    }
+
+    const distance = calculateDistance(
+      consumerLocation.latitude,
+      consumerLocation.longitude,
+      dealerLocation.latitude,
+      dealerLocation.longitude
+    );
+
+    return distance <= vehicle.Radius;
+  });
 }
+
 
 (async function () {
   try {
