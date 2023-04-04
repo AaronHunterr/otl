@@ -131,7 +131,7 @@ async function fetchData({ zip, ...filters } = {}, page = 1) {
     }
   }
 
-  const filteredData = await filterData(jsonData, filter, page);
+  const filteredData = await filterData(jsonData, filters, page);
   console.log('Filtered Data:', filteredData);
 
   if (jsonData.length > 0) {
