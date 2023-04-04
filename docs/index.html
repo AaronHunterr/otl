@@ -78,8 +78,8 @@
       op: "setPage",
       pubid: "201000",
       zip: zip,
-      make: make,
-      model: model
+      bodystyle: bodyStyle,
+      year: yearAny,
     });
     // Set Custom Ad Options
     window.VinAds.push({
@@ -198,37 +198,39 @@
     });
   </script>
   <script>
-  document.getElementById("searchForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Prevent form from submitting and causing a page refresh
+    document.getElementById("searchForm").addEventListener("submit", function(event) {
+      event.preventDefault(); // Prevent form from submitting and causing a page refresh
 
-    // Get form field values
-    const bodyStyle = document.getElementById("bodystyle").value;
-    const yearAny = document.getElementById("yearAny").checked;
-    const yearMin = document.getElementById("yearMin").value;
-    const yearMax = document.getElementById("yearMax").value;
-    const priceMin = document.getElementById("priceMin").value;
-    const priceMax = document.getElementById("priceMax").value;
-    const mileageMin = document.getElementById("mileageMin").value;
-    const mileageMax = document.getElementById("mileageMax").value;
-    const zip = document.getElementById("zip").value;
+      // Get form field values
+      const bodyStyle = document.getElementById("bodystyle").value;
+      const yearAny = document.getElementById("yearAny").checked;
+      const yearMin = document.getElementById("yearMin").value;
+      const yearMax = document.getElementById("yearMax").value;
+      const priceMin = document.getElementById("priceMin").value;
+      const priceMax = document.getElementById("priceMax").value;
+      const mileageMin = document.getElementById("mileageMin").value;
+      const mileageMax = document.getElementById("mileageMax").value;
+      const zip = document.getElementById("zip").value;
 
-    // Construct the query string
-    const params = new URLSearchParams();
-    params.set("bodystyle", bodyStyle);
-    if (!yearAny) {
-      params.set("yearMin", yearMin);
-      params.set("yearMax", yearMax);
-    }
-    params.set("priceMin", priceMin);
-    params.set("priceMax", priceMax);
-    params.set("mileageMin", mileageMin);
-    params.set("mileageMax", mileageMax);
-    params.set("zip", zip);
+      // Update window.VinAds array with new values
+      window.VinAds.push({
+        op: "setPage",
+        pubid: "201000",
+        zip: zip,
+        bodystyle: bodyStyle, // Assuming make parameter should be bodyStyle
+        year: yearAny ? "Any" : `${yearMin}-${yearMax}`, // Assuming model parameter should be year range
+        priceMin: priceMin,
+        priceMax: priceMax,
+        mileageMin: mileageMin,
+        mileageMax: mileageMax,
+      });
 
-    // Reload the page with the new query string
-    window.location.search = params.toString();
-  });
-</script>
+      // Call buildCustom command
+      window.VinAds.push({
+        op: "buildCustom",
+      });
+    });
+  </script>
 </body>
 
 </html>
