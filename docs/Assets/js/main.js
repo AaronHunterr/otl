@@ -35,28 +35,48 @@ function updatePagination(dataLength, itemsPerPage, currentPage, onPageChange) {
   }
 }
 
-function calculateDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(lat1 * Math.PI / 180) *
-    Math.cos(lat2 * Math.PI / 180) *
-    Math.sin(dLon / 2) *
-    Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  const d = R * c;
-  return d / 1.609344;
+async function calculateDistance(zip1, zip2) {
+  try {
+    const response1 = await axios.get(`https://api.zippopotam.us/us/${zip1}`);
+    const response2 = await axios.get(`https://api.zippopotam.us/us/${zip2}`);
+
+    const lat1 = response1.data.places[0].latitude;
+    const lon1 = response1.data.places[0].longitude;
+    const lat2 = response2.data.places[0].latitude;
+    const lon2 = response2.data.places[0].longitude;
+
+    const R = 6371; // Radius of the earth in km
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c; // Distance in km
+
+    return d * 0.621371; // Convert to miles
+  } catch (error) {
+    console.error('Error calculating distance:', error);
+    return Number.MAX_VALUE;
+  }
+}
+async function isVehicleWithinRadius(zip1, zip2, radius) {
+  const distance = await calculateDistance(zip1, zip2);
+  return distance <= radius;
 }
 
-function filterData(data, filters, page) {
+async function filterData(data, filters, page) {
   const itemsPerPage = 20;
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
-  return data
-    .filter((vehicle) => {
+  const filteredData = [];
+
+  for (const vehicle of data) {
+    const withinRadius = await isVehicleWithinRadius(filters.zip, vehicle.zip, vehicle.Radius);
+    if (withinRadius) {
+      let match = true;
       for (const key in filters) {
         if (filters[key]) {
           if (key === 'price' || key === 'mileage') {
@@ -64,31 +84,22 @@ function filterData(data, filters, page) {
             const value = Number(vehicle[key]);
 
             if (value < min || value > max) {
-              return false;
+              match = false;
+              break;
             }
-          } else if (key === 'zip') {
-            const consumerLat = filters.consumerLat;
-            const consumerLon = filters.consumerLon;
-            const dealerLat = vehicle.Latitude;
-            const dealerLon = vehicle.Longitude;
-            const distance = calculateDistance(
-              consumerLat,
-              consumerLon,
-              dealerLat,
-              dealerLon
-            );
-
-            if (distance > vehicle.Radius) {
-              return false;
-            }
-          } else if (String(vehicle[key]) !== String(filters[key])) {
-            return false;
+          } else if (key !== 'zip' && String(vehicle[key]) !== String(filters[key])) {
+            match = false;
+            break;
           }
         }
       }
-      return true;
-    })
-    .slice(startIndex, endIndex);
+      if (match) {
+        filteredData.push(vehicle);
+      }
+    }
+  }
+
+  return filteredData.slice(startIndex, endIndex);
 }
 
 async function fetchData({ zip, ...filters } = {}, page = 1) {
@@ -115,8 +126,8 @@ async function fetchData({ zip, ...filters } = {}, page = 1) {
     }
   }
 
-  const filteredData = filterData(jsonData, filters, page);
-  console.log('Filtered Data:', filteredData);
+  const filteredData = await filterData(jsonData, filters, page);
+    console.log('Filtered Data:', filteredData);
 
   if (jsonData.length > 0) {
     console.log('JSON Data Keys:', Object.keys(jsonData[0]));
