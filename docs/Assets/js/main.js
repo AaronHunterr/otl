@@ -81,10 +81,13 @@ async function filterData(data, filters, page) {
             return false;
           }
         } else if (key === 'zip') {
-          const distance = await calculateDistance(filters.zip, vehicle.DealerZip);
-          const radius = parseFloat(vehicle.Radius);
+          const withinRadius = await isVehicleWithinRadius(
+            filters.zip,
+            vehicle.DealerZip,
+            filters.radius
+          );
 
-          if (distance > radius) {
+          if (!withinRadius) {
             return false;
           }
         } else if (String(vehicle[key]) !== String(filters[key])) {
