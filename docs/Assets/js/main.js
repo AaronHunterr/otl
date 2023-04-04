@@ -95,9 +95,9 @@ function filterData(data, filters, page) {
 
 (async function() {
   try {
-    await fetchData({
-      zip: '90210'
-    }, 1);
+    fetchData({ zip: '90210' }, 1).catch((error) => {
+  console.error('Error:', error);
+});
   } catch (error) {
     console.error('Error:', error);
   }
