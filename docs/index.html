@@ -225,9 +225,69 @@
         mileageMax: mileageMax,
       });
 
-      // Call buildCustom command
+      // Call buildCustom command with the callback function
       window.VinAds.push({
         op: "buildCustom",
+        numresults: 10,
+        callback: function(vehicles) {
+          // Check that there are vehicles present
+          if (vehicles == "") {
+            console.log("No matching vehicles");
+            return;
+          }
+  
+          // Get ad block element
+          var container = document.getElementById("adBlock1");
+
+          // Clear container before adding new vehicle blocks
+          container.innerHTML = "";
+
+          // Create vehicle block elements for each vehicle and append to container
+          for (var i = 0; i < vehicles.length; i++) {
+            var vehicle = vehicles[i];
+            var v_div = document.createElement("div");
+            v_div.classList.add("vehicle-block");
+
+            // Create vehicle image container element
+            var imgContainer = document.createElement("div");
+            imgContainer.classList.add("vehicle-image-container");
+
+            // Create vehicle image element
+            var img = document.createElement("img");
+            img.src = vehicle.image_url;
+            img.alt = vehicle.make + " " + vehicle.model;
+            img.classList.add("vehicle-image");
+
+            // Append image to image container
+            imgContainer.appendChild(img);
+
+            // Create vehicle title element
+            var title = document.createElement("h2");
+            title.innerHTML = vehicle.make + " " + vehicle.model;
+            title.classList.add("vehicle-title");
+
+            // Create vehicle price element
+            var price = document.createElement("div");
+            price.innerHTML = "Price: $" + vehicle.price;
+            price.classList.add("vehicle-price");
+
+            // Create view details button element
+            var button = document.createElement("a");
+            button.href = vehicle.url;
+            button.innerHTML = "Click Here For More";
+            button.classList.add("vehicle-button");
+
+            // Append elements to vehicle block
+            v_div.appendChild(imgContainer); // Add the image container instead of the image
+            v_div.appendChild(title);
+            v_div.appendChild(price);
+            v_div.appendChild(button);
+
+            // Append vehicle block to container
+            container.appendChild(v_div);
+          }
+        },
+        channel: "carpaymentinfo"
       });
     });
   </script>
