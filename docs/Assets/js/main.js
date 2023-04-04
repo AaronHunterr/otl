@@ -78,7 +78,7 @@ function filterData(data, filters, page) {
               dealerLon
             );
 
-            if (distance > vehicle.Radius) {
+            if (distance > filters.radius) { // Fix this line
               return false;
             }
           } else if (String(vehicle[key]) !== String(filters[key])) {
@@ -195,7 +195,7 @@ document.getElementById('search-form').addEventListener('submit', async (event) 
     model: model,
     price: minPrice && maxPrice ? `${minPrice}-${maxPrice}` : undefined,
     mileage: minMileage && maxMileage ? `${minMileage}-${maxMileage}` : undefined,
-    radius: true, // Include the radius filter
+    radius: document.getElementById('radius').value || undefined,
   };
 
   console.log('Applied Filters:', filters); // This line should now work correctly
