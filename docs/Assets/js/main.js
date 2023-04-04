@@ -115,9 +115,14 @@ async function fetchData(filters = {}, page = 1) {
 
   if (filters.zip) {
     const zipData = zipcodes.lookup(filters.zip);
+    if (zipData) {
     filters.consumerLat = zipData.latitude;
     filters.consumerLon = zipData.longitude;
+  } else {
+    console.error('Invalid ZIP code:', filters.zip);
+    return;
   }
+}
 
   const filteredData = filterData(jsonData, filters, page);
 
