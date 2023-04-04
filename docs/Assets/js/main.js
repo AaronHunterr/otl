@@ -74,7 +74,7 @@ async function filterData(data, filters, page) {
   const filteredData = [];
 
   for (const vehicle of data) {
-    const withinRadius = await isVehicleWithinRadius(filters.zip, vehicle.zip, vehicle.Radius);
+    const withinRadius = await isVehicleWithinRadius(filters.zip, vehicle.DealerZip, vehicle.Radius);
     if (withinRadius) {
       let match = true;
       for (const key in filters) {
