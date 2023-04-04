@@ -179,30 +179,30 @@ inventoryContainer.appendChild(inventoryItem);
 }
 
 document.getElementById('search-form').addEventListener('submit', async (event) => {
-event.preventDefault();
+  event.preventDefault();
 
-console.log('Applied Filters:', filters);
+  const zip = document.getElementById('zip').value;
+  const make = document.getElementById('make').value;
+  const model = document.getElementById('model').value;
+  const minPrice = document.getElementById('min-price').value;
+  const maxPrice = document.getElementById('max-price').value;
+  const minMileage = document.getElementById('min-mileage').value;
+  const maxMileage = document.getElementById('max-mileage').value;
 
-const zip = document.getElementById('zip').value;
-const make = document.getElementById('make').value;
-const model = document.getElementById('model').value;
-const minPrice = document.getElementById('min-price').value;
-const maxPrice = document.getElementById('max-price').value;
-const minMileage = document.getElementById('min-mileage').value;
-const maxMileage = document.getElementById('max-mileage').value;
+  const filters = {
+    zip: zip,
+    make: make,
+    model: model,
+    price: minPrice && maxPrice ? `${minPrice}-${maxPrice}` : undefined,
+    mileage: minMileage && maxMileage ? `${minMileage}-${maxMileage}` : undefined,
+    radius: true, // Include the radius filter
+  };
 
-const filters = {
-zip: zip,
-make: make,
-model: model,
-price: minPrice && maxPrice ? `${minPrice}-${maxPrice}` : undefined,
-mileage: minMileage && maxMileage ? `${minMileage}-${maxMileage}` : undefined,
-radius: true,
-};
+  console.log('Applied Filters:', filters); // This line should now work correctly
 
-fetchData(filters, 1).catch((error) => {
-console.error('Error:', error);
-});
+  fetchData(filters, 1).catch((error) => {
+    console.error('Error:', error);
+  });
 });
 
 fetchData().catch((error) => {
