@@ -103,7 +103,7 @@ function filterData(data, filters, page) {
   }
 })();
 
-async function fetchData(filters = {}, page = 1) {
+async function fetchData({ zip, ...filters } = {}, page = 1) {
   const url = 'https://storage.googleapis.com/lotlinxdatabucket/master.json';
   const response = await fetch(url);
 
@@ -113,19 +113,18 @@ async function fetchData(filters = {}, page = 1) {
 
   const jsonData = await response.json();
 
-  if (filters.zip) {
-    try {
-        const requestUrl = `https://api.zippopotam.us/us/${filters.zip}`;
-        const response = await axios.get(requestUrl);
+  if (zip) {
+   const zipData = await fetch(`https://api.zippopotam.us/us/${zip}`)
+     .then((res) => res.json())
+     .catch((error) => {
+       console.error('Error fetching zip data:', error);
+     });
 
-        if (response.data && response.data.places && response.data.places.length > 0) {
-          filters.consumerLat = parseFloat(response.data.places[0].latitude);
-          filters.consumerLon = parseFloat(response.data.places[0].longitude);
-        }
-      } catch (error) {
-        console.error('Error fetching latitude and longitude:', error);
-      }
-    }
+   if (zipData && zipData.places && zipData.places[0]) {
+     filters.consumerLat = parseFloat(zipData.places[0].latitude);
+     filters.consumerLon = parseFloat(zipData.places[0].longitude);
+   }
+ }
 
   const filteredData = filterData(jsonData, filters, page);
 
