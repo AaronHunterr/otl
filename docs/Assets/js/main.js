@@ -66,7 +66,7 @@ function filterData(data, filters, page) {
             if (value < min || value > max) {
               return false;
             }
-          } else if (key === 'radius') {
+          } else if (key === 'zip') {
             const consumerLat = filters.consumerLat;
             const consumerLon = filters.consumerLon;
             const dealerLat = vehicle.Latitude;
