@@ -114,15 +114,18 @@ async function fetchData(filters = {}, page = 1) {
   const jsonData = await response.json();
 
   if (filters.zip) {
-    const zipData = zipcodes.lookup(filters.zip);
-    if (zipData) {
-    filters.consumerLat = zipData.latitude;
-    filters.consumerLon = zipData.longitude;
-  } else {
-    console.error('Invalid ZIP code:', filters.zip);
-    return;
-  }
-}
+    try {
+        const requestUrl = `https://api.zippopotam.us/us/${filters.zip}`;
+        const response = await axios.get(requestUrl);
+
+        if (response.data && response.data.places && response.data.places.length > 0) {
+          filters.consumerLat = parseFloat(response.data.places[0].latitude);
+          filters.consumerLon = parseFloat(response.data.places[0].longitude);
+        }
+      } catch (error) {
+        console.error('Error fetching latitude and longitude:', error);
+      }
+    }
 
   const filteredData = filterData(jsonData, filters, page);
 
