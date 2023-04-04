@@ -1,94 +1,99 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-  <link rel="stylesheet" href="./Assets/styles.css">
-</head>
-
-<body>
-  <div class="wrapper">
-    <header>
-      <h1>Rydeshopper On The Lot</h1>
-    </header>
-    <div class="content">
-      <div class="placement">
-        <div class="feeder-container">
-          <div id="pop-up-form" class="dt-actionable"></div>
-        </div>
-        <br>
-        <br>
-        <div id="adBlock1" class="ad-block">
-          <!-- This is where the ad will display -->
+  <head>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="stylesheet" href="./Assets/styles.css">
+    <style>
+      .vehicle-block {
+        display: inline-block;
+        border: 1px solid black;
+        margin: 10px;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Rydeshopper On The Lot</h1>
+      </header>
+      <div class="content">
+        <div class="placement">
+          <div class="feeder-container">
+            <div id="pop-up-form" class="dt-actionable"></div>
+          </div>
+          <br>
+          <br>
+          <div id="adBlock1" class="ad-block">
+            <!-- This is where the ad will display -->
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <script>
-    let urlZipCode = null;
+    <script>
+      let urlZipCode = null;
 
-    // Get URL Query Parameters
-    function getQueryParam(name) {
-      const queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
-      return urlParams.get(name);
-    }
+      // Get URL Query Parameters
+      function getQueryParam(name) {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        return urlParams.get(name);
+      }
 
-    const zip = getQueryParam("Zip") || "60435"; // Default Zip is "60435"
-    urlZipCode = zip;
-    const make = getQueryParam("Make") || "honda"; // Default Make is "honda"
-    const model = getQueryParam("Model") || "civic"; // Default Model is "civic"
+      const zip = getQueryParam("Zip") || "60435"; // Default Zip is "60435"
+      urlZipCode = zip;
+      const make = getQueryParam("Make") || "honda"; // Default Make is "honda"
+      const model = getQueryParam("Model") || "civic"; // Default Model is "civic"
 
-    // Instantiate Command Queue
-    window.VinAds = window.VinAds || [];
-    // Set Page Options
-    window.VinAds.push({
-      op: "setPage",
-      pubid: "201000",
-      zip: zip,
-      make: make,
-      model: model
-    });
-    // Set Template Ad Options
-    for (let i = 1; i <= 5; i++) {
+      // Instantiate Command Queue
+      window.VinAds = window.VinAds || [];
+      // Set Page Options
       window.VinAds.push({
-        op: "buildAd",
+        op: "setPage",
+        pubid: "201000",
+        zip: zip,
+        make: make,
+        model: model
+      });
+
+      // Set Custom Ad Options
+      const cb = function(vehicles) {
+        // Check that there are vehicles present
+        if (vehicles == "") {
+          console.log("No matching vehicles");
+          return;
+        }
+
+        const container = document.getElementById("adBlock1");
+        for (let i = 0; i < vehicles.length; i++) {
+          const vehicle = vehicles[i];
+          const v_div = document.createElement("div");
+          v_div.classList.add("vehicle-block");
+
+          // Display vehicle properties
+          const make_model = document.createElement("p");
+          make_model.innerHTML = vehicle.make + " " + vehicle.model;
+          const price = document.createElement("p");
+          price.innerHTML = "$" + vehicle.price;
+          const mileage = document.createElement("p");
+          mileage.innerHTML = vehicle.mileage + " miles";
+          const image = document.createElement("img");
+          image.src = vehicle.image_url;
+          image.alt = vehicle.make + " " + vehicle.model;
+
+          v_div.appendChild(make_model);
+          v_div.appendChild(price);
+          v_div.appendChild(mileage);
+          v_div.appendChild(image);
+          container.appendChild(v_div);
+        }
+      };
+      window.VinAds.push({
+        op: "buildCustom",
+        callback: cb,
         numresults: 10,
-        width: 960,
-        height: 100,
-        template: "blue01",
-        container: "adBlock" + i,
         channel: "carpaymentinfo"
       });
-    }
-  </script>
-  <script src="Assets/script.js"></script>
-  <script id="rydeshopper-widget" type="text/javascript" src="https://www.rydeshopper.com/app/shoppingtools/scripts/widget-inline.js?gid=0000-4880"></script>
-  <script type="text/javascript">
-  function updateZipWhenReady() {
-    const zipField = document.getElementById("dtZipcode");
-    const zipLabel = document.querySelector("div.dt-form-item > label");
-    if (zipField) {
-      zipField.value = urlZipCode;
-      zipField.classList.remove("dt-error");
-      if (urlZipCode) {
-        zipField.classList.add("filled");
-        zipLabel.classList.add("filled"); // Add "filled" class to the label
-      } else {
-        zipField.classList.remove("filled");
-        zipLabel.classList.remove("filled"); // Remove "filled" class from the label
-      }
-      // Call getAQuoteDealers after updating zip code
-      dtWidgetInline.plugins.popupform.getAQuoteDealers(document.getElementById("pop-up-form"));
-    } else {
-      setTimeout(updateZipWhenReady, 100);
-    }
-  }
-    document.getElementById("pop-up-form").addEventListener("makes-loaded", function() {
-      updateZipWhenReady();
-    });
-  </script>
-
-</body>
-
-</html>
+    </script>
+    <script src="Assets/script.js"></script>
+    <script id="rydeshopper-widget" type="text/javascript" src="https://www.rydeshopper.com/app/shoppingtools/scripts/widget-inline.js?gid=0000-4880"></script>
