@@ -58,3 +58,41 @@ body {
 .inventory-detail:hover {
   background-color: #0056b3;
 }
+
+#adBlock1 {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#adBlock1 > div {
+  border: solid 1px black;
+  margin: 20px;
+  padding: 10px;
+  width: calc((100% / 3) - 40px);
+  box-sizing: border-box;
+}
+
+#adBlock1 a {
+  display: block;
+  margin-top: 10px;
+  padding: 5px;
+  background-color: #0046bf;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 3px;
+}
+.vehicle-block {
+  display: inline-block;
+  box-sizing: border-box;
+  width: 25%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin: 10px;
+  text-align: center;
+}
+
+.vehicle-block img {
+  width: 100%;
+  height: auto;
+}

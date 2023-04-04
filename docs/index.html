@@ -3,14 +3,6 @@
   <head>
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <link rel="stylesheet" href="./Assets/styles.css">
-    <style>
-      .vehicle-block {
-        display: inline-block;
-        border: 1px solid black;
-        margin: 10px;
-        padding: 10px;
-      }
-    </style>
   </head>
   <body>
     <div class="wrapper">
@@ -30,70 +22,73 @@
         </div>
       </div>
     </div>
-    <script>
-      let urlZipCode = null;
+    <div id="adBlock1" class="ad-block">
+    <!-- This is where the ad will display -->
+  </div>
 
-      // Get URL Query Parameters
-      function getQueryParam(name) {
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        return urlParams.get(name);
-      }
+  <script>
+    // Instantiate Command Queue
+    window.VinAds = window.VinAds || [];
 
-      const zip = getQueryParam("Zip") || "60435"; // Default Zip is "60435"
-      urlZipCode = zip;
-      const make = getQueryParam("Make") || "honda"; // Default Make is "honda"
-      const model = getQueryParam("Model") || "civic"; // Default Model is "civic"
+    // Set Page Options
+    window.VinAds.push({
+      op: "setPage",
+      pubid: "201000",
+      zip: "60435",
+      make: "honda",
+      model: "civic"
+    });
 
-      // Instantiate Command Queue
-      window.VinAds = window.VinAds || [];
-      // Set Page Options
-      window.VinAds.push({
-        op: "setPage",
-        pubid: "201000",
-        zip: zip,
-        make: make,
-        model: model
-      });
-
-      // Set Custom Ad Options
-      const cb = function(vehicles) {
-        // Check that there are vehicles present
+    // Set Custom Ad Options
+    window.VinAds.push({
+      op: "buildCustom",
+      numresults: 10,
+      callback: function(vehicles) {
         if (vehicles == "") {
           console.log("No matching vehicles");
           return;
         }
 
-        const container = document.getElementById("adBlock1");
-        for (let i = 0; i < vehicles.length; i++) {
-          const vehicle = vehicles[i];
-          const v_div = document.createElement("div");
+        var container = document.getElementById("adBlock1");
+        for (var i = 0; i < vehicles.length; i++) {
+          var vehicle = vehicles[i];
+          var v_div = document.createElement("div");
+
+          // Add class "vehicle-block" to each vehicle div
           v_div.classList.add("vehicle-block");
 
-          // Display vehicle properties
-          const make_model = document.createElement("p");
-          make_model.innerHTML = vehicle.make + " " + vehicle.model;
-          const price = document.createElement("p");
-          price.innerHTML = "$" + vehicle.price;
-          const mileage = document.createElement("p");
-          mileage.innerHTML = vehicle.mileage + " miles";
-          const image = document.createElement("img");
-          image.src = vehicle.image_url;
-          image.alt = vehicle.make + " " + vehicle.model;
+          // Add vehicle image
+          var v_img = document.createElement("img");
+          v_img.src = vehicle.image_url;
+          v_img.alt = vehicle.title;
+          v_div.appendChild(v_img);
 
-          v_div.appendChild(make_model);
-          v_div.appendChild(price);
-          v_div.appendChild(mileage);
-          v_div.appendChild(image);
+          // Add vehicle details
+          var v_details = document.createElement("div");
+          v_details.classList.add("vehicle-details");
+
+          // Add vehicle title
+          var v_title = document.createElement("h3");
+          v_title.textContent = vehicle.title;
+          v_details.appendChild(v_title);
+
+          // Add vehicle description
+          var v_desc = document.createElement("p");
+          v_desc.textContent = vehicle.description;
+          v_details.appendChild(v_desc);
+
+          // Add vehicle button with link to vehicle url
+          var v_btn = document.createElement("a");
+          v_btn.href = vehicle.url;
+          v_btn.textContent = "View Details";
+          v_details.appendChild(v_btn);
+
+          v_div.appendChild(v_details);
+
           container.appendChild(v_div);
         }
-      };
-      window.VinAds.push({
-        op: "buildCustom",
-        callback: cb,
-        numresults: 10,
-        channel: "carpaymentinfo"
-      });
-    </script>
+      }
+    });
+  </script>
     <script src="Assets/script.js"></script>
     <script id="rydeshopper-widget" type="text/javascript" src="https://www.rydeshopper.com/app/shoppingtools/scripts/widget-inline.js?gid=0000-4880"></script>
