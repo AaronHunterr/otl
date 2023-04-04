@@ -209,6 +209,7 @@ document.getElementById('search-form').addEventListener('submit', async (event) 
     model: model,
     price: minPrice && maxPrice ? `${minPrice}-${maxPrice}` : undefined,
     mileage: minMileage && maxMileage ? `${minMileage}-${maxMileage}` : undefined,
+    radius: true, // Include the radius filter
   };
 
   fetchData(filters, 1).catch((error) => {
