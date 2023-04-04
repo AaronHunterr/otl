@@ -1,4 +1,3 @@
-// Add this code at the beginning of your JavaScript code
 document.getElementById('min-price').addEventListener('input', (event) => {
   document.getElementById('min-price-display').textContent = event.target.value;
 });
@@ -36,9 +35,8 @@ function updatePagination(dataLength, itemsPerPage, currentPage, onPageChange) {
   }
 }
 
-// Add the new 'calculateDistance' function
 function calculateDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371; // Earth's radius in km
+  const R = 6371;
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
   const a =
@@ -49,7 +47,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
     Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const d = R * c;
-  return d / 1.609344; // Convert distance to miles
+  return d / 1.609344;
 }
 
 function filterData(data, filters, page) {
@@ -93,16 +91,6 @@ function filterData(data, filters, page) {
     .slice(startIndex, endIndex);
 }
 
-(async function() {
-  try {
-    fetchData({ zip: '90210' }, 1).catch((error) => {
-  console.error('Error:', error);
-});
-  } catch (error) {
-    console.error('Error:', error);
-  }
-})();
-
 async function fetchData({ zip, ...filters } = {}, page = 1) {
   const url = 'https://storage.googleapis.com/lotlinxdatabucket/master.json';
   const response = await fetch(url);
@@ -114,38 +102,34 @@ async function fetchData({ zip, ...filters } = {}, page = 1) {
   const jsonData = await response.json();
 
   if (zip) {
-   const zipData = await fetch(`https://api.zippopotam.us/us/${zip}`)
-     .then((res) => res.json())
-     .catch((error) => {
-       console.error('Error fetching zip data:', error);
-     });
+    const zipData = await fetch(`https://api.zippopotam.us/us/${zip}`)
+      .then((res) => res.json())
+      .catch((error) => {
+        console.error('Error fetching zip data:', error);
+      });
 
-   if (zipData && zipData.places && zipData.places[0]) {
-     filters.consumerLat = parseFloat(zipData.places[0].latitude);
-     filters.consumerLon = parseFloat(zipData.places[0].longitude);
-   }
- }
+    if (zipData && zipData.places && zipData.places[0]) {
+      filters.consumerLat = parseFloat(zipData.places[0].latitude);
+      filters.consumerLon = parseFloat(zipData.places[0].longitude);
+    }
+  }
 
   const filteredData = filterData(jsonData, filters, page);
 
-  // Log the keys of the first item in the JSON data array
   if (jsonData.length > 0) {
     console.log('JSON Data Keys:', Object.keys(jsonData[0]));
   } else {
     console.log('The JSON data array is empty.');
   }
 
-  // Update the pagination container
   updatePagination(jsonData.length, 20, page, (newPage) => {
     fetchData(filters, newPage).catch((error) => {
       console.error('Error:', error);
     });
   });
 
-  // Clear the inventory container before displaying the filtered data
   document.getElementById('inventory-container').innerHTML = '';
 
-  // Use filteredData to populate your inventory results on the site
   displayInventory(filteredData);
 }
 
@@ -154,68 +138,68 @@ function displayInventory(data) {
 
   data.forEach((vehicle) => {
     const inventoryItem = document.createElement('div');
-    inventoryItem.className = 'inventory-item';
+inventoryItem.className = 'inventory-item';
 
-    const inventoryImage = document.createElement('img');
-    inventoryImage.className = 'inventory-image';
-    inventoryImage.src = vehicle.ImageUrls;
+const inventoryImage = document.createElement('img');
+inventoryImage.className = 'inventory-image';
+inventoryImage.src = vehicle.ImageUrls;
 
-    const inventoryInfo = document.createElement('div');
-    inventoryInfo.className = 'inventory-info';
+const inventoryInfo = document.createElement('div');
+inventoryInfo.className = 'inventory-info';
 
-    const inventoryTitle = document.createElement('p');
-    inventoryTitle.className = 'inventory-title';
-    inventoryTitle.textContent = `${vehicle.Year} ${vehicle.Make} ${vehicle.Model}`;
+const inventoryTitle = document.createElement('p');
+inventoryTitle.className = 'inventory-title';
+inventoryTitle.textContent = `${vehicle.Year} ${vehicle.Make} ${vehicle.Model}`;
 
-    const inventoryMileage = document.createElement('p');
-    inventoryMileage.className = 'inventory-mileage';
-    inventoryMileage.textContent = `Mileage: ${vehicle.Miles}`;
+const inventoryMileage = document.createElement('p');
+inventoryMileage.className = 'inventory-mileage';
+inventoryMileage.textContent = `Mileage: ${vehicle.Miles}`;
 
-    const inventoryDealer = document.createElement('p');
-    inventoryDealer.className = 'inventory-dealer';
-    inventoryDealer.textContent = `Dealer: ${vehicle.DealerName}`;
+const inventoryDealer = document.createElement('p');
+inventoryDealer.className = 'inventory-dealer';
+inventoryDealer.textContent = `Dealer: ${vehicle.DealerName}`;
 
-    const inventoryDetail = document.createElement('button');
-    inventoryDetail.className = 'inventory-detail';
-    inventoryDetail.textContent = 'View Details';
+const inventoryDetail = document.createElement('button');
+inventoryDetail.className = 'inventory-detail';
+inventoryDetail.textContent = 'View Details';
 
-    inventoryInfo.appendChild(inventoryTitle);
-    inventoryInfo.appendChild(inventoryMileage);
-    inventoryInfo.appendChild(inventoryDealer);
-    inventoryInfo.appendChild(inventoryDetail);
+inventoryInfo.appendChild(inventoryTitle);
+inventoryInfo.appendChild(inventoryMileage);
+inventoryInfo.appendChild(inventoryDealer);
+inventoryInfo.appendChild(inventoryDetail);
 
-    inventoryItem.appendChild(inventoryImage);
-    inventoryItem.appendChild(inventoryInfo);
+inventoryItem.appendChild(inventoryImage);
+inventoryItem.appendChild(inventoryInfo);
 
-    inventoryContainer.appendChild(inventoryItem);
-  });
+inventoryContainer.appendChild(inventoryItem);
+});
 }
 
 document.getElementById('search-form').addEventListener('submit', async (event) => {
-  event.preventDefault();
+event.preventDefault();
 
-  const zip = document.getElementById('zip').value;
-  const make = document.getElementById('make').value;
-  const model = document.getElementById('model').value;
-  const minPrice = document.getElementById('min-price').value;
-  const maxPrice = document.getElementById('max-price').value;
-  const minMileage = document.getElementById('min-mileage').value;
-  const maxMileage = document.getElementById('max-mileage').value;
+const zip = document.getElementById('zip').value;
+const make = document.getElementById('make').value;
+const model = document.getElementById('model').value;
+const minPrice = document.getElementById('min-price').value;
+const maxPrice = document.getElementById('max-price').value;
+const minMileage = document.getElementById('min-mileage').value;
+const maxMileage = document.getElementById('max-mileage').value;
 
-  const filters = {
-    zip: zip,
-    make: make,
-    model: model,
-    price: minPrice && maxPrice ? `${minPrice}-${maxPrice}` : undefined,
-    mileage: minMileage && maxMileage ? `${minMileage}-${maxMileage}` : undefined,
-    radius: true, // Include the radius filter
-  };
+const filters = {
+zip: zip,
+make: make,
+model: model,
+price: minPrice && maxPrice ? `${minPrice}-${maxPrice}` : undefined,
+mileage: minMileage && maxMileage ? `${minMileage}-${maxMileage}` : undefined,
+radius: true,
+};
 
-  fetchData(filters, 1).catch((error) => {
-    console.error('Error:', error);
-  });
+fetchData(filters, 1).catch((error) => {
+console.error('Error:', error);
+});
 });
 
 fetchData().catch((error) => {
-  console.error('Error:', error);
+console.error('Error:', error);
 });
