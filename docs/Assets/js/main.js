@@ -71,33 +71,40 @@ async function filterData(data, filters, page) {
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
-  const filteredData = [];
+  // Map data to an array of promises that resolve to true or false
+  const filterPromises = data.map(async (vehicle) => {
+    for (const key in filters) {
+      if (filters[key]) {
+        if (key === 'price' || key === 'mileage') {
+          const [min, max] = filters[key].split('-').map(Number);
+          const value = Number(vehicle[key]);
 
-  for (const vehicle of data) {
-    const withinRadius = await isVehicleWithinRadius(filters.zip, vehicle.DealerZip, vehicle.Radius);
-    if (withinRadius) {
-      let match = true;
-      for (const key in filters) {
-        if (filters[key]) {
-          if (key === 'price' || key === 'mileage') {
-            const [min, max] = filters[key].split('-').map(Number);
-            const value = Number(vehicle[key]);
-
-            if (value < min || value > max) {
-              match = false;
-              break;
-            }
-          } else if (key !== 'zip' && String(vehicle[key]) !== String(filters[key])) {
-            match = false;
-            break;
+          if (value < min || value > max) {
+            return false;
           }
+        } else if (key === 'zip') {
+          const withinRadius = await isVehicleWithinRadius(
+            filters.zip,
+            vehicle.DealerZip,
+            vehicle.Radius
+          );
+
+          if (!withinRadius) {
+            return false;
+          }
+        } else if (String(vehicle[key]) !== String(filters[key])) {
+          return false;
         }
       }
-      if (match) {
-        filteredData.push(vehicle);
-      }
     }
-  }
+    return true;
+  });
+
+  // Wait for all filter promises to resolve
+  const filterResults = await Promise.all(filterPromises);
+
+  // Filter data based on filterResults
+  const filteredData = data.filter((_, index) => filterResults[index]);
 
   return filteredData.slice(startIndex, endIndex);
 }
