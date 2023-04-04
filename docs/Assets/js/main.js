@@ -68,8 +68,6 @@ async function isVehicleWithinRadius(zip1, zip2, radius) {
 
 async function filterData(data, filters, page) {
   const itemsPerPage = 20;
-  const startIndex = (page - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
 
   // Map data to an array of promises that resolve to true or false
   const filterPromises = data.map(async (vehicle) => {
@@ -83,13 +81,10 @@ async function filterData(data, filters, page) {
             return false;
           }
         } else if (key === 'zip') {
-          const withinRadius = await isVehicleWithinRadius(
-            filters.zip,
-            vehicle.DealerZip,
-            vehicle.Radius
-          );
+          const distance = await calculateDistance(filters.zip, vehicle.DealerZip);
+          const radius = parseFloat(vehicle.Radius);
 
-          if (!withinRadius) {
+          if (distance > radius) {
             return false;
           }
         } else if (String(vehicle[key]) !== String(filters[key])) {
@@ -105,6 +100,9 @@ async function filterData(data, filters, page) {
 
   // Filter data based on filterResults
   const filteredData = data.filter((_, index) => filterResults[index]);
+
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
 
   return filteredData.slice(startIndex, endIndex);
 }
