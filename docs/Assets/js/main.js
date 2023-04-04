@@ -100,6 +100,7 @@ async function fetchData({ zip, ...filters } = {}, page = 1) {
   }
 
   const jsonData = await response.json();
+  console.log('Fetched Data:', jsonData);
 
   if (zip) {
     const zipData = await fetch(`https://api.zippopotam.us/us/${zip}`)
@@ -115,6 +116,7 @@ async function fetchData({ zip, ...filters } = {}, page = 1) {
   }
 
   const filteredData = filterData(jsonData, filters, page);
+  console.log('Filtered Data:', filteredData);
 
   if (jsonData.length > 0) {
     console.log('JSON Data Keys:', Object.keys(jsonData[0]));
@@ -134,6 +136,7 @@ async function fetchData({ zip, ...filters } = {}, page = 1) {
 }
 
 function displayInventory(data) {
+  console.log('Displaying Data:', data);
   const inventoryContainer = document.getElementById('inventory-container');
 
   data.forEach((vehicle) => {
@@ -177,6 +180,8 @@ inventoryContainer.appendChild(inventoryItem);
 
 document.getElementById('search-form').addEventListener('submit', async (event) => {
 event.preventDefault();
+
+console.log('Applied Filters:', filters);
 
 const zip = document.getElementById('zip').value;
 const make = document.getElementById('make').value;
