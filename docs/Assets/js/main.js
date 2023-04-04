@@ -133,8 +133,8 @@ async function fetchData({ zip, ...filters } = {}, page = 1) {
     }
   }
 
-  const filteredData = await filterData(jsonData, filters, page);
-    console.log('Filtered Data:', filteredData);
+  const filteredData = await filterData(jsonData, filters);
+  console.log('Filtered Data:', filteredData);
 
   if (jsonData.length > 0) {
     console.log('JSON Data Keys:', Object.keys(jsonData[0]));
@@ -142,7 +142,9 @@ async function fetchData({ zip, ...filters } = {}, page = 1) {
     console.log('The JSON data array is empty.');
   }
 
-  updatePagination(jsonData.length, 20, page, (newPage) => {
+  const paginatedData = filteredData.slice((page - 1) * 20, page * 20);
+
+  updatePagination(filteredData.length, 20, page, (newPage) => {
     fetchData(filters, newPage).catch((error) => {
       console.error('Error:', error);
     });
@@ -150,7 +152,7 @@ async function fetchData({ zip, ...filters } = {}, page = 1) {
 
   document.getElementById('inventory-container').innerHTML = '';
 
-  displayInventory(filteredData);
+  displayInventory(paginatedData);
 }
 
 function displayInventory(data) {
