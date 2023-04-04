@@ -67,11 +67,18 @@
           var v_div = document.createElement("div");
           v_div.classList.add("vehicle-block");
 
+          // Create vehicle image container element
+          var imgContainer = document.createElement("div");
+          imgContainer.classList.add("vehicle-image-container");
+
           // Create vehicle image element
           var img = document.createElement("img");
           img.src = vehicle.image_url;
           img.alt = vehicle.make + " " + vehicle.model;
           img.classList.add("vehicle-image");
+
+          // Append image to image container
+          imgContainer.appendChild(img);
 
           // Create vehicle title element
           var title = document.createElement("h2");
@@ -90,7 +97,7 @@
           button.classList.add("vehicle-button");
 
           // Append elements to vehicle block
-          v_div.appendChild(img);
+          v_div.appendChild(imgContainer); // Add the image container instead of the image
           v_div.appendChild(title);
           v_div.appendChild(price);
           v_div.appendChild(button);
@@ -99,9 +106,9 @@
           container.appendChild(v_div);
         }
       },
-      channel: "carpaymentinfo"
-    });
-  </script>
-  <script src="Assets/script.js"></script>
+  channel: "carpaymentinfo"
+});
+</script>
+<script src="Assets/script.js"></script>
 </body>
 </html>
