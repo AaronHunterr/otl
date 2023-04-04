@@ -197,6 +197,38 @@
       // Use these values to send a request to the API
     });
   </script>
+  <script>
+  document.getElementById("searchForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent form from submitting and causing a page refresh
+
+    // Get form field values
+    const bodyStyle = document.getElementById("bodystyle").value;
+    const yearAny = document.getElementById("yearAny").checked;
+    const yearMin = document.getElementById("yearMin").value;
+    const yearMax = document.getElementById("yearMax").value;
+    const priceMin = document.getElementById("priceMin").value;
+    const priceMax = document.getElementById("priceMax").value;
+    const mileageMin = document.getElementById("mileageMin").value;
+    const mileageMax = document.getElementById("mileageMax").value;
+    const zip = document.getElementById("zip").value;
+
+    // Construct the query string
+    const params = new URLSearchParams();
+    params.set("bodystyle", bodyStyle);
+    if (!yearAny) {
+      params.set("yearMin", yearMin);
+      params.set("yearMax", yearMax);
+    }
+    params.set("priceMin", priceMin);
+    params.set("priceMax", priceMax);
+    params.set("mileageMin", mileageMin);
+    params.set("mileageMax", mileageMax);
+    params.set("zip", zip);
+
+    // Reload the page with the new query string
+    window.location.search = params.toString();
+  });
+</script>
 </body>
 
 </html>
