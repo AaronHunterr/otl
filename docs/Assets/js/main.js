@@ -66,7 +66,7 @@ function filterData(data, filters, page) {
             if (value < min || value > max) {
               return false;
             }
-          } else if (key === 'radius') {
+          } else if (key === 'zip') {
             const consumerLat = filters.consumerLat;
             const consumerLon = filters.consumerLon;
             const dealerLat = vehicle.Latitude;
@@ -78,7 +78,7 @@ function filterData(data, filters, page) {
               dealerLon
             );
 
-            if (distance > filters.radius) { // Fix this line
+            if (distance > vehicle.Radius) {
               return false;
             }
           } else if (String(vehicle[key]) !== String(filters[key])) {
@@ -195,7 +195,6 @@ document.getElementById('search-form').addEventListener('submit', async (event) 
     model: model,
     price: minPrice && maxPrice ? `${minPrice}-${maxPrice}` : undefined,
     mileage: minMileage && maxMileage ? `${minMileage}-${maxMileage}` : undefined,
-    radius: document.getElementById('radius').value || undefined,
   };
 
   console.log('Applied Filters:', filters); // This line should now work correctly
