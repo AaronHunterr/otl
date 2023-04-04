@@ -13,75 +13,93 @@
     </header>
     <div class="content">
       <div class="placement">
+        </div>
         <div id="adBlock1" class="ad-block">
           <!-- This is where the ad will display -->
         </div>
       </div>
     </div>
-  </div>
-
   <script>
+    let urlZipCode = null;
+
+    // Get URL Query Parameters
+    function getQueryParam(name) {
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      return urlParams.get(name);
+    }
+
+    const zip = getQueryParam("Zip") || "60435"; // Default Zip is "60435"
+    urlZipCode = zip;
+    const make = getQueryParam("Make") || "honda"; // Default Make is "honda"
+    const model = getQueryParam("Model") || "civic"; // Default Model is "civic"
+
     // Instantiate Command Queue
     window.VinAds = window.VinAds || [];
-
     // Set Page Options
     window.VinAds.push({
       op: "setPage",
       pubid: "201000",
-      zip: "60435",
-      make: "honda",
-      model: "civic"
+      zip: zip,
+      make: make,
+      model: model
     });
-
     // Set Custom Ad Options
     window.VinAds.push({
       op: "buildCustom",
       numresults: 10,
       callback: function(vehicles) {
+        // Check that there are vehicles present
         if (vehicles == "") {
           console.log("No matching vehicles");
           return;
         }
 
+        // Get ad block element
         var container = document.getElementById("adBlock1");
+
+        // Clear container before adding new vehicle blocks
+        container.innerHTML = "";
+
+        // Create vehicle block elements for each vehicle and append to container
         for (var i = 0; i < vehicles.length; i++) {
           var vehicle = vehicles[i];
           var v_div = document.createElement("div");
-
-          // Add class "vehicle-block" to each vehicle div
           v_div.classList.add("vehicle-block");
 
-          // Add vehicle image
-          var v_img = document.createElement("img");
-          v_img.src = vehicle.image_url;
-          v_img.alt = vehicle.title;
-          v_div.appendChild(v_img);
+          // Create vehicle image element
+          var img = document.createElement("img");
+          img.src = vehicle.image_url;
+          img.alt = vehicle.make + " " + vehicle.model;
+          img.classList.add("vehicle-image");
 
-          // Add vehicle details
-          var v_details = document.createElement("div");
-          v_details.classList.add("vehicle-details");
+          // Create vehicle title element
+          var title = document.createElement("h2");
+          title.innerHTML = vehicle.make + " " + vehicle.model;
+          title.classList.add("vehicle-title");
 
-          // Add vehicle title
-          var v_title = document.createElement("h3");
-          v_title.textContent = vehicle.title;
-          v_details.appendChild(v_title);
+          // Create vehicle price element
+          var price = document.createElement("div");
+          price.innerHTML = "Price: $" + vehicle.price;
+          price.classList.add("vehicle-price");
 
-          // Add vehicle description
-          var v_desc = document.createElement("p");
-          v_desc.textContent = vehicle.description;
-          v_details.appendChild(v_desc);
+          // Create view details button element
+          var button = document.createElement("a");
+          button.href = vehicle.url;
+          button.innerHTML = "Click Here For More";
+          button.classList.add("vehicle-button");
 
-          // Add vehicle button with link to vehicle url
-          var v_btn = document.createElement("a");
-          v_btn.href = vehicle.url;
-          v_btn.textContent = "View Details";
-          v_details.appendChild(v_btn);
+          // Append elements to vehicle block
+          v_div.appendChild(img);
+          v_div.appendChild(title);
+          v_div.appendChild(price);
+          v_div.appendChild(button);
 
-          v_div.appendChild(v_details);
-
+          // Append vehicle block to container
           container.appendChild(v_div);
         }
-      }
+      },
+      channel: "carpaymentinfo"
     });
   </script>
   <script src="Assets/script.js"></script>
