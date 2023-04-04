@@ -44,9 +44,9 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(lat1 * Math.PI / 180) *
-      Math.cos(lat2 * Math.PI / 180) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
+    Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const d = R * c;
   return d / 1.609344; // Convert distance to miles
@@ -93,9 +93,11 @@ function filterData(data, filters, page) {
     .slice(startIndex, endIndex);
 }
 
-(async function () {
+(async function() {
   try {
-    await fetchData({ zip: '90210' }, 1);
+    await fetchData({
+      zip: '90210'
+    }, 1);
   } catch (error) {
     console.error('Error:', error);
   }
@@ -110,6 +112,13 @@ async function fetchData(filters = {}, page = 1) {
   }
 
   const jsonData = await response.json();
+
+  if (filters.zip) {
+    const zipData = zipcodes.lookup(filters.zip);
+    filters.consumerLat = zipData.latitude;
+    filters.consumerLon = zipData.longitude;
+  }
+
   const filteredData = filterData(jsonData, filters, page);
 
   // Log the keys of the first item in the JSON data array
