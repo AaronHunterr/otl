@@ -13,102 +13,134 @@
     </header>
     <div class="content">
       <div class="placement">
-        </div>
-        <div id="adBlock1" class="ad-block">
-          <!-- This is where the ad will display -->
-        </div>
+        <form id="searchForm">
+          <label for="bodystyle">Body Style:</label>
+          <select id="bodystyle">
+            <option value="convertible">Convertible</option>
+            <option value="coupe">Coupe</option>
+            <option value="hatchback">Hatchback</option>
+            <option value="minivan">Minivan</option>
+            <option value="pickup">Truck</option>
+            <option value="sedan">Sedan</option>
+            <option value="suv">SUV</option>
+            <option value="wagon">Wagon</option>
+          </select>
+
+          <label for="year">Year:</label>
+          <input type="radio" id="yearAny" name="year" value="any" checked>
+          <label for="yearAny">Any</label>
+          <input type="radio" id="yearRange" name="year" value="range">
+          <label for="yearRange">Select Range</label>
+          <input type="range" id="yearMin" min="1950" max="2024" value="1950" style="display: none;">
+          <input type="range" id="yearMax" min="1950" max="2024" value="2024" style="display: none;">
+          <span id="yearMinLabel" style="display: none;"></span> - <span id="yearMaxLabel" style="display: none;"></span>
+
+          <label for="price">Price Range:</label>
+          <input type="range" id="priceMin" min="0" max="100000" value="0">
+          <input type="range" id="priceMax" min="0" max="100000" value="100000">
+          <span id="priceMinLabel"></span> - <span id="priceMaxLabel"></span>
+
+          <label for="mileage">Mileage:</label>
+          <input type="range" id="mileageMin" min="0" max="300000" value="0">
+          <input type="range" id="mileageMax" min="0" max="300000" value="300000">
+          <span id="mileageMinLabel"></span> - <span id="mileageMaxLabel"></span>
+
+          <label for="zip">ZIP Code:</label>
+          <input type="text" id="zip" placeholder="e.g. 60435">
+
+          <button type="submit">Search</button>
+        </form>
+      </div>
+      <div id="adBlock1" class="ad-block">
+        <!-- This is where the ad will display -->
       </div>
     </div>
+  </div>
   <script>
-    let urlZipCode = null;
+    const defaultBodystyle = "sedan";
+    const defaultYear = "2020";
 
-    // Get URL Query Parameters
-    function getQueryParam(name) {
-      const queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
-      return urlParams.get(name);
+    window.VinAds = window.VinAds || [];
+
+    function updateAds(bodystyle, year) {
+      window.VinAds.push({
+        op: "buildCustom",
+        numresults: 10,
+        bodystyle: bodystyle,
+        year: year,
+        callback: function(vehicles) {
+          if (vehicles == "") {
+            console.log("No matching vehicles");
+            return;
+          }
+
+          var container = document.getElementById("adBlock1");
+          container.innerHTML = "";
+
+          for (var i = 0; i < vehicles.length; i++) {
+            var vehicle = vehicles[i];
+            var v_div = document.createElement("div");
+            v_div.classList.add("vehicle-block");
+
+            var imgContainer = document.createElement("div");
+            imgContainer.classList.add("vehicle-image-container");
+
+            var img = document.createElement("img");
+            img.src = vehicle.image_url;
+            img.alt = vehicle.make + " " + vehicle.model;
+            img.classList.add("vehicle-image");
+
+            imgContainer.appendChild(img);
+
+            var title = document.createElement("h2");
+            title.innerHTML = vehicle.make + " " + vehicle.model;
+            title.classList.add("vehicle-title");
+
+            var price = document.createElement("div");
+            price.innerHTML = "Price: $" + vehicle.price;
+            price.classList.add("vehicle-price");
+
+            var button = document.createElement("a");
+            button.href = vehicle.url;
+            button.innerHTML = "Click Here For More";
+            button.classList.add("vehicle-button");
+
+            v_div.appendChild(imgContainer);
+            v_div.appendChild(title);
+            v_div.appendChild(price);
+            v_div.appendChild(button);
+
+            container.appendChild(v_div);
+          }
+        },
+        channel: "carpaymentinfo",
+      });
     }
 
-    const zip = getQueryParam("Zip") || "60435"; // Default Zip is "60435"
-    urlZipCode = zip;
-    const make = getQueryParam("Make") || "honda"; // Default Make is "honda"
-    const model = getQueryParam("Model") || "civic"; // Default Model is "civic"
+    // Add an event listener for the form submission
+    document.getElementById("searchForm").addEventListener("submit", function(event) {
+      event.preventDefault(); // Prevent the form from submitting and refreshing the page
 
-    // Instantiate Command Queue
-    window.VinAds = window.VinAds || [];
-    // Set Page Options
-    window.VinAds.push({
-      op: "setPage",
-      pubid: "201000",
-      zip: zip,
-      make: make,
-      model: model
+      // Get the input values from the form
+      const bodystyle = document.getElementById("bodystyle").value;
+      const yearAny = document.getElementById("yearAny").checked;
+      const yearMin = document.getElementById("yearMin").value;
+      const yearMax = document.getElementById("yearMax").value;
+      const priceMin = document.getElementById("priceMin").value;
+      const priceMax = document.getElementById("priceMax").value;
+      const mileageMin = document.getElementById("mileageMin").value;
+      const mileageMax = document.getElementById("mileageMax").value;
+      const zip = document.getElementById("zip").value;
+
+      // Update ads with the new input values
+      const selectedYear = yearAny ? defaultYear : yearMin + "-" + yearMax;
+      updateAds(bodystyle, selectedYear);
     });
-    // Set Custom Ad Options
-    window.VinAds.push({
-      op: "buildCustom",
-      numresults: 10,
-      callback: function(vehicles) {
-        // Check that there are vehicles present
-        if (vehicles == "") {
-          console.log("No matching vehicles");
-          return;
-        }
 
-        // Get ad block element
-        var container = document.getElementById("adBlock1");
-
-        // Clear container before adding new vehicle blocks
-        container.innerHTML = "";
-
-        // Create vehicle block elements for each vehicle and append to container
-        for (var i = 0; i < vehicles.length; i++) {
-          var vehicle = vehicles[i];
-          var v_div = document.createElement("div");
-          v_div.classList.add("vehicle-block");
-
-          // Create vehicle image container element
-          var imgContainer = document.createElement("div");
-          imgContainer.classList.add("vehicle-image-container");
-
-          // Create vehicle image element
-          var img = document.createElement("img");
-          img.src = vehicle.image_url;
-          img.alt = vehicle.make + " " + vehicle.model;
-          img.classList.add("vehicle-image");
-
-          // Append image to image container
-          imgContainer.appendChild(img);
-
-          // Create vehicle title element
-          var title = document.createElement("h2");
-          title.innerHTML = vehicle.make + " " + vehicle.model;
-          title.classList.add("vehicle-title");
-
-          // Create vehicle price element
-          var price = document.createElement("div");
-          price.innerHTML = "Price: $" + vehicle.price;
-          price.classList.add("vehicle-price");
-
-          // Create view details button element
-          var button = document.createElement("a");
-          button.href = vehicle.url;
-          button.innerHTML = "Click Here For More";
-          button.classList.add("vehicle-button");
-
-          // Append elements to vehicle block
-          v_div.appendChild(imgContainer); // Add the image container instead of the image
-          v_div.appendChild(title);
-          v_div.appendChild(price);
-          v_div.appendChild(button);
-
-          // Append vehicle block to container
-          container.appendChild(v_div);
-        }
-      },
-  channel: "carpaymentinfo"
-});
-</script>
-<script src="Assets/script.js"></script>
+    // Initialize the ad with default values
+    updateAds(defaultBodystyle, defaultYear);
+  </script>
+  <script src="Assets/script.js"></script>
 </body>
+
 </html>
