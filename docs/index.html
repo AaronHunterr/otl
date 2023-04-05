@@ -222,8 +222,8 @@
       const mileageMin = document.getElementById("mileageMin").value;
       const mileageMax = document.getElementById("mileageMax").value;
       const zip = document.getElementById("zip").value;
-      const mileageRange = mileageMin && mileageMax ? `${mileageMin}-${mileageMax}` : null;
-      const priceRange = priceMin && priceMax ? `${priceMin}-${priceMax}` : null;
+      const mileageRange = mileageMin && mileageMax ? "'" + mileageMin + "-" + mileageMax + "'" : null;
+      const priceRange = priceMin && priceMax ? "'" + priceMin + "-" + priceMax + "'" : null;
 
       // Update window.VinAds array with new values
       window.VinAds = window.VinAds || [];
