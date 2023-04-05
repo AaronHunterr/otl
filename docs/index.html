@@ -93,28 +93,6 @@
       op: "buildCustom",
       numresults: 10,
       callback: function(vehicles) {
-
-        function matchesFilter(vehicle) {
-          // Implement your filtering logic here
-          // For example:
-          const yearValid = (yearAny || (vehicle.year >= yearMin && vehicle.year <= yearMax));
-          const priceValid = (vehicle.price >= priceMin && vehicle.price <= priceMax);
-          const mileageValid = (vehicle.miles >= mileageMin && vehicle.miles <= mileageMax);
-
-          return yearValid && priceValid && mileageValid;
-        }
-
-        // Log received vehicles data
-        console.log("Callback received data:", vehicles);
-        // Check that there are vehicles present
-        if (vehicles == "") {
-          console.log("No matching vehicles");
-          return;
-        }
-
-        // Filter vehicles based on your criteria
-        vehicles = vehicles.filter(matchesFilter);
-
         // Log received vehicles data
         console.log("Callback received data:", vehicles);
         // Check that there are vehicles present
@@ -265,28 +243,6 @@
         op: "buildCustom",
         numresults: 10,
         callback: function(vehicles) {
-
-          function matchesFilter(vehicle) {
-            // Implement your filtering logic here
-            // For example:
-            const yearValid = (yearAny || (vehicle.year >= yearMin && vehicle.year <= yearMax));
-            const priceValid = (vehicle.price >= priceMin && vehicle.price <= priceMax);
-            const mileageValid = (vehicle.miles >= mileageMin && vehicle.miles <= mileageMax);
-
-            return yearValid && priceValid && mileageValid;
-          }
-
-          // Log received vehicles data
-          console.log("Callback received data:", vehicles);
-          // Check that there are vehicles present
-          if (vehicles == "") {
-            console.log("No matching vehicles");
-            return;
-          }
-
-          // Filter vehicles based on your criteria
-          vehicles = vehicles.filter(matchesFilter);
-
           // Log received vehicles data
           console.log("Callback received data:", vehicles);
           // Check that there are vehicles present
