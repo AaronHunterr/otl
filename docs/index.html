@@ -68,8 +68,8 @@
 
     const zip = getQueryParam("Zip") || "60435"; // Default Zip is "60435"
     urlZipCode = zip;
-    const make = getQueryParam("Make") || "honda"; // Default Make is "honda"
-    const model = getQueryParam("Model") || "civic"; // Default Model is "civic"
+    const make = getQueryParam("Bodystyle") || "sedan"; // Default Make is "honda"
+    const model = getQueryParam("Year") || "2023"; // Default Model is "civic"
 
     // Instantiate Command Queue
     window.VinAds = window.VinAds || [];
