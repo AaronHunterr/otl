@@ -8,16 +8,16 @@
 
 <body>
   <header class="site-header">
-		<nav>
-			<ul class="site-header-nav">
-				<li>
-					<a class="site-header-nav-link site-header-nav-logo">
-						<img src="https://rydeshopper.com/app/cardealfinder/images/tenants/rydeshopper/Rydeshopper-logo.png" alt="Rydeshopper">
-					</a>
-				</li>
-			</ul>
-		</nav>
-	</header>
+    <nav>
+      <ul class="site-header-nav">
+        <li>
+          <a class="site-header-nav-link site-header-nav-logo">
+            <img src="https://rydeshopper.com/app/cardealfinder/images/tenants/rydeshopper/Rydeshopper-logo.png" alt="Rydeshopper">
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
   <div class="wrapper">
     <div class="content">
       <div class="placement">
@@ -93,6 +93,8 @@
       op: "buildCustom",
       numresults: 10,
       callback: function(vehicles) {
+        // Log received vehicles data
+        console.log("Callback received data:", vehicles);
         // Check that there are vehicles present
         if (vehicles == "") {
           console.log("No matching vehicles");
@@ -241,6 +243,8 @@
         op: "buildCustom",
         numresults: 10,
         callback: function(vehicles) {
+          // Log received vehicles data
+          console.log("Callback received data:", vehicles);
           // Check that there are vehicles present
           if (vehicles == "") {
             console.log("No matching vehicles");
