@@ -237,6 +237,6 @@ input[type="range"]::-moz-range-thumb {
   }
 }
 img,picture {
-    max-width: 100%;
+    width: 200px;
     display: block
 }
