@@ -87,6 +87,7 @@
       pubid: "201000",
       zip: zip,
       bodystyle: bodyStyle,
+      debug: true,
     });
     // Set Custom Ad Options
     window.VinAds.push({
@@ -153,8 +154,7 @@
         }
       },
       channel: "RydeshopperOTL",
-      searchpath: "exact",
-      debug: "true"
+      searchpath: "exact"
     });
   </script>
   <script src="https://ads.lotlinx.com/load.js" async></script>
@@ -234,8 +234,9 @@
         zip: zip,
         bodystyle: bodyStyle, // Assuming make parameter should be bodyStyle
         year: yearAny ? "" : `${yearMin}-${yearMax}`, // Assuming model parameter should be year range
-        miles: mileageRange,
+        mileage: mileageRange,
         price: priceRange,
+        debug: true,
       });
 
       // Call buildCustom command with the callback function
@@ -303,8 +304,7 @@
           }
         },
         channel: "RydeshopperOTL",
-        searchpath: "exact",
-        debug: "true"
+        searchpath: "exact"
       });
     });
   </script>
