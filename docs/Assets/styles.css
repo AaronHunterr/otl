@@ -1,5 +1,5 @@
 body {
-  font-family: Arial, sans-serif;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif
 }
 
 .wrapper {
@@ -7,10 +7,32 @@ body {
   margin: 0 auto;
 }
 
-header {
-  text-align: center;
-  background-color: #f7f7f7;
-  padding: 1rem;
+.site-header {
+    background-color: var(--brand-primary-1)
+}
+
+.site-header-nav {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    height: 100px;
+    list-style-type: none;
+    margin: 0;
+    padding: 1rem 1.25rem
+}
+
+@media(max-width: 479px) {
+    .site-header-nav {
+        height:auto;
+        justify-content: center
+    }
+}
+
+.site-header-nav-link {
+    color: #fff;
+    display: block;
+    font-size: 1.25rem;
+    text-decoration: none
 }
 
 .content {
