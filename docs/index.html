@@ -96,7 +96,7 @@
       callback: function(vehicles) {
         // Log received vehicles data
         console.log("Callback received data:", vehicles);
-        console.log(arguments);
+        console.trace();
         // Check that there are vehicles present
         if (vehicles == "") {
           console.log("No matching vehicles");
@@ -247,7 +247,7 @@
         callback: function(vehicles) {
           // Log received vehicles data
           console.log("Callback received data:", vehicles);
-          console.log(arguments);
+          console.trace();
           // Check that there are vehicles present
           if (vehicles == "") {
             console.log("No matching vehicles");
