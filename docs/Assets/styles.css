@@ -100,17 +100,51 @@ input[type="radio"] {
 
 .range-slider {
   position: relative;
+  width: 100%;
 }
 
 .range-slider input[type="range"] {
+  width: 100%;
   position: absolute;
-  z-index: 1;
-  pointer-events: none;
+  z-index: 2;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.range-slider input[type="range"]:focus {
+  outline: none;
 }
 
 .range-slider input.range-min {
+  z-index: 3;
+}
+
+.range-slider input.range-max {
   z-index: 2;
-  pointer-events: all;
+}
+
+.range-slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  background-color: #1a73e8;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.range-slider input[type="range"]::-moz-range-thumb {
+  height: 16px;
+  width: 16px;
+  background-color: #1a73e8;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.range-slider .range-labels {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
 }
 
 button {
