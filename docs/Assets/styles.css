@@ -98,9 +98,19 @@ input[type="radio"] {
     width: auto;
 }
 
-input[type="range"] {
-    width: 100%;
-    padding: 5px 0;
+.range-slider {
+  position: relative;
+}
+
+.range-slider input[type="range"] {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.range-slider input.range-min {
+  z-index: 2;
+  pointer-events: all;
 }
 
 button {

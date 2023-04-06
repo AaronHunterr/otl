@@ -44,13 +44,17 @@
           <span id="yearMinLabel" style="display: none;"></span> - <span id="yearMaxLabel" style="display: none;"></span>
 
           <label for="price">Price Range:</label>
-          <input type="range" id="priceMin" min="0" max="100000" value="0">
-          <input type="range" id="priceMax" min="0" max="100000" value="100000">
+          <div class="range-slider">
+            <input type="range" class="range-min" id="priceMin" min="0" max="100000" value="0">
+            <input type="range" class="range-max" id="priceMax" min="0" max="100000" value="100000">
+          </div>
           <span id="priceMinLabel"></span> - <span id="priceMaxLabel"></span>
 
           <label for="mileage">Mileage:</label>
-          <input type="range" id="mileageMin" min="0" max="300000" value="0">
-          <input type="range" id="mileageMax" min="0" max="300000" value="300000">
+          <div class="range-slider">
+            <input type="range" class="range-min" id="mileageMin" min="0" max="300000" value="0">
+            <input type="range" class="range-max" id="mileageMax" min="0" max="300000" value="300000">
+          </div>
           <span id="mileageMinLabel"></span> - <span id="mileageMaxLabel"></span>
 
           <label for="zip">ZIP Code:</label>
