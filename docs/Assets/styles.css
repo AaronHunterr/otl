@@ -110,7 +110,6 @@ input[type="radio"] {
 .range-slider input[type="range"] {
   width: 100%;
   position: absolute;
-  z-index: 2;
   appearance: none;
   background: transparent;
   cursor: pointer;
@@ -121,11 +120,11 @@ input[type="radio"] {
 }
 
 .range-slider input.range-min {
-  z-index: 3;
+  z-index: 4; /* Increased z-index value */
 }
 
 .range-slider input.range-max {
-  z-index: 2;
+  z-index: 3; /* Increased z-index value */
 }
 
 .range-slider input[type="range"]::-webkit-slider-runnable-track {
