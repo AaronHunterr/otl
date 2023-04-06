@@ -39,9 +39,11 @@
           <label for="yearAny">Any</label>
           <input type="radio" id="yearRange" name="year" value="range">
           <label for="yearRange">Select Range</label>
-          <input type="range" id="yearMin" min="1950" max="2024" value="1950" style="display: none;">
-          <input type="range" id="yearMax" min="1950" max="2024" value="2024" style="display: none;">
-          <span id="yearMinLabel" style="display: none;"></span> - <span id="yearMaxLabel" style="display: none;"></span>
+          <div class="range-slider">
+            <input type="range" class="range-min" id="yearMin" min="1950" max="2024" value="1950">
+            <input type="range" class="range-max" id="yearMax" min="1950" max="2024" value="2024">
+          </div>
+          <span id="yearMinLabel"></span> - <span id="yearMaxLabel"></span>
 
           <label for="price">Price Range:</label>
           <div class="range-slider">
