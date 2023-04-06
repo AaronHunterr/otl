@@ -230,6 +230,7 @@
       const zip = document.getElementById("zip").value;
       const mileageRange = mileageMin && mileageMax ? mileageMin + '-' + mileageMax : null;
       const priceRange = priceMin && priceMax ? priceMin + '-' + priceMax : null;
+      const yearRange = yearMin && yearMax ? yearMin + '-' + yearMax : null;
 
       // Update window.VinAds array with new values
       window.VinAds = window.VinAds || [];
@@ -239,7 +240,7 @@
         pubid: "201000",
         zip: zip,
         bodystyle: bodyStyle, // Assuming make parameter should be bodyStyle
-        year: `${yearMin}-${yearMax}`, // Assuming model parameter should be year range
+        year: yearRange,
         mileage: mileageRange,
         price: priceRange,
         debug: true,
