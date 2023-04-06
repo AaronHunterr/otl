@@ -22,7 +22,7 @@
     <div class="content">
       <div class="placement">
         <form id="searchForm">
-          <label for="bodystyle">Body Style:</label>
+          <div class="form-field"> <label for="bodystyle">Body Style:</label></div>
           <select id="bodystyle">
             <option value="convertible">Convertible</option>
             <option value="coupe">Coupe</option>
@@ -34,33 +34,39 @@
             <option value="wagon">Wagon</option>
           </select>
 
-          <label for="year">Year:</label>
-          <input type="radio" id="yearAny" name="year" value="any" checked>
-          <label for="yearAny">Any</label>
-          <input type="radio" id="yearRange" name="year" value="range">
-          <label for="yearRange">Select Range</label>
-          <div class="range-slider">
-            <input type="range" class="range-min" id="yearMin" min="1950" max="2024" value="1950">
-            <input type="range" class="range-max" id="yearMax" min="1950" max="2024" value="2024">
+          <div class="form-field"> <label for="year">Year:</label>
+            <input type="radio" id="yearAny" name="year" value="any" checked>
           </div>
-          <span id="yearMinLabel"></span> - <span id="yearMaxLabel"></span>
-
-          <label for="price">Price Range:</label>
-          <div class="range-slider">
-            <input type="range" class="range-min" id="priceMin" min="0" max="100000" value="0">
-            <input type="range" class="range-max" id="priceMax" min="0" max="100000" value="100000">
+          <div class="form-field"> <label for="yearAny">Any</label>
+            <input type="radio" id="yearRange" name="year" value="range">
           </div>
-          <span id="priceMinLabel"></span> - <span id="priceMaxLabel"></span>
-
-          <label for="mileage">Mileage:</label>
-          <div class="range-slider">
-            <input type="range" class="range-min" id="mileageMin" min="0" max="300000" value="0">
-            <input type="range" class="range-max" id="mileageMax" min="0" max="300000" value="300000">
+          <div class="form-field"> <label for="yearRange">Select Range</label>
+            <div class="range-slider">
+              <input type="range" class="range-min" id="yearMin" min="1950" max="2024" value="1950">
+              <input type="range" class="range-max" id="yearMax" min="1950" max="2024" value="2024">
+            </div>
+            <span id="yearMinLabel"></span> - <span id="yearMaxLabel"></span>
           </div>
-          <span id="mileageMinLabel"></span> - <span id="mileageMaxLabel"></span>
 
-          <label for="zip">ZIP Code:</label>
-          <input type="text" id="zip" placeholder="e.g. 60435">
+          <div class="form-field"> <label for="price">Price Range:</label>
+            <div class="range-slider">
+              <input type="range" class="range-min" id="priceMin" min="0" max="100000" value="0">
+              <input type="range" class="range-max" id="priceMax" min="0" max="100000" value="100000">
+            </div>
+            <span id="priceMinLabel"></span> - <span id="priceMaxLabel"></span>
+          </div>
+
+          <div class="form-field"> <label for="mileage">Mileage:</label>
+            <div class="range-slider">
+              <input type="range" class="range-min" id="mileageMin" min="0" max="300000" value="0">
+              <input type="range" class="range-max" id="mileageMax" min="0" max="300000" value="300000">
+            </div>
+            <span id="mileageMinLabel"></span> - <span id="mileageMaxLabel"></span>
+          </div>
+
+          <div class="form-field"> <label for="zip">ZIP Code:</label>
+            <input type="text" id="zip" placeholder="e.g. 60435">
+          </div>
 
           <button type="submit">Search</button>
         </form>
