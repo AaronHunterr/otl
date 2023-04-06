@@ -129,33 +129,39 @@ input[type="radio"] {
 }
 
 .range-slider input[type="range"]::-webkit-slider-runnable-track {
-  height: 4px;
-  background: #ccc;
-  border-radius: 4px;
+  height: 1em;
+  border: 1px solid #b2b2b2;
+  border-radius: 0.5em;
+  background: #efefef;
+  box-shadow: none;
 }
 
 .range-slider input[type="range"]::-moz-range-track {
-  height: 4px;
-  background: #ccc;
-  border-radius: 4px;
+  height: max(calc(1em - 1px - 1px), 0px);
+  border: 1px solid #b2b2b2;
+  border-radius: 0.5em;
+  background: #efefef;
+  box-shadow: none;
 }
 
 .range-slider input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  height: 16px;
-  width: 16px;
-  background-color: #1a73e8;
-  border-radius: 50%;
-  cursor: pointer;
-  margin-top: -6px;
+  width: 17px;
+  height: 17px;
+  border-radius: 10px;
+  background: #00A3FF;
+  border: 1px solid #D3D3D3;
+  box-shadow: 0 0 2px black;
+  margin-top: calc(max((1em - 1px - 1px) * 0.5, 0px) - max(17px * 0.5, 1px));
 }
 
 .range-slider input[type="range"]::-moz-range-thumb {
-  height: 16px;
-  width: 16px;
-  background-color: #1a73e8;
-  border-radius: 50%;
-  cursor: pointer;
+  width: max(calc(17px - 1px - 1px), 0px);
+  height: max(calc(17px - 1px - 1px), 0px);
+  border-radius: 10px;
+  background: #00A3FF;
+  border: 1px solid #D3D3D3;
+  box-shadow: 0 0 2px black;
 }
 
 .range-slider .range-labels {
