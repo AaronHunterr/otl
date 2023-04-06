@@ -35,12 +35,6 @@
           </select>
 
           <div class="form-field"> <label for="year">Year:</label>
-            <input type="radio" id="yearAny" name="year" value="any" checked>
-          </div>
-          <div class="form-field"> <label for="yearAny">Any</label>
-            <input type="radio" id="yearRange" name="year" value="range">
-          </div>
-          <div class="form-field"> <label for="yearRange">Select Range</label>
             <div class="range-slider">
               <input type="range" class="range-min" id="yearMin" min="1950" max="2024" value="1950">
               <input type="range" class="range-max" id="yearMax" min="1950" max="2024" value="2024">
@@ -227,7 +221,6 @@
 
       // Get form field values
       const bodyStyle = document.getElementById("bodystyle").value;
-      const yearAny = document.getElementById("yearAny").checked;
       const yearMin = document.getElementById("yearMin").value;
       const yearMax = document.getElementById("yearMax").value;
       const priceMin = document.getElementById("priceMin").value;
@@ -246,7 +239,7 @@
         pubid: "201000",
         zip: zip,
         bodystyle: bodyStyle, // Assuming make parameter should be bodyStyle
-        year: yearAny ? "" : `${yearMin}-${yearMax}`, // Assuming model parameter should be year range
+        year: `${yearMin}-${yearMax}`, // Assuming model parameter should be year range
         mileage: mileageRange,
         price: priceRange,
         debug: true,
