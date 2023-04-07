@@ -85,31 +85,29 @@ var LxLoader = (function() {
       return;
     };
   };;
-  LxLoader.prototype.getVins = function(operation) {
-    console.trace("Get Vins");
-    var url = this.domain() + "/v2/getVins";
-    var body = JSON.stringify({
-      "page": this.page,
-      "op": operation
-    });
-    if (typeof operation.success != "function") {
-      console.error("No function defined for success on call");
-      return;
-    }
-    if (typeof operation.failure != "function") {
-      operation.failure = function(resp) {
-        console.trace(resp.data.message);
-      };
-    }
-    var handler = {
-    success: function(resp) {
-        console.log('Response:', resp); // Add this line to log the response data
-        operation.success(resp);
-    },
-    failure: operation.failure
-};
-this.post(url, body, handler);
-};
+  LxLoader.prototype.getVins = function (operation) {
+        console.trace("Get Vins");
+        var url = this.domain() + "/v2/getVins";
+        var body = JSON.stringify({
+            "page": this.page,
+            "op": operation
+        });
+        if (typeof operation.success != "function") {
+            console.error("No function defined for success on call");
+            return;
+        }
+        if (typeof operation.failure != "function") {
+            operation.failure = function (resp) {
+                console.trace(resp.data.message);
+            };
+        }
+        var handler = {
+            success: operation.success,
+            failure: operation.failure
+        };
+        this.post(url, body, handler);
+    };
+    ;
   LxLoader.prototype.getDetails = function(operation) {
     console.trace("Get Details");
     var url = this.domain() + "/v2/getDetails";
