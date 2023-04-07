@@ -50,6 +50,7 @@ var LxLoader = (function() {
     return "https://ads.lotlinx.com";
   };;
   LxLoader.prototype.post = function(url, body, handler) {
+    console.log('Payload:', body);
     var xhr = new XMLHttpRequest();
     xhr.open("POST", url);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -101,11 +102,14 @@ var LxLoader = (function() {
       };
     }
     var handler = {
-      success: operation.success,
-      failure: operation.failure
-    };
-    this.post(url, body, handler);
-  };;
+    success: function(resp) {
+        console.log('Response:', resp); // Add this line to log the response data
+        operation.success(resp);
+    },
+    failure: operation.failure
+};
+this.post(url, body, handler);
+};
   LxLoader.prototype.getDetails = function(operation) {
     console.trace("Get Details");
     var url = this.domain() + "/v2/getDetails";
