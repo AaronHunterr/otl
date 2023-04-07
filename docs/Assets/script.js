@@ -174,6 +174,7 @@ this.post(url, body, handler);
         return;
       } else {
         success = function(resp) {
+          console.log('Response:', resp);
           console.trace(resp.data.message);
           callback(resp.data);
         };
