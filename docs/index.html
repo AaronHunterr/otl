@@ -74,7 +74,7 @@
     window.VinAds.push({
       op: "buildCustom",
       numresults: 10,
-      callback: function(vehicles) {
+      success: function(vehicles) {
         // Log received vehicles data
         console.log("Callback received data:", vehicles);
         console.trace();
@@ -172,7 +172,7 @@
       window.VinAds.push({
         op: "buildCustom",
         numresults: 10,
-        callback: function(vehicles) {
+        success: function(vehicles) {
           // Log received vehicles data
           console.log("Callback received data:", vehicles);
           console.trace();
