@@ -33,31 +33,6 @@
             <option value="suv">SUV</option>
             <option value="wagon">Wagon</option>
           </select>
-
-          <div class="form-field"> <label for="year">Year:</label>
-            <div class="range-slider">
-              <input type="range" class="range-min" id="yearMin" min="1950" max="2024" value="1950">
-              <input type="range" class="range-max" id="yearMax" min="1950" max="2024" value="2024">
-            </div>
-            <span id="yearMinLabel"></span> - <span id="yearMaxLabel"></span>
-          </div>
-
-          <div class="form-field"> <label for="price">Price Range:</label>
-            <div class="range-slider">
-              <input type="range" class="range-min" id="priceMin" min="0" max="100000" value="0">
-              <input type="range" class="range-max" id="priceMax" min="0" max="100000" value="100000">
-            </div>
-            <span id="priceMinLabel"></span> - <span id="priceMaxLabel"></span>
-          </div>
-
-          <div class="form-field"> <label for="mileage">Mileage:</label>
-            <div class="range-slider">
-              <input type="range" class="range-min" id="mileageMin" min="0" max="300000" value="0">
-              <input type="range" class="range-max" id="mileageMax" min="0" max="300000" value="300000">
-            </div>
-            <span id="mileageMinLabel"></span> - <span id="mileageMaxLabel"></span>
-          </div>
-
           <div class="form-field"> <label for="zip">ZIP Code:</label>
             <input type="text" id="zip" placeholder="e.g. 60435">
           </div>
@@ -166,45 +141,6 @@
   </script>
   <script src="https://ads.lotlinx.com/load.js" async ></script>
   <script>
-    // Add your event listeners here
-    document.getElementById("yearAny").addEventListener("change", function() {
-      document.getElementById("yearMin").style.display = "none";
-      document.getElementById("yearMax").style.display = "none";
-      document.getElementById("yearMinLabel").style.display = "none";
-      document.getElementById("yearMaxLabel").style.display = "none";
-    });
-
-    document.getElementById("yearRange").addEventListener("change", function() {
-      document.getElementById("yearMin").style.display = "inline";
-      document.getElementById("yearMax").style.display = "inline";
-      document.getElementById("yearMinLabel").style.display = "inline";
-      document.getElementById("yearMaxLabel").style.display = "inline";
-    });
-
-    document.getElementById("yearMin").addEventListener("input", function() {
-      document.getElementById("yearMinLabel").textContent = this.value;
-    });
-
-    document.getElementById("yearMax").addEventListener("input", function() {
-      document.getElementById("yearMaxLabel").textContent = this.value;
-    });
-
-    document.getElementById("priceMin").addEventListener("input", function() {
-      document.getElementById("priceMinLabel").textContent = this.value;
-    });
-
-    document.getElementById("priceMax").addEventListener("input", function() {
-      document.getElementById("priceMaxLabel").textContent = this.value;
-    });
-
-    document.getElementById("mileageMin").addEventListener("input", function() {
-      document.getElementById("mileageMinLabel").textContent = this.value;
-    });
-
-    document.getElementById("mileageMax").addEventListener("input", function() {
-      document.getElementById("mileageMaxLabel").textContent = this.value;
-    });
-
     // Add your form submit event listener here
     document.getElementById("searchForm").addEventListener("submit", function(event) {
       event.preventDefault(); // Prevent the form from submitting and reloading the page
@@ -221,16 +157,7 @@
 
       // Get form field values
       const bodyStyle = document.getElementById("bodystyle").value;
-      const yearMin = document.getElementById("yearMin").value;
-      const yearMax = document.getElementById("yearMax").value;
-      const priceMin = document.getElementById("priceMin").value;
-      const priceMax = document.getElementById("priceMax").value;
-      const mileageMin = document.getElementById("mileageMin").value;
-      const mileageMax = document.getElementById("mileageMax").value;
       const zip = document.getElementById("zip").value;
-      const mileageRange = mileageMin && mileageMax ? mileageMin + '-' + mileageMax : null;
-      const priceRange = priceMin && priceMax ? priceMin + '-' + priceMax : null;
-      const yearRange = yearMin && yearMax ? yearMin + '-' + yearMax : null;
 
       // Update window.VinAds array with new values
       window.VinAds = window.VinAds || [];
@@ -240,9 +167,6 @@
         pubid: "201000",
         zip: zip,
         bodystyle: bodyStyle, // Assuming make parameter should be bodyStyle
-        year: yearRange,
-        mileage: mileageRange,
-        price: priceRange,
         debug: true,
       });
 
