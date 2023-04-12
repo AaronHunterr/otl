@@ -74,11 +74,11 @@
     window.VinAds.push({
       op: "buildCustom",
       numresults: 10,
-      success: function(vehicles) {
-        // Log received vehicles data
-        console.log("Callback received data:", vehicles);
+      success: function(resp) {
+        var vehicles = resp.data; // Extract vehicles data from the response object
+        console.log("Received data:", vehicles);
         console.trace();
-        // Check that there are vehicles present
+
         if (vehicles == "") {
           console.log("No matching vehicles");
           return;
@@ -172,11 +172,11 @@
       window.VinAds.push({
         op: "buildCustom",
         numresults: 10,
-        success: function(vehicles) {
-          // Log received vehicles data
-          console.log("Callback received data:", vehicles);
+        success: function(resp) {
+          var vehicles = resp.data; // Extract vehicles data from the response object
+          console.log("Received data:", vehicles);
           console.trace();
-          // Check that there are vehicles present
+
           if (vehicles == "") {
             console.log("No matching vehicles");
             return;
