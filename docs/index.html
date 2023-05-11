@@ -73,7 +73,7 @@
     // Set Custom Ad Options
     window.VinAds.push({
       op: "buildCustom",
-      numresults: 10,
+      numresults: 12,
       success: function(resp) {
         var vehicles = resp.data; // Extract vehicles data from the response object
         console.log("Received data:", vehicles);
@@ -170,7 +170,7 @@
       // Call buildCustom command with the callback function
       window.VinAds.push({
         op: "buildCustom",
-        numresults: 10,
+        numresults: 12,
         success: function(resp) {
           var vehicles = resp.data; // Extract vehicles data from the response object
           console.log("Received data:", vehicles);
