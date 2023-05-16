@@ -1,43 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Vehicle Inventory</title>
-	<link rel="stylesheet" href="Assets/css/styles.css">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <link rel="stylesheet" href="./Assets/styles.css">
 </head>
 
 <body>
-	<!-- Add this form inside your body tag -->
-	<form id="search-form">
-	  <label for="zip">Zip Code:</label>
-	  <input type="text" id="zip" name="zip" value="90210" required />
-	  <label for="make">Make:</label>
-	  <input type="text" id="make" name="make" />
-	  <label for="model">Model:</label>
-	  <input type="text" id="model" name="model" />
-		<label for="min-price">Min Price:</label>
-		<input type="range" id="min-price" name="min-price" min="0" max="100000" value="0" step="100" />
-		<span id="min-price-display">0</span>
-		<label for="max-price">Max Price:</label>
-		<input type="range" id="max-price" name="max-price" min="0" max="100000" value="100000" step="100" />
-		<span id="max-price-display">100000</span>
-		<label for="min-mileage">Min Mileage:</label>
-		<input type="range" id="min-mileage" name="min-mileage" min="0" max="200000" value="0" step="1000" />
-		<span id="min-mileage-display">0</span>
-		<label for="max-mileage">Max Mileage:</label>
-		<input type="range" id="max-mileage" name="max-mileage" min="0" max="200000" value="200000" step="1000" />
-		<span id="max-mileage-display">200000</span>
-	  <button type="submit">Search</button>
-	</form>
-
-	<div id="pagination-container"></div>
-	<div id="inventory-container"></div>
-
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js"></script>
-	<script src="Assets/js/main.js"></script>
-	<script src="https://unpkg.com/axios@0.26.1/dist/axios.min.js"></script>
+  <header class="site-header">
+    <nav>
+      <ul class="site-header-nav">
+        <li>
+          <a class="site-header-nav-link site-header-nav-logo">
+            <img src="https://rydeshopper.com/app/cardealfinder/images/tenants/rydeshopper/Rydeshopper-logo.png" alt="Rydeshopper">
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <div class="wrapper">
+		<div id="make-model-new-car-image" class="dt-actionable" data-make="Nissan" data-model="Pathfinder"></div>
+	</div>
+<script type="text/javascript" src="https://www.rydeshopper.com/app/shoppingtools/scripts/widget-inline.js?gid=0000-4880"></script>
 </body>
 
 </html>
