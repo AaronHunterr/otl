@@ -54,14 +54,14 @@ body {
 }
 
 .logo-text {
-  
+
 }
 
 .content {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-top: 20px;
+  margin: 0 auto;
+  padding: 20px;
+  max-width: 90%;
+  background-color: white;
 }
 
 .form-container {
