@@ -1,241 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-  <link rel="stylesheet" href="./Assets/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-  <header class="site-header">
+  <header>
     <nav>
-      <ul class="site-header-nav">
-        <li>
-          <a class="site-header-nav-link site-header-nav-logo">
-            <img src="https://rydeshopper.com/app/cardealfinder/images/tenants/rydeshopper/Rydeshopper-logo.png" alt="Rydeshopper">
-          </a>
-        </li>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="car-segment.html">Car Segment Article</a></li>
+        <li><a href="chevrolet-blazer.html">Chevrolet Blazer Article</a></li>
+        <li><a href="blazer-2024.html">Blazer 2024 Details</a></li>
+        <li><a href="another-model.html">Another Model Details</a></li>
       </ul>
     </nav>
   </header>
-  <div class="wrapper">
-    <div class="content">
-      <div class="placement">
-        <form id="searchForm">
-          <div class="form-field"> <label for="bodystyle">Body Style:</label></div>
-          <select id="bodystyle">
-            <option value="convertible">Convertible</option>
-            <option value="coupe">Coupe</option>
-            <option value="hatchback">Hatchback</option>
-            <option value="minivan">Minivan</option>
-            <option value="pickup">Truck</option>
-            <option value="sedan">Sedan</option>
-            <option value="suv">SUV</option>
-            <option value="wagon">Wagon</option>
-          </select>
-          <div class="form-field"> <label for="zip">ZIP Code:</label>
-            <input type="text" id="zip" placeholder="e.g. 60435">
-          </div>
-
-          <button type="submit">Search</button>
-        </form>
-      </div>
-      <div id="adBlock1" class="ad-block">
-        <!-- This is where the ad will display -->
-      </div>
-    </div>
-  </div>
-  <script>
-    let urlZipCode = null;
-
-    // Get URL Query Parameters
-    function getQueryParam(name) {
-      const queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
-      return urlParams.get(name);
-    }
-
-    const zip = getQueryParam("Zip") || "60435"; // Default Zip is "60435"
-    urlZipCode = zip;
-    const bodyStyle = getQueryParam("Bodystyle") || "sedan"; // Default Make is "honda"
-    const year = getQueryParam("Year") || "2023"; // Default Model is "civic"
-
-    // Instantiate Command Queue
-    window.VinAds = window.VinAds || [];
-    // Set Page Options
-    window.VinAds.push({
-      op: "setPage",
-      pubid: "201000",
-      zip: zip,
-      bodystyle: bodyStyle,
-      debug: true,
-    });
-    // Set Custom Ad Options
-    window.VinAds.push({
-      op: "buildCustom",
-      numresults: 12,
-      success: function(resp) {
-        var vehicles = resp.data; // Extract vehicles data from the response object
-        console.log("Received data:", vehicles);
-        console.trace();
-
-        if (vehicles == "") {
-          console.log("No matching vehicles");
-          return;
-        }
-
-        // Get ad block element
-        var container = document.getElementById("adBlock1");
-
-        // Clear container before adding new vehicle blocks
-        container.innerHTML = "";
-
-        // Create vehicle block elements for each vehicle and append to container
-        for (var i = 0; i < vehicles.length; i++) {
-          var vehicle = vehicles[i];
-          var v_div = document.createElement("div");
-          v_div.classList.add("vehicle-block");
-
-          // Create vehicle image container element
-          var imgContainer = document.createElement("div");
-          imgContainer.classList.add("vehicle-image-container");
-
-          // Create vehicle image element
-          var img = document.createElement("img");
-          img.src = vehicle.image_url;
-          img.alt = vehicle.make + " " + vehicle.model;
-          img.classList.add("vehicle-image");
-
-          // Append image to image container
-          imgContainer.appendChild(img);
-
-          // Create vehicle title element
-          var title = document.createElement("h2");
-          title.innerHTML = vehicle.year + " " + vehicle.make + " " + vehicle.model;
-          title.classList.add("vehicle-title");
-
-          // Create vehicle price element
-          var price = document.createElement("div");
-          price.innerHTML = "Price: $" + vehicle.price;
-          price.classList.add("vehicle-price");
-
-          // Create view details button element
-          var button = document.createElement("a");
-          button.href = vehicle.url;
-          button.innerHTML = "Click Here For More";
-          button.classList.add("vehicle-button");
-
-          // Append elements to vehicle block
-          v_div.appendChild(imgContainer); // Add the image container instead of the image
-          v_div.appendChild(title);
-          v_div.appendChild(price);
-          v_div.appendChild(button);
-
-          // Append vehicle block to container
-          container.appendChild(v_div);
-        }
-      },
-      channel: "RydeshopperOTL"
-    });
-  </script>
-  <script src="https://ads.lotlinx.com/load.js" async ></script>
-  <script>
-    // Add your form submit event listener here
-    document.getElementById("searchForm").addEventListener("submit", function(event) {
-      event.preventDefault(); // Prevent the form from submitting and reloading the page
-
-      const formData = new FormData(event.target);
-      // ... (get the values from the form fields as shown in the previous response) ...
-
-      // Use these values to send a request to the API
-    });
-  </script>
-  <script>
-    document.getElementById("searchForm").addEventListener("submit", function(event) {
-      event.preventDefault(); // Prevent form from submitting and causing a page refresh
-
-      // Get form field values
-      const bodyStyle = document.getElementById("bodystyle").value;
-      const zip = document.getElementById("zip").value;
-
-
-      window.VinAds.push({
-        op: "setPage",
-        pubid: "201000",
-        zip: zip,
-        bodystyle: bodyStyle, // Assuming make parameter should be bodyStyle
-        debug: true,
-      });
-
-      // Call buildCustom command with the callback function
-      window.VinAds.push({
-        op: "buildCustom",
-        numresults: 12,
-        success: function(resp) {
-          var vehicles = resp.data; // Extract vehicles data from the response object
-          console.log("Received data:", vehicles);
-          console.trace();
-
-          if (vehicles == "") {
-            console.log("No matching vehicles");
-            return;
-          }
-
-          // Get ad block element
-          var container = document.getElementById("adBlock1");
-
-          // Clear container before adding new vehicle blocks
-          container.innerHTML = "";
-
-          // Create vehicle block elements for each vehicle and append to container
-          for (var i = 0; i < vehicles.length; i++) {
-            var vehicle = vehicles[i];
-            var v_div = document.createElement("div");
-            v_div.classList.add("vehicle-block");
-
-            // Create vehicle image container element
-            var imgContainer = document.createElement("div");
-            imgContainer.classList.add("vehicle-image-container");
-
-            // Create vehicle image element
-            var img = document.createElement("img");
-            img.src = vehicle.image_url;
-            img.alt = vehicle.make + " " + vehicle.model;
-            img.classList.add("vehicle-image");
-
-            // Append image to image container
-            imgContainer.appendChild(img);
-
-            // Create vehicle title element
-            var title = document.createElement("h2");
-            title.innerHTML = vehicle.year + " " + vehicle.make + " " + vehicle.model;
-            title.classList.add("vehicle-title");
-
-            // Create vehicle price element
-            var price = document.createElement("div");
-            price.innerHTML = "Price: $" + vehicle.price;
-            price.classList.add("vehicle-price");
-
-            // Create view details button element
-            var button = document.createElement("a");
-            button.href = vehicle.url;
-            button.innerHTML = "Click Here For More";
-            button.classList.add("vehicle-button");
-
-            // Append elements to vehicle block
-            v_div.appendChild(imgContainer); // Add the image container instead of the image
-            v_div.appendChild(title);
-            v_div.appendChild(price);
-            v_div.appendChild(button);
-
-            // Append vehicle block to container
-            container.appendChild(v_div);
-          }
-        },
-        channel: "RydeshopperOTL"
-      });
-    });
-  </script>
+  <main>
+    <h1>Car Segment Article</h1>
+    <p>Content about a segment of cars.</p>
+  </main>
 </body>
 
 </html>
