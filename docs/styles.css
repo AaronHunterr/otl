@@ -33,7 +33,14 @@ nav ul li a {
 }
 
 main {
+    display: flex;
     padding: 2rem;
+    flex: 1;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
     flex: 1;
 }
 
@@ -46,9 +53,7 @@ article {
 }
 
 aside {
-    position: fixed;
-    top: 100px;
-    right: 20px;
+    margin-left: 2rem;
     width: 300px;
 }
 
@@ -67,8 +72,12 @@ aside {
 }
 
 @media (max-width: 768px) {
+    main {
+        flex-direction: column;
+        padding: 1rem;
+    }
     aside {
-        position: static;
+        margin-left: 0;
         width: 100%;
     }
     nav ul {
