@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <link rel="stylesheet" href="./Assets/styles.css">
+  <title>Chevrolet Silverado - Discover Your Perfect Truck</title>
+</head>
+
+<body>
+  <header class="site-header">
+    <nav>
+      <ul class="site-header-nav">
+        <li>
+          <a class="site-header-nav-link site-header-nav-logo">
+            <img src="https://rydeshopper.com/app/cardealfinder/images/tenants/rydeshopper/Rydeshopper-logo.png" alt="Rydeshopper">
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <div class="wrapper">
+    <div class="content">
+      <article>
+        <h1>The Chevrolet Silverado: Built for Strength and Versatility</h1>
+        <p>The Chevrolet Silverado is a top choice for those seeking a reliable and durable truck. Whether you're hauling gear or cruising through town, the Silverado is built to perform. Explore local deals below!</p>
+      </article>
+      <div id="adBlock1" class="ad-block">
+        <!-- Template Ad will display here -->
+      </div>
+    </div>
+  </div>
+  <script>
+    // Load LotLinx Ads Library
+    window.VinAds = window.VinAds || [];
+
+    // Attempt to detect user's location (ZIP code) via geolocation
+    async function detectZipCode() {
+      try {
+        const response = await fetch("https://ipapi.co/json/");
+        const data = await response.json();
+        return data.postal || "60435"; // Fallback ZIP if detection fails
+      } catch (error) {
+        console.error("Error detecting ZIP code:", error);
+        return "60435"; // Default ZIP
+      }
+    }
+
+    // Initialize Ads with detected ZIP
+    async function initializeAds() {
+      const detectedZip = await detectZipCode();
+
+      // Set Page Options for Chevrolet Silverado
+      window.VinAds.push({
+        op: "setPage",
+        pubid: "201000", // Replace with your Publisher ID
+        zip: detectedZip,
+        make: "Chevrolet",
+        model: "Silverado",
+        debug: true
+      });
+
+      // Build Template Ad
+      window.VinAds.push({
+        op: "buildAd",
+        width: 300,
+        height: 250,
+        container: "adBlock1", // Element ID where the ad will render
+        template: "default",  // Template style
+        numresults: 3 // Number of ads to display
+      });
+    }
+
+    initializeAds();
+  </script>
+  <script src="https://ads.lotlinx.com/load.js" async></script>
+</body>
+
+</html>
