@@ -4,36 +4,18 @@
 <head>
   <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   <link rel="stylesheet" href="styles.css">
-  <title>Ad Carousel Example</title>
+  <title>Custom Ad Carousel</title>
   <style>
-    /* Carousel styles */
+    /* Carousel container styles */
     .carousel-container {
       display: flex;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
       gap: 15px;
-      padding: 10px 20px;
-      background: #f4f4f4;
+      padding: 10px;
+      background-color: #f9f9f9;
     }
 
-    .carousel-item {
-      flex: 0 0 auto;
-      width: 300px;
-      height: 250px;
-      scroll-snap-align: start;
-      background: #fff;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .carousel-item img {
-      max-width: 100%;
-      max-height: 100%;
-    }
-
-    /* Scrollbar styling */
     .carousel-container::-webkit-scrollbar {
       height: 8px;
     }
@@ -42,52 +24,150 @@
       background: #ccc;
       border-radius: 4px;
     }
+
+    /* Offer card styles */
+    .offer-card {
+      border-radius: 6px;
+      position: relative;
+      min-width: 240px;
+      max-width: 400px;
+      margin: 0 auto 24px;
+    }
+
+    .offer-card-content {
+      background-color: white;
+      border-radius: 4px;
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
+      border: 1px solid rgb(212, 212, 212);
+      width: 100%;
+      padding: 16px;
+      text-align: left;
+    }
+
+    .offer-header h3 {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .offer-header p {
+      font-size: 0.9rem;
+      color: #666;
+      margin: 4px 0;
+    }
+
+    .offer-price {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #333;
+      margin: 12px 0;
+    }
+
+    .offer-price p:last-child {
+      font-size: 0.9rem;
+      color: #999;
+    }
+
+    .offer-image img {
+      width: 100%;
+      border-radius: 4px;
+    }
+
+    .offer-details p {
+      font-size: 0.9rem;
+      color: #666;
+      margin: 4px 0;
+    }
+
+    .offer-location p {
+      font-size: 0.9rem;
+      color: #444;
+    }
+
+    .offer-cta a {
+      display: block;
+      text-align: center;
+      background-color: #ff0000;
+      color: white;
+      padding: 10px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .offer-cta a:hover {
+      background-color: #cc0000;
+    }
   </style>
 </head>
 
 <body>
   <header>
-    <h1>Ad Carousel Example</h1>
+    <h1>Custom Ad Carousel</h1>
   </header>
   <main class="container">
-    <div class="carousel-container" id="adCarousel">
-      <!-- Ad items will be dynamically injected here -->
+    <div class="carousel-container">
+      <!-- Cards will be dynamically injected here -->
     </div>
   </main>
   <script>
     window.VinAds = window.VinAds || [];
 
-    // Initialize ads
-    async function loadAds() {
-      // Simulated location detection
-      const zip = "60435";
+    // Set the page context
+    window.VinAds.push({
+      op: "setPage",
+      pubid: "201000", // Replace with your Publisher ID
+      zip: "60435", // Replace with a static or detected ZIP code
+      make: "Toyota",
+      model: "Tacoma",
+      test: true,
+      debug: true,
+    });
 
-      // Set page options
-      window.VinAds.push({
-        op: "setPage",
-        pubid: "201000",
-        zip: zip,
-        make: "Chevrolet",
-        model: "Silverado",
-      });
+    // Build custom ads
+    window.VinAds.push({
+      op: "buildCustom",
+      numresults: 5,
+      callback: function (vehicles) {
+        const carouselContainer = document.querySelector(".carousel-container");
 
-      // Add ads to carousel
-      window.VinAds.push({
-        op: "buildCustom",
-        numresults: 5,
-        callback: function (vehicles) {
-          const carousel = document.getElementById("adCarousel");
-          vehicles.forEach(vehicle => {
-            const item = document.createElement("div");
-            item.classList.add("carousel-item");
-            item.innerHTML = `<img src="${vehicle.image_url}" alt="${vehicle.title}">`;
-            carousel.appendChild(item);
-          });
-        }
-      });
-    }
+        // Loop through each vehicle and create the offer card
+        vehicles.forEach(vehicle => {
+          const offerCard = document.createElement("div");
+          offerCard.classList.add("offer-card");
 
-    loadAds();
+          offerCard.innerHTML = `
+            <div class="offer-card-content">
+              <div class="offer-header">
+                <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
+                <p>${vehicle.condition ? vehicle.condition : ''} ${vehicle.trim ? `| Trim: ${vehicle.trim}` : ''}</p>
+              </div>
+              <div class="offer-price">
+                <p>$${vehicle.price}</p>
+                <p>${vehicle.monthly_payment ? `Est. $${vehicle.monthly_payment}/mo` : ''}</p>
+              </div>
+              <div class="offer-image">
+                <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
+              </div>
+              <div class="offer-details">
+                <p>Mileage: ${vehicle.mileage ? `${vehicle.mileage} miles` : 'N/A'}</p>
+                <p>Color: ${vehicle.exterior_color ? vehicle.exterior_color : 'N/A'}</p>
+              </div>
+              <hr>
+              <div class="offer-location">
+                <p>${vehicle.city}, ${vehicle.state} - ${vehicle.zip ? `${vehicle.zip} miles` : ''}</p>
+              </div>
+              <div class="offer-cta">
+                <a href="${vehicle.url}" target="_blank">See Details</a>
+              </div>
+            </div>
+          `;
+
+          // Append the card to the carousel
+          carouselContainer.appendChild(offerCard);
+        });
+      },
+    });
   </script>
   <script src="https://ads.lotlinx.com/load.js" async></script>
 </body>
