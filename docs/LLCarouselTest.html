@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="styles.css">
   <title>Custom Ad Carousel</title>
   <style>
-    /* Main carousel wrapper */
+    /* Carousel wrapper styles */
     .carousel-wrapper {
       position: relative;
       width: 100%;
@@ -22,7 +22,7 @@
       scroll-snap-type: x mandatory;
       scroll-behavior: smooth;
       overflow-x: auto;
-      justify-content: center;
+      justify-content: flex-start;
     }
 
     .carousel-container::-webkit-scrollbar {
@@ -36,8 +36,7 @@
 
     /* Offer card styles */
     .offer-card {
-      flex: 0 0 calc(33.33% - 20px);
-      /* Ensure 3 cards fit in view */
+      flex: 0 0 calc(33.33% - 20px); /* Ensure 3 cards fit in view */
       border-radius: 6px;
       position: relative;
       max-width: 300px;
@@ -52,63 +51,6 @@
       text-align: left;
     }
 
-    .offer-header h3 {
-      font-size: 1.2rem;
-      font-weight: bold;
-      margin: 0;
-    }
-
-    .offer-header p {
-      font-size: 0.9rem;
-      color: #666;
-      margin: 4px 0;
-    }
-
-    .offer-price {
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: #333;
-      margin: 12px 0;
-    }
-
-    .offer-price p:last-child {
-      font-size: 0.9rem;
-      color: #999;
-    }
-
-    .offer-image img {
-      width: 100%;
-      border-radius: 4px;
-    }
-
-    .offer-details p {
-      font-size: 0.9rem;
-      color: #666;
-      margin: 4px 0;
-    }
-
-    .offer-location p {
-      font-size: 0.9rem;
-      color: #444;
-    }
-
-    .offer-cta a {
-      display: block;
-      text-align: center;
-      background-color: #e13c16;
-      /* Updated button color */
-      color: white;
-      padding: 10px;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .offer-cta a:hover {
-      background-color: #cf3511;
-      /* Updated hover color */
-    }
-
     /* Arrows for navigation */
     .carousel-arrow {
       position: absolute;
@@ -121,6 +63,7 @@
       cursor: pointer;
       border-radius: 50%;
       z-index: 10;
+      display: none; /* Initially hidden */
     }
 
     .carousel-arrow.left {
@@ -131,16 +74,12 @@
       right: 10px;
     }
 
-    .carousel-arrow:hover {
-      background-color: rgba(0, 0, 0, 0.7);
+    .carousel-arrow.active {
+      display: block; /* Show arrows when active */
     }
 
-    /* Mobile styles */
-    @media (max-width: 768px) {
-      .offer-card {
-        flex: 0 0 80%;
-        /* Ensure 1 card fits in view on small screens */
-      }
+    .carousel-arrow:hover {
+      background-color: rgba(0, 0, 0, 0.7);
     }
   </style>
 </head>
@@ -155,7 +94,7 @@
       <div class="carousel-container">
         <!-- Cards will be dynamically injected here -->
       </div>
-      <button class="carousel-arrow right" onclick="scrollCarousel('right')">&gt;</button>
+      <button class="carousel-arrow right active" onclick="scrollCarousel('right')">&gt;</button>
     </div>
   </main>
   <script>
@@ -197,48 +136,50 @@
       window.VinAds.push({
         op: "buildCustom",
         numresults: 8,
-        callback: function(vehicles) {
+        callback: function (vehicles) {
           const carouselContainer = document.querySelector(".carousel-container");
 
           vehicles.forEach(vehicle => {
             const offerCard = document.createElement("div");
             offerCard.classList.add("offer-card");
 
-            // Correct location display logic: City, State - (X miles)
-            const locationDisplay = vehicle.distance ?
-              `${vehicle.city}, ${vehicle.state} - ${vehicle.distance} miles` :
-              `${vehicle.city}, ${vehicle.state}`;
+            const locationDisplay = vehicle.distance
+              ? `${vehicle.city}, ${vehicle.state} - ${vehicle.distance} miles`
+              : `${vehicle.city}, ${vehicle.state}`;
 
             offerCard.innerHTML = `
-        <div class="offer-card-content">
-          <div class="offer-header">
-            <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
-            <p>${vehicle.condition ? vehicle.condition : ''} ${vehicle.trim ? `| Trim: ${vehicle.trim}` : ''}</p>
-          </div>
-          <div class="offer-price">
-            <p>$${formatNumber(vehicle.price)}</p>
-            <p>${vehicle.monthly_payment ? `Est. $${formatNumber(vehicle.monthly_payment)}/mo` : ''}</p>
-          </div>
-          <div class="offer-image">
-            <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
-          </div>
-          <div class="offer-details">
-            <p>Mileage: ${vehicle.mileage ? `${formatNumber(vehicle.mileage)} miles` : 'N/A'}</p>
-            <p>Color: ${vehicle.exterior_color ? vehicle.exterior_color : 'N/A'}</p>
-          </div>
-          <hr>
-          <div class="offer-location">
-            <p>${locationDisplay}</p>
-          </div>
-          <div class="offer-cta">
-            <a href="${vehicle.url}" target="_blank">See Details</a>
-          </div>
-        </div>
-      `;
+              <div class="offer-card-content">
+                <div class="offer-header">
+                  <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
+                  <p>${vehicle.condition ? vehicle.condition : ''} ${vehicle.trim ? `| Trim: ${vehicle.trim}` : ''}</p>
+                </div>
+                <div class="offer-price">
+                  <p>$${formatNumber(vehicle.price)}</p>
+                  <p>${vehicle.monthly_payment ? `Est. $${formatNumber(vehicle.monthly_payment)}/mo` : ''}</p>
+                </div>
+                <div class="offer-image">
+                  <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
+                </div>
+                <div class="offer-details">
+                  <p>Mileage: ${vehicle.mileage ? `${formatNumber(vehicle.mileage)} miles` : 'N/A'}</p>
+                  <p>Color: ${vehicle.exterior_color ? vehicle.exterior_color : 'N/A'}</p>
+                </div>
+                <hr>
+                <div class="offer-location">
+                  <p>${locationDisplay}</p>
+                </div>
+                <div class="offer-cta">
+                  <a href="${vehicle.url}" target="_blank">See Details</a>
+                </div>
+              </div>
+            `;
 
             // Append the card to the carousel
             carouselContainer.appendChild(offerCard);
           });
+
+          // Enable dynamic arrows
+          updateArrowVisibility();
         },
       });
     }
@@ -247,10 +188,27 @@
     function scrollCarousel(direction) {
       const carousel = document.querySelector(".carousel-container");
       const scrollAmount = direction === "left" ? -carousel.clientWidth : carousel.clientWidth;
-      carousel.scrollBy({
-        left: scrollAmount,
-        behavior: "smooth"
-      });
+      carousel.scrollBy({ left: scrollAmount, behavior: "smooth" });
+      setTimeout(updateArrowVisibility, 300); // Update arrow visibility after scrolling
+    }
+
+    // Update arrow visibility based on scroll position
+    function updateArrowVisibility() {
+      const carousel = document.querySelector(".carousel-container");
+      const leftArrow = document.querySelector(".carousel-arrow.left");
+      const rightArrow = document.querySelector(".carousel-arrow.right");
+
+      if (carousel.scrollLeft === 0) {
+        leftArrow.classList.remove("active");
+      } else {
+        leftArrow.classList.add("active");
+      }
+
+      if (carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth) {
+        rightArrow.classList.remove("active");
+      } else {
+        rightArrow.classList.add("active");
+      }
     }
 
     initializeAds();
