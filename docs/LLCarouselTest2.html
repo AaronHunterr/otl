@@ -6,7 +6,6 @@
   <link rel="stylesheet" href="styles.css">
   <title>Ad Carousel Example</title>
   <style>
-    /* Carousel styles */
     .carousel-container {
       display: flex;
       overflow-x: auto;
@@ -24,16 +23,6 @@
       background: #fff;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
-
-    /* Scrollbar styling */
-    .carousel-container::-webkit-scrollbar {
-      height: 8px;
-    }
-
-    .carousel-container::-webkit-scrollbar-thumb {
-      background: #ccc;
-      border-radius: 4px;
-    }
   </style>
 </head>
 
@@ -42,52 +31,41 @@
     <h1>Ad Carousel Example</h1>
   </header>
   <main class="container">
-    <div class="carousel-container" id="adCarousel">
-      <!-- Predefined ad slots -->
-      <div class="carousel-item" id="adSlot1"></div>
-      <div class="carousel-item" id="adSlot2"></div>
-      <div class="carousel-item" id="adSlot3"></div>
-      <div class="carousel-item" id="adSlot4"></div>
-      <div class="carousel-item" id="adSlot5"></div>
+    <div class="carousel-container">
+      <div id="adSlot1" class="carousel-item"></div>
+      <div id="adSlot2" class="carousel-item"></div>
+      <div id="adSlot3" class="carousel-item"></div>
+      <div id="adSlot4" class="carousel-item"></div>
+      <div id="adSlot5" class="carousel-item"></div>
     </div>
   </main>
   <script>
     window.VinAds = window.VinAds || [];
 
-    // Initialize ads with page-level context
+    // Set the page context
     window.VinAds.push({
       op: "setPage",
       pubid: "201000", // Replace with your Publisher ID
-      zip: "60435", // Replace with a detected or static ZIP code
+      zip: "60435", // Replace with a static or detected ZIP code
       make: "Chevrolet",
       model: "Silverado",
-      test: true, // Enable test mode for debugging
-      debug: true // Enable debugging for more detailed logging
+      test: true,
+      debug: true
     });
 
-    // Fetch multiple ads in one call
-    window.VinAds.push({
-      op: "buildAd",
-      width: 300,
-      height: 250,
-      template: "default", // Replace with preferred template
-      numresults: 5, // Request multiple distinct ads
-      callback: function (vehicles) {
-        console.log("Vehicles returned:", vehicles); // Debugging output
-        const adSlots = ["adSlot1", "adSlot2", "adSlot3", "adSlot4", "adSlot5"];
-        adSlots.forEach((slotId, index) => {
-          const slot = document.getElementById(slotId);
-          if (slot && vehicles[index]) {
-            const vehicle = vehicles[index];
-            slot.innerHTML = `
-              <a href="${vehicle.url}" target="_blank">
-                <img src="${vehicle.image_url}" alt="${vehicle.title}">
-              </a>`;
-          } else if (slot) {
-            slot.innerHTML = "<p>No ad available</p>"; // Fallback content
-          }
-        });
-      }
+    // Build ads with unique channels to reduce duplication
+    const adSlots = ["adSlot1", "adSlot2", "adSlot3", "adSlot4", "adSlot5"];
+    adSlots.forEach((slotId, index) => {
+      window.VinAds.push({
+        op: "buildAd",
+        container: slotId, // Element ID for each ad slot
+        width: 300, // Ad width in pixels
+        height: 250, // Ad height in pixels
+        template: "default", // Use a valid template name
+        numresults: 1, // One ad per slot
+        channel: `carousel-${index}`, // Unique channel for each slot
+        searchpath: "exact" // Optional: Force different matching logic if supported
+      });
     });
   </script>
   <script src="https://ads.lotlinx.com/load.js" async></script>
