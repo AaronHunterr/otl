@@ -47,9 +47,12 @@
     }
 
     .lotlinx-carousel-wrapper .offer-header h3 {
-      white-space: nowrap; /* Prevent line breaks */
-      overflow: hidden; /* Hide overflow text */
-      text-overflow: ellipsis; /* Add ellipsis for overflowing text */
+      white-space: nowrap;
+      /* Prevent line breaks */
+      overflow: hidden;
+      /* Hide overflow text */
+      text-overflow: ellipsis;
+      /* Add ellipsis for overflowing text */
       font-size: 1.1rem;
       margin: 0;
     }
@@ -60,6 +63,22 @@
       object-fit: cover;
       border-radius: 4px;
     }
+
+    .lotlinx-carousel-wrapper .offer-cta a {
+      display: block;
+      text-align: center;
+      background-color: #e13c16;
+      color: white;
+      padding: 10px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .lotlinx-carousel-wrapper .offer-cta a:hover {
+      background-color: #cf3511;
+    }
+
 
     .lotlinx-carousel-wrapper .lotlinx-carousel-arrow {
       position: absolute;
@@ -87,16 +106,23 @@
     }
 
     @media (max-width: 768px) {
-      .lotlinx-carousel-wrapper .lotlinx-offer-card {
-        flex: 0 0 calc(90% - 10px); /* Adjust to fit a single card with partial visibility of the next */
-      }
-
       .lotlinx-carousel-wrapper .lotlinx-carousel-container {
+        display: flex;
         gap: 10px;
+        overflow-x: scroll;
+        /* Ensure scrolling works on mobile */
       }
 
-      .lotlinx-carousel-wrapper {
-        padding: 10px; /* Reduce padding for smaller screens */
+      .lotlinx-carousel-wrapper .lotlinx-offer-card {
+        flex: 0 0 calc(80% - 20px);
+        /* Fit one full card and part of the next */
+        max-width: none;
+        /* Prevent width limits */
+      }
+
+      .lotlinx-carousel-wrapper .lotlinx-carousel-wrapper {
+        padding: 10px;
+        /* Reduce padding for smaller screens */
       }
     }
   </style>
