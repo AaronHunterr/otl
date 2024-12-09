@@ -6,14 +6,23 @@
   <link rel="stylesheet" href="styles.css">
   <title>Custom Ad Carousel</title>
   <style>
-    /* Carousel container styles */
+    /* Main carousel wrapper */
+    .carousel-wrapper {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      background-color: #f9f9f9;
+    }
+
+    /* Carousel container for scrollable content */
     .carousel-container {
       display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      gap: 20px; /* Increased gap for better spacing */
+      gap: 20px;
       padding: 20px;
-      background-color: #f9f9f9;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      overflow-x: auto;
+      justify-content: center;
     }
 
     .carousel-container::-webkit-scrollbar {
@@ -27,11 +36,11 @@
 
     /* Offer card styles */
     .offer-card {
+      flex: 0 0 calc(33.33% - 20px);
+      /* Ensure 3 cards fit in view */
       border-radius: 6px;
       position: relative;
-      min-width: 240px;
-      max-width: 400px;
-      margin: 0 auto 24px;
+      max-width: 300px;
     }
 
     .offer-card-content {
@@ -39,7 +48,6 @@
       border-radius: 4px;
       box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
       border: 1px solid rgb(212, 212, 212);
-      width: 100%;
       padding: 20px;
       text-align: left;
     }
@@ -88,6 +96,7 @@
       display: block;
       text-align: center;
       background-color: #e13c16;
+      /* Updated button color */
       color: white;
       padding: 10px;
       border-radius: 4px;
@@ -97,23 +106,40 @@
 
     .offer-cta a:hover {
       background-color: #cf3511;
+      /* Updated hover color */
     }
 
-    /* Mobile View Styles */
+    /* Arrows for navigation */
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 50%;
+      z-index: 10;
+    }
+
+    .carousel-arrow.left {
+      left: 10px;
+    }
+
+    .carousel-arrow.right {
+      right: 10px;
+    }
+
+    .carousel-arrow:hover {
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    /* Mobile styles */
     @media (max-width: 768px) {
-      .carousel-container {
-        gap: 16px; /* Reduce gap for smaller screens */
-        padding: 16px;
-      }
-
       .offer-card {
-        min-width: 90%; /* Cards take up most of the screen */
-        max-width: 90%;
-        margin: 16px auto; /* Centered with adjusted spacing */
-      }
-
-      .offer-card-content {
-        padding: 16px; /* Reduced padding for smaller screens */
+        flex: 0 0 80%;
+        /* Ensure 1 card fits in view on small screens */
       }
     }
   </style>
@@ -124,8 +150,12 @@
     <h1>Custom Ad Carousel</h1>
   </header>
   <main class="container">
-    <div class="carousel-container">
-      <!-- Cards will be dynamically injected here -->
+    <div class="carousel-wrapper">
+      <button class="carousel-arrow left" onclick="scrollCarousel('left')">&lt;</button>
+      <div class="carousel-container">
+        <!-- Cards will be dynamically injected here -->
+      </div>
+      <button class="carousel-arrow right" onclick="scrollCarousel('right')">&gt;</button>
     </div>
   </main>
   <script>
@@ -166,46 +196,60 @@
       // Build custom ads
       window.VinAds.push({
         op: "buildCustom",
-        numresults: 5,
-        callback: function (vehicles) {
+        numresults: 8,
+        callback: function(vehicles) {
           const carouselContainer = document.querySelector(".carousel-container");
 
-          // Loop through each vehicle and create the offer card
           vehicles.forEach(vehicle => {
             const offerCard = document.createElement("div");
             offerCard.classList.add("offer-card");
 
+            // Correct location display logic: City, State - (X miles)
+            const locationDisplay = vehicle.distance ?
+              `${vehicle.city}, ${vehicle.state} - ${vehicle.distance} miles` :
+              `${vehicle.city}, ${vehicle.state}`;
+
             offerCard.innerHTML = `
-              <div class="offer-card-content">
-                <div class="offer-header">
-                  <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
-                  <p>${vehicle.condition ? vehicle.condition : ''} ${vehicle.trim ? `| Trim: ${vehicle.trim}` : ''}</p>
-                </div>
-                <div class="offer-price">
-                  <p>$${formatNumber(vehicle.price)}</p>
-                  <p>${vehicle.monthly_payment ? `Est. $${formatNumber(vehicle.monthly_payment)}/mo` : ''}</p>
-                </div>
-                <div class="offer-image">
-                  <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
-                </div>
-                <div class="offer-details">
-                  <p>Mileage: ${vehicle.mileage ? `${formatNumber(vehicle.mileage)} miles` : 'N/A'}</p>
-                  <p>Color: ${vehicle.exterior_color ? vehicle.exterior_color : 'N/A'}</p>
-                </div>
-                <hr>
-                <div class="offer-location">
-                  <p>${vehicle.city}, ${vehicle.state} - ${vehicle.zip ? `${vehicle.zip} miles` : ''}</p>
-                </div>
-                <div class="offer-cta">
-                  <a href="${vehicle.url}" target="_blank">See Details</a>
-                </div>
-              </div>
-            `;
+        <div class="offer-card-content">
+          <div class="offer-header">
+            <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
+            <p>${vehicle.condition ? vehicle.condition : ''} ${vehicle.trim ? `| Trim: ${vehicle.trim}` : ''}</p>
+          </div>
+          <div class="offer-price">
+            <p>$${formatNumber(vehicle.price)}</p>
+            <p>${vehicle.monthly_payment ? `Est. $${formatNumber(vehicle.monthly_payment)}/mo` : ''}</p>
+          </div>
+          <div class="offer-image">
+            <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
+          </div>
+          <div class="offer-details">
+            <p>Mileage: ${vehicle.mileage ? `${formatNumber(vehicle.mileage)} miles` : 'N/A'}</p>
+            <p>Color: ${vehicle.exterior_color ? vehicle.exterior_color : 'N/A'}</p>
+          </div>
+          <hr>
+          <div class="offer-location">
+            <p>${locationDisplay}</p>
+          </div>
+          <div class="offer-cta">
+            <a href="${vehicle.url}" target="_blank">See Details</a>
+          </div>
+        </div>
+      `;
 
             // Append the card to the carousel
             carouselContainer.appendChild(offerCard);
           });
         },
+      });
+    }
+
+    // Scroll carousel logic
+    function scrollCarousel(direction) {
+      const carousel = document.querySelector(".carousel-container");
+      const scrollAmount = direction === "left" ? -carousel.clientWidth : carousel.clientWidth;
+      carousel.scrollBy({
+        left: scrollAmount,
+        behavior: "smooth"
       });
     }
 
