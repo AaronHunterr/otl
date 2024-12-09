@@ -3,86 +3,82 @@
 
 <head>
   <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <link rel="stylesheet" href="styles.css">
   <title>Custom Ad Carousel</title>
   <style>
-    /* Scoped styles for the carousel only */
-    .lotlinx-carousel-wrapper {
-      position: relative;
-      width: 100%;
-      overflow: hidden;
-      background-color: #f9f9f9;
+  /* Fully Scoped Styles */
+  .lotlinx-carousel-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background-color: #f9f9f9;
+  }
+
+  .lotlinx-carousel-wrapper .lotlinx-carousel-container {
+    display: flex;
+    gap: 20px;
+    scroll-behavior: smooth;
+    overflow: hidden;
+  }
+
+  .lotlinx-carousel-wrapper .lotlinx-offer-card {
+    flex: 0 0 calc(25% - 20px);
+    max-width: 300px;
+    border-radius: 6px;
+    transition: transform 0.3s ease;
+  }
+
+  .lotlinx-carousel-wrapper .lotlinx-offer-card-content {
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
+    border: 1px solid rgb(212, 212, 212);
+    padding: 20px;
+    text-align: left;
+  }
+
+  .lotlinx-carousel-wrapper .lotlinx-offer-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  .lotlinx-carousel-wrapper .lotlinx-carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 10;
+  }
+
+  .lotlinx-carousel-wrapper .lotlinx-carousel-arrow.left {
+    left: 10px;
+  }
+
+  .lotlinx-carousel-wrapper .lotlinx-carousel-arrow.right {
+    right: 10px;
+  }
+
+  .lotlinx-carousel-wrapper .lotlinx-carousel-arrow:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+
+  @media (max-width: 768px) {
+    .lotlinx-carousel-wrapper .lotlinx-offer-card {
+      flex: 0 0 calc(80% - 20px);
     }
 
-    .lotlinx-carousel-container {
-      display: flex;
-      gap: 20px;
-      scroll-behavior: smooth;
-      overflow: hidden;
-      /* Hide overflow for looping */
+    .lotlinx-carousel-wrapper .lotlinx-carousel-container {
+      gap: 10px;
     }
-
-    .lotlinx-offer-card {
-      flex: 0 0 calc(25% - 20px);
-      /* Show 4 cards on desktop */
-      max-width: 300px;
-      border-radius: 6px;
-      transition: transform 0.3s ease;
-      /* Smooth card resizing */
-    }
-
-    .lotlinx-offer-card-content {
-      background-color: white;
-      border-radius: 4px;
-      box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
-      border: 1px solid rgb(212, 212, 212);
-      padding: 20px;
-      text-align: left;
-    }
-
-    .lotlinx-offer-image img {
-      width: 100%;
-      height: auto;
-      object-fit: cover;
-      border-radius: 4px;
-    }
-
-    .lotlinx-carousel-arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background-color: rgba(0, 0, 0, 0.5);
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      cursor: pointer;
-      border-radius: 50%;
-      z-index: 10;
-    }
-
-    .lotlinx-carousel-arrow.left {
-      left: 10px;
-    }
-
-    .lotlinx-carousel-arrow.right {
-      right: 10px;
-    }
-
-    .lotlinx-carousel-arrow:hover {
-      background-color: rgba(0, 0, 0, 0.7);
-    }
-
-    @media (max-width: 768px) {
-      .lotlinx-offer-card {
-        flex: 0 0 calc(80% - 20px);
-        /* Show 1 full card with partial next/previous */
-      }
-
-      .lotlinx-carousel-container {
-        gap: 10px;
-        /* Adjust gap for smaller screens */
-      }
-    }
-  </style>
+  }
+</style>
 </head>
 
 <body>
