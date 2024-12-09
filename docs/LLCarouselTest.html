@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <link rel="stylesheet" href="styles.css">
+  <title>Ad Carousel Example</title>
+  <style>
+    /* Carousel styles */
+    .carousel-container {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 15px;
+      padding: 10px 20px;
+      background: #f4f4f4;
+    }
+
+    .carousel-item {
+      flex: 0 0 auto;
+      width: 300px;
+      height: 250px;
+      scroll-snap-align: start;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .carousel-item img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    /* Scrollbar styling */
+    .carousel-container::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .carousel-container::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Ad Carousel Example</h1>
+  </header>
+  <main class="container">
+    <div class="carousel-container" id="adCarousel">
+      <!-- Ad items will be dynamically injected here -->
+    </div>
+  </main>
+  <script>
+    window.VinAds = window.VinAds || [];
+
+    // Initialize ads
+    async function loadAds() {
+      // Simulated location detection
+      const zip = "60435";
+
+      // Set page options
+      window.VinAds.push({
+        op: "setPage",
+        pubid: "201000",
+        zip: zip,
+        make: "Chevrolet",
+        model: "Silverado",
+      });
+
+      // Add ads to carousel
+      window.VinAds.push({
+        op: "buildCustom",
+        numresults: 5,
+        callback: function (vehicles) {
+          const carousel = document.getElementById("adCarousel");
+          vehicles.forEach(vehicle => {
+            const item = document.createElement("div");
+            item.classList.add("carousel-item");
+            item.innerHTML = `<img src="${vehicle.image_url}" alt="${vehicle.title}">`;
+            carousel.appendChild(item);
+          });
+        }
+      });
+    }
+
+    loadAds();
+  </script>
+  <script src="https://ads.lotlinx.com/load.js" async></script>
+</body>
+
+</html>
