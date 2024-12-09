@@ -11,8 +11,8 @@
       display: flex;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
-      gap: 15px;
-      padding: 10px;
+      gap: 20px; /* Increased gap for better spacing */
+      padding: 20px;
       background-color: #f9f9f9;
     }
 
@@ -40,7 +40,7 @@
       box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
       border: 1px solid rgb(212, 212, 212);
       width: 100%;
-      padding: 16px;
+      padding: 20px;
       text-align: left;
     }
 
@@ -87,7 +87,7 @@
     .offer-cta a {
       display: block;
       text-align: center;
-      background-color: #ff0000;
+      background-color: #e13c16;
       color: white;
       padding: 10px;
       border-radius: 4px;
@@ -96,7 +96,25 @@
     }
 
     .offer-cta a:hover {
-      background-color: #cc0000;
+      background-color: #cf3511;
+    }
+
+    /* Mobile View Styles */
+    @media (max-width: 768px) {
+      .carousel-container {
+        gap: 16px; /* Reduce gap for smaller screens */
+        padding: 16px;
+      }
+
+      .offer-card {
+        min-width: 90%; /* Cards take up most of the screen */
+        max-width: 90%;
+        margin: 16px auto; /* Centered with adjusted spacing */
+      }
+
+      .offer-card-content {
+        padding: 16px; /* Reduced padding for smaller screens */
+      }
     }
   </style>
 </head>
@@ -113,61 +131,85 @@
   <script>
     window.VinAds = window.VinAds || [];
 
-    // Set the page context
-    window.VinAds.push({
-      op: "setPage",
-      pubid: "201000", // Replace with your Publisher ID
-      zip: "60435", // Replace with a static or detected ZIP code
-      make: "Toyota",
-      model: "Tacoma",
-      test: true,
-      debug: true,
-    });
+    // Helper function to format numbers with commas
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 
-    // Build custom ads
-    window.VinAds.push({
-      op: "buildCustom",
-      numresults: 5,
-      callback: function (vehicles) {
-        const carouselContainer = document.querySelector(".carousel-container");
+    // Function to detect ZIP code using IP geolocation
+    async function detectZipCode() {
+      try {
+        const response = await fetch("https://ipapi.co/json/");
+        const data = await response.json();
+        return data.postal || "60435"; // Default ZIP if detection fails
+      } catch (error) {
+        console.error("Error detecting ZIP code:", error);
+        return "60435"; // Default ZIP
+      }
+    }
 
-        // Loop through each vehicle and create the offer card
-        vehicles.forEach(vehicle => {
-          const offerCard = document.createElement("div");
-          offerCard.classList.add("offer-card");
+    // Initialize LotLinx Ads with the detected ZIP code
+    async function initializeAds() {
+      const detectedZip = await detectZipCode();
 
-          offerCard.innerHTML = `
-            <div class="offer-card-content">
-              <div class="offer-header">
-                <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
-                <p>${vehicle.condition ? vehicle.condition : ''} ${vehicle.trim ? `| Trim: ${vehicle.trim}` : ''}</p>
-              </div>
-              <div class="offer-price">
-                <p>$${vehicle.price}</p>
-                <p>${vehicle.monthly_payment ? `Est. $${vehicle.monthly_payment}/mo` : ''}</p>
-              </div>
-              <div class="offer-image">
-                <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
-              </div>
-              <div class="offer-details">
-                <p>Mileage: ${vehicle.mileage ? `${vehicle.mileage} miles` : 'N/A'}</p>
-                <p>Color: ${vehicle.exterior_color ? vehicle.exterior_color : 'N/A'}</p>
-              </div>
-              <hr>
-              <div class="offer-location">
-                <p>${vehicle.city}, ${vehicle.state} - ${vehicle.zip ? `${vehicle.zip} miles` : ''}</p>
-              </div>
-              <div class="offer-cta">
-                <a href="${vehicle.url}" target="_blank">See Details</a>
-              </div>
-            </div>
-          `;
+      // Set the page context
+      window.VinAds.push({
+        op: "setPage",
+        pubid: "201000", // Replace with your Publisher ID
+        zip: detectedZip,
+        make: "Toyota",
+        model: "Tacoma",
+        test: true,
+        debug: true,
+      });
 
-          // Append the card to the carousel
-          carouselContainer.appendChild(offerCard);
-        });
-      },
-    });
+      // Build custom ads
+      window.VinAds.push({
+        op: "buildCustom",
+        numresults: 5,
+        callback: function (vehicles) {
+          const carouselContainer = document.querySelector(".carousel-container");
+
+          // Loop through each vehicle and create the offer card
+          vehicles.forEach(vehicle => {
+            const offerCard = document.createElement("div");
+            offerCard.classList.add("offer-card");
+
+            offerCard.innerHTML = `
+              <div class="offer-card-content">
+                <div class="offer-header">
+                  <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
+                  <p>${vehicle.condition ? vehicle.condition : ''} ${vehicle.trim ? `| Trim: ${vehicle.trim}` : ''}</p>
+                </div>
+                <div class="offer-price">
+                  <p>$${formatNumber(vehicle.price)}</p>
+                  <p>${vehicle.monthly_payment ? `Est. $${formatNumber(vehicle.monthly_payment)}/mo` : ''}</p>
+                </div>
+                <div class="offer-image">
+                  <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
+                </div>
+                <div class="offer-details">
+                  <p>Mileage: ${vehicle.mileage ? `${formatNumber(vehicle.mileage)} miles` : 'N/A'}</p>
+                  <p>Color: ${vehicle.exterior_color ? vehicle.exterior_color : 'N/A'}</p>
+                </div>
+                <hr>
+                <div class="offer-location">
+                  <p>${vehicle.city}, ${vehicle.state} - ${vehicle.zip ? `${vehicle.zip} miles` : ''}</p>
+                </div>
+                <div class="offer-cta">
+                  <a href="${vehicle.url}" target="_blank">See Details</a>
+                </div>
+              </div>
+            `;
+
+            // Append the card to the carousel
+            carouselContainer.appendChild(offerCard);
+          });
+        },
+      });
+    }
+
+    initializeAds();
   </script>
   <script src="https://ads.lotlinx.com/load.js" async></script>
 </body>
