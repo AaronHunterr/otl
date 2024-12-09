@@ -21,43 +21,45 @@
       padding: 20px;
     }
 
-    .lotlinx-carousel-wrapper .lotlinx-carousel-container {
+    .lotlinx-carousel-container {
       display: flex;
       gap: 20px;
       scroll-behavior: smooth;
       overflow-x: auto;
     }
 
-    .lotlinx-carousel-wrapper .lotlinx-offer-card {
+    .lotlinx-offer-card {
       flex: 0 0 calc(25% - 20px);
       max-width: 300px;
       border-radius: 6px;
       transition: transform 0.3s ease;
       display: flex;
-      flex-direction: column; /* Stack content vertically */
+      flex-direction: column;
+      justify-content: space-between;
     }
 
-    .lotlinx-carousel-wrapper .lotlinx-offer-card-content {
+    .lotlinx-offer-card-content {
       background-color: white;
       border-radius: 4px;
       box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
       border: 1px solid rgb(212, 212, 212);
       padding: 20px;
       text-align: left;
-      height: 100%;
       display: flex;
-      flex-direction: column; /* Ensure content stacks */
-      justify-content: space-between; /* Distribute space evenly */
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
     }
 
-    .lotlinx-carousel-wrapper .lotlinx-offer-image img {
+    .lotlinx-offer-image img {
       width: 100%;
-      height: 180px; /* Fixed height for all images */
-      object-fit: cover; /* Crop or scale the image */
+      height: 150px;
+      /* Adjusted height for uniformity */
+      object-fit: cover;
       border-radius: 4px;
     }
 
-    .lotlinx-carousel-wrapper .offer-cta a {
+    .offer-cta a {
       display: block;
       text-align: center;
       background-color: #e13c16;
@@ -68,11 +70,11 @@
       font-weight: bold;
     }
 
-    .lotlinx-carousel-wrapper .offer-cta a:hover {
+    .offer-cta a:hover {
       background-color: #cf3511;
     }
 
-    .lotlinx-carousel-wrapper .lotlinx-carousel-arrow {
+    .lotlinx-carousel-arrow {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
@@ -85,28 +87,28 @@
       z-index: 10;
     }
 
-    .lotlinx-carousel-wrapper .lotlinx-carousel-arrow.left {
+    .lotlinx-carousel-arrow.left {
       left: 10px;
     }
 
-    .lotlinx-carousel-wrapper .lotlinx-carousel-arrow.right {
+    .lotlinx-carousel-arrow.right {
       right: 10px;
     }
 
-    .lotlinx-carousel-wrapper .lotlinx-carousel-arrow:hover {
+    .lotlinx-carousel-arrow:hover {
       background-color: rgba(0, 0, 0, 0.7);
     }
 
     @media (max-width: 768px) {
-      .lotlinx-carousel-wrapper .lotlinx-carousel-container {
-        display: flex;
-        gap: 10px;
-        overflow-x: scroll;
+      .lotlinx-offer-card {
+        flex: 0 0 calc(80% - 20px);
+        /* Show one full card and part of the next */
+        max-width: none;
       }
 
-      .lotlinx-carousel-wrapper .lotlinx-offer-card {
-        flex: 0 0 calc(90% - 10px); /* One card visible with partial next */
-        max-width: none;
+      .lotlinx-carousel-container {
+        gap: 10px;
+        overflow-x: scroll;
       }
 
       .lotlinx-carousel-wrapper {
