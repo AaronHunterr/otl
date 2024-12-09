@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <link rel="stylesheet" href="styles.css">
+  <title>Ad Carousel with Template Ads</title>
+  <style>
+    /* Carousel styles */
+    .carousel-container {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 15px;
+      padding: 10px 20px;
+      background: #f4f4f4;
+    }
+
+    .carousel-item {
+      flex: 0 0 auto;
+      width: 300px;
+      height: 250px;
+      scroll-snap-align: start;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Scrollbar styling */
+    .carousel-container::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .carousel-container::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Ad Carousel Example</h1>
+  </header>
+  <main class="container">
+    <div class="carousel-container" id="adCarousel">
+      <!-- Ad slots will be added dynamically -->
+      <div class="carousel-item" id="adSlot1"></div>
+      <div class="carousel-item" id="adSlot2"></div>
+      <div class="carousel-item" id="adSlot3"></div>
+      <div class="carousel-item" id="adSlot4"></div>
+      <div class="carousel-item" id="adSlot5"></div>
+    </div>
+  </main>
+  <script>
+    window.VinAds = window.VinAds || [];
+
+    // Initialize LotLinx ads
+    function initializeAds() {
+      // Set Page Options
+      window.VinAds.push({
+        op: "setPage",
+        pubid: "201000", // Replace with your Publisher ID
+        zip: "60435", // Replace with a detected ZIP if needed
+        make: "Chevrolet",
+        model: "Silverado"
+      });
+
+      // Add Template Ads to each slot
+      const adSlots = ["adSlot1", "adSlot2", "adSlot3", "adSlot4", "adSlot5"];
+      adSlots.forEach((slot, index) => {
+        window.VinAds.push({
+          op: "buildAd",
+          container: slot,
+          width: 300,
+          height: 250,
+          template: "default", // Replace with your preferred template
+          numresults: 1, // One ad per slot
+          channel: `carousel-item-${index}` // Optional: differentiate slots
+        });
+      });
+    }
+
+    initializeAds();
+  </script>
+  <script src="https://ads.lotlinx.com/load.js" async></script>
+</body>
+
+</html>
