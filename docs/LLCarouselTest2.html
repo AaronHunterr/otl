@@ -54,6 +54,17 @@
   <script>
     window.VinAds = window.VinAds || [];
 
+    // Initialize ads with page-level context
+    window.VinAds.push({
+      op: "setPage",
+      pubid: "201000", // Replace with your Publisher ID
+      zip: "60435", // Replace with a detected or static ZIP code
+      make: "Chevrolet",
+      model: "Silverado",
+      test: true, // Enable test mode for debugging
+      debug: true // Enable debugging for more detailed logging
+    });
+
     // Fetch multiple ads in one call
     window.VinAds.push({
       op: "buildAd",
@@ -62,6 +73,7 @@
       template: "default", // Replace with preferred template
       numresults: 5, // Request multiple distinct ads
       callback: function (vehicles) {
+        console.log("Vehicles returned:", vehicles); // Debugging output
         const adSlots = ["adSlot1", "adSlot2", "adSlot3", "adSlot4", "adSlot5"];
         adSlots.forEach((slotId, index) => {
           const slot = document.getElementById(slotId);
