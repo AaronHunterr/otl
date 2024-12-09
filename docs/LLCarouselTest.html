@@ -7,89 +7,104 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <title>Custom Ad Carousel</title>
   <style>
+    /* Apply Montserrat font to the entire page */
     body {
       font-family: 'Montserrat', sans-serif;
       margin: 0;
       padding: 0;
     }
 
-  .lotlinx-carousel-wrapper {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-    background-color: #f9f9f9;
-  }
-
-  .lotlinx-carousel-wrapper .lotlinx-carousel-container {
-    display: flex;
-    gap: 20px;
-    scroll-behavior: smooth;
-    overflow: hidden;
-  }
-
-  .lotlinx-carousel-wrapper .lotlinx-offer-card {
-    flex: 0 0 calc(25% - 20px);
-    max-width: 300px;
-    border-radius: 6px;
-    transition: transform 0.3s ease;
-  }
-
-  .lotlinx-carousel-wrapper .lotlinx-offer-card-content {
-    background-color: white;
-    border-radius: 4px;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
-    border: 1px solid rgb(212, 212, 212);
-    padding: 20px;
-    text-align: left;
-  }
-
-  .lotlinx-carousel-wrapper .lotlinx-offer-image img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    border-radius: 4px;
-  }
-
-  .lotlinx-carousel-wrapper .lotlinx-carousel-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    border-radius: 50%;
-    z-index: 10;
-  }
-
-  .lotlinx-carousel-wrapper .lotlinx-carousel-arrow.left {
-    left: 10px;
-  }
-
-  .lotlinx-carousel-wrapper .lotlinx-carousel-arrow.right {
-    right: 10px;
-  }
-
-  .lotlinx-carousel-wrapper .lotlinx-carousel-arrow:hover {
-    background-color: rgba(0, 0, 0, 0.7);
-  }
-
-  @media (max-width: 768px) {
-    .lotlinx-carousel-wrapper .lotlinx-offer-card {
-      flex: 0 0 calc(80% - 20px);
+    /* Fully Scoped Styles */
+    .lotlinx-carousel-wrapper {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      background-color: #f9f9f9;
+      padding: 20px;
     }
 
     .lotlinx-carousel-wrapper .lotlinx-carousel-container {
-      gap: 10px;
+      display: flex;
+      gap: 20px;
+      scroll-behavior: smooth;
+      overflow: hidden;
     }
-  }
-</style>
+
+    .lotlinx-carousel-wrapper .lotlinx-offer-card {
+      flex: 0 0 calc(25% - 20px);
+      max-width: 300px;
+      border-radius: 6px;
+      transition: transform 0.3s ease;
+    }
+
+    .lotlinx-carousel-wrapper .lotlinx-offer-card-content {
+      background-color: white;
+      border-radius: 4px;
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
+      border: 1px solid rgb(212, 212, 212);
+      padding: 20px;
+      text-align: left;
+    }
+
+    .lotlinx-carousel-wrapper .offer-header h3 {
+      white-space: nowrap; /* Prevent line breaks */
+      overflow: hidden; /* Hide overflow text */
+      text-overflow: ellipsis; /* Add ellipsis for overflowing text */
+      font-size: 1.1rem;
+      margin: 0;
+    }
+
+    .lotlinx-carousel-wrapper .lotlinx-offer-image img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .lotlinx-carousel-wrapper .lotlinx-carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 50%;
+      z-index: 10;
+    }
+
+    .lotlinx-carousel-wrapper .lotlinx-carousel-arrow.left {
+      left: 10px;
+    }
+
+    .lotlinx-carousel-wrapper .lotlinx-carousel-arrow.right {
+      right: 10px;
+    }
+
+    .lotlinx-carousel-wrapper .lotlinx-carousel-arrow:hover {
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    @media (max-width: 768px) {
+      .lotlinx-carousel-wrapper .lotlinx-offer-card {
+        flex: 0 0 calc(90% - 10px); /* Adjust to fit a single card with partial visibility of the next */
+      }
+
+      .lotlinx-carousel-wrapper .lotlinx-carousel-container {
+        gap: 10px;
+      }
+
+      .lotlinx-carousel-wrapper {
+        padding: 10px; /* Reduce padding for smaller screens */
+      }
+    }
+  </style>
 </head>
 
 <body>
   <header>
-    <h1>Custom Ad Carousel</h1>
+    <h1 style="text-align: center;">Custom Ad Carousel</h1>
   </header>
   <main class="container">
     <div class="lotlinx-carousel-wrapper">
