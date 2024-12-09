@@ -5,28 +5,32 @@
   <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   <title>Custom Ad Carousel</title>
   <style>
-    .carousel-wrapper {
+    /* Scoped styles for the carousel only */
+    .lotlinx-carousel-wrapper {
       position: relative;
       width: 100%;
       overflow: hidden;
       background-color: #f9f9f9;
     }
 
-    .carousel-container {
+    .lotlinx-carousel-container {
       display: flex;
       gap: 20px;
       scroll-behavior: smooth;
-      overflow: hidden; /* Hide overflow for looping */
+      overflow: hidden;
+      /* Hide overflow for looping */
     }
 
-    .offer-card {
-      flex: 0 0 calc(25% - 20px); /* Show 4 cards on desktop */
+    .lotlinx-offer-card {
+      flex: 0 0 calc(25% - 20px);
+      /* Show 4 cards on desktop */
       max-width: 300px;
       border-radius: 6px;
-      transition: transform 0.3s ease; /* Smooth card resizing */
+      transition: transform 0.3s ease;
+      /* Smooth card resizing */
     }
 
-    .offer-card-content {
+    .lotlinx-offer-card-content {
       background-color: white;
       border-radius: 4px;
       box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
@@ -35,14 +39,14 @@
       text-align: left;
     }
 
-    .offer-image img {
+    .lotlinx-offer-image img {
       width: 100%;
       height: auto;
       object-fit: cover;
       border-radius: 4px;
     }
 
-    .carousel-arrow {
+    .lotlinx-carousel-arrow {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
@@ -55,26 +59,27 @@
       z-index: 10;
     }
 
-    .carousel-arrow.left {
+    .lotlinx-carousel-arrow.left {
       left: 10px;
     }
 
-    .carousel-arrow.right {
+    .lotlinx-carousel-arrow.right {
       right: 10px;
     }
 
-    .carousel-arrow:hover {
+    .lotlinx-carousel-arrow:hover {
       background-color: rgba(0, 0, 0, 0.7);
     }
 
-    /* Mobile View: Show one card and partial next/previous cards */
     @media (max-width: 768px) {
-      .offer-card {
-        flex: 0 0 calc(80% - 20px); /* Show 1 full card with partial next/previous */
+      .lotlinx-offer-card {
+        flex: 0 0 calc(80% - 20px);
+        /* Show 1 full card with partial next/previous */
       }
 
-      .carousel-container {
-        gap: 10px; /* Adjust gap for smaller screens */
+      .lotlinx-carousel-container {
+        gap: 10px;
+        /* Adjust gap for smaller screens */
       }
     }
   </style>
@@ -85,12 +90,12 @@
     <h1>Custom Ad Carousel</h1>
   </header>
   <main class="container">
-    <div class="carousel-wrapper">
-      <button class="carousel-arrow left" onclick="scrollCarousel('left')">&lt;</button>
-      <div class="carousel-container">
+    <div class="lotlinx-carousel-wrapper">
+      <button class="lotlinx-carousel-arrow left" onclick="scrollCarousel('left')">&lt;</button>
+      <div class="lotlinx-carousel-container">
         <!-- Cards will be dynamically injected here -->
       </div>
-      <button class="carousel-arrow right" onclick="scrollCarousel('right')">&gt;</button>
+      <button class="lotlinx-carousel-arrow right" onclick="scrollCarousel('right')">&gt;</button>
     </div>
   </main>
   <script>
@@ -127,19 +132,19 @@
       window.VinAds.push({
         op: "buildCustom",
         numresults: 8,
-        callback: function (vehicles) {
-          const carouselContainer = document.querySelector(".carousel-container");
+        callback: function(vehicles) {
+          const carouselContainer = document.querySelector(".lotlinx-carousel-container");
 
           vehicles.forEach(vehicle => {
             const offerCard = document.createElement("div");
-            offerCard.classList.add("offer-card");
+            offerCard.classList.add("lotlinx-offer-card");
 
-            const locationDisplay = vehicle.distance
-              ? `${vehicle.city}, ${vehicle.state} - ${vehicle.distance} miles`
-              : `${vehicle.city}, ${vehicle.state}`;
+            const locationDisplay = vehicle.distance ?
+              `${vehicle.city}, ${vehicle.state} - ${vehicle.distance} miles` :
+              `${vehicle.city}, ${vehicle.state}`;
 
             offerCard.innerHTML = `
-              <div class="offer-card-content">
+              <div class="lotlinx-offer-card-content">
                 <div class="offer-header">
                   <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
                   <p>${vehicle.condition ? vehicle.condition : ''} ${vehicle.trim ? `| Trim: ${vehicle.trim}` : ''}</p>
@@ -148,7 +153,7 @@
                   <p>$${formatNumber(vehicle.price)}</p>
                   <p>${vehicle.monthly_payment ? `Est. $${formatNumber(vehicle.monthly_payment)}/mo` : ''}</p>
                 </div>
-                <div class="offer-image">
+                <div class="lotlinx-offer-image">
                   <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
                 </div>
                 <div class="offer-details">
@@ -172,7 +177,7 @@
     }
 
     function scrollCarousel(direction) {
-      const carousel = document.querySelector(".carousel-container");
+      const carousel = document.querySelector(".lotlinx-carousel-container");
       const cards = Array.from(carousel.children);
       if (direction === "right") {
         carousel.appendChild(cards[0]); // Move the first card to the end
