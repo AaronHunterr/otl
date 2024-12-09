@@ -4,7 +4,7 @@
 <head>
   <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   <link rel="stylesheet" href="styles.css">
-  <title>Ad Carousel with Template Ads</title>
+  <title>Ad Carousel Example</title>
   <style>
     /* Carousel styles */
     .carousel-container {
@@ -43,7 +43,7 @@
   </header>
   <main class="container">
     <div class="carousel-container" id="adCarousel">
-      <!-- Ad slots will be added dynamically -->
+      <!-- Predefined ad slots -->
       <div class="carousel-item" id="adSlot1"></div>
       <div class="carousel-item" id="adSlot2"></div>
       <div class="carousel-item" id="adSlot3"></div>
@@ -54,33 +54,29 @@
   <script>
     window.VinAds = window.VinAds || [];
 
-    // Initialize LotLinx ads
-    function initializeAds() {
-      // Set Page Options
-      window.VinAds.push({
-        op: "setPage",
-        pubid: "201000", // Replace with your Publisher ID
-        zip: "60435", // Replace with a detected ZIP if needed
-        make: "Chevrolet",
-        model: "Silverado"
-      });
-
-      // Add Template Ads to each slot
-      const adSlots = ["adSlot1", "adSlot2", "adSlot3", "adSlot4", "adSlot5"];
-      adSlots.forEach((slot, index) => {
-        window.VinAds.push({
-          op: "buildAd",
-          container: slot,
-          width: 300,
-          height: 250,
-          template: "default", // Replace with your preferred template
-          numresults: 1, // One ad per slot
-          channel: `carousel-item-${index}` // Optional: differentiate slots
+    // Fetch multiple ads in one call
+    window.VinAds.push({
+      op: "buildAd",
+      width: 300,
+      height: 250,
+      template: "default", // Replace with preferred template
+      numresults: 5, // Request multiple distinct ads
+      callback: function (vehicles) {
+        const adSlots = ["adSlot1", "adSlot2", "adSlot3", "adSlot4", "adSlot5"];
+        adSlots.forEach((slotId, index) => {
+          const slot = document.getElementById(slotId);
+          if (slot && vehicles[index]) {
+            const vehicle = vehicles[index];
+            slot.innerHTML = `
+              <a href="${vehicle.url}" target="_blank">
+                <img src="${vehicle.image_url}" alt="${vehicle.title}">
+              </a>`;
+          } else if (slot) {
+            slot.innerHTML = "<p>No ad available</p>"; // Fallback content
+          }
         });
-      });
-    }
-
-    initializeAds();
+      }
+    });
   </script>
   <script src="https://ads.lotlinx.com/load.js" async></script>
 </body>
