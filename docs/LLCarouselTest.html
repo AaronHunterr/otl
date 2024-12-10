@@ -157,6 +157,7 @@
     // Function to initialize ads
     async function initializeAds() {
       const { channel, query } = parseURLParams();
+      const detectedZip = await detectZipCode();
 
       window.VinAds.push({
         op: "setPage",
