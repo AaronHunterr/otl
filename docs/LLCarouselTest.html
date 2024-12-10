@@ -5,8 +5,104 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Custom Ad Carousel</title>
-  <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Carousel Wrapper */
+    .lotlinx-carousel-wrapper {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+
+    /* Carousel Container */
+    .lotlinx-carousel-container {
+      display: flex;
+      gap: 16px;
+      overflow: hidden;
+      /* Hide scrollbar */
+      scroll-behavior: smooth;
+    }
+
+    /* Individual Cards */
+    .lotlinx-offer-card {
+      flex: 0 0 calc(30% - 16px);
+      /* Show 3 cards with space */
+      max-width: 300px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      scroll-snap-align: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .lotlinx-offer-image img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+
+    /* Card Content */
+    .lotlinx-offer-card-content {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* CTA Button */
+    .offer-cta a {
+      text-align: center;
+      background-color: #e13c16;
+      color: white;
+      padding: 10px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .offer-cta a:hover {
+      background-color: #cf3511;
+    }
+
+    /* Arrows */
+    .lotlinx-carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .lotlinx-carousel-arrow.left {
+      left: 10px;
+    }
+
+    .lotlinx-carousel-arrow.right {
+      right: 10px;
+    }
+
+    /* Mobile View */
+    @media (max-width: 768px) {
+      .lotlinx-offer-card {
+        flex: 0 0 calc(80% - 16px);
+        /* Show 1 full card and partial next */
+      }
+
+      .lotlinx-carousel-container {
+        gap: 10px;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -14,19 +110,12 @@
     <h1 style="text-align: center; font-family: 'Montserrat', sans-serif;">Custom Ad Carousel</h1>
   </header>
   <main>
-    <div style="position: relative; width: 100%; overflow: hidden; background-color: #f9f9f9; padding: 20px;">
-      <!-- Carousel Wrapper -->
-      <button style="position: absolute; top: 50%; transform: translateY(-50%); left: 10px; background-color: rgba(0, 0, 0, 0.5); color: white; border: none; padding: 10px; border-radius: 50%; cursor: pointer; z-index: 10;"
-        onclick="scrollCarousel('left')">
-        &lt;
-      </button>
-      <div class="lotlinx-carousel-container" style="display: flex; gap: 16px; overflow-x: auto; scroll-behavior: smooth; padding: 0 20px;">
+    <div class="lotlinx-carousel-wrapper">
+      <button class="lotlinx-carousel-arrow left" onclick="scrollCarousel('left')">&lt;</button>
+      <div class="lotlinx-carousel-container">
         <!-- Cards will be dynamically injected -->
       </div>
-      <button style="position: absolute; top: 50%; transform: translateY(-50%); right: 10px; background-color: rgba(0, 0, 0, 0.5); color: white; border: none; padding: 10px; border-radius: 50%; cursor: pointer; z-index: 10;"
-        onclick="scrollCarousel('right')">
-        &gt;
-      </button>
+      <button class="lotlinx-carousel-arrow right" onclick="scrollCarousel('right')">&gt;</button>
     </div>
   </main>
 
@@ -36,6 +125,11 @@
     // Format numbers with commas
     function formatNumber(num) {
       return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    // Format makesmodels parameter
+    function formatMakesModels(param) {
+      return param.replace(/\./g, " ").replace(/,/g, ", ");
     }
 
     // Detect ZIP code from IP
@@ -50,21 +144,19 @@
       }
     }
 
-    // Extract query parameters from URL
+    // Extract query parameters
     function getQueryParameter(key) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(key);
     }
 
-    // Initialize ads with Lotlinx
+    // Initialize Lotlinx Ads
     async function initializeAds() {
       const detectedZip = await detectZipCode();
-
-      // Extract "gid" for channel and "makesmodels" for the query (or use default)
       const channel = getQueryParameter("gid") || "default-channel";
-      const query = getQueryParameter("makesmodels") || "2017-2024 SUV";
+      const makesmodels = getQueryParameter("makesmodels");
+      const query = makesmodels ? formatMakesModels(makesmodels) : "2017-2024 SUV";
 
-      // Lotlinx settings
       window.VinAds.push({
         op: "setPage",
         pubid: "201000",
@@ -83,35 +175,21 @@
 
           vehicles.forEach(vehicle => {
             const card = document.createElement("div");
-            card.style.cssText = `
-              flex: 0 0 calc(25% - 16px);
-              max-width: 300px;
-              background-color: #fff;
-              border: 1px solid #ddd;
-              border-radius: 8px;
-              display: flex;
-              flex-direction: column;
-              justify-content: space-between;
-              scroll-snap-align: center;
-            `;
+            card.className = "lotlinx-offer-card";
             card.innerHTML = `
-              <div style="width: 100%; height: 150px; overflow: hidden; border-radius: 4px;">
-                <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make}" style="width: 100%; height: 100%; object-fit: cover;">
+              <div class="lotlinx-offer-image">
+                <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make}">
               </div>
-              <div style="padding: 16px; display: flex; flex-direction: column; justify-content: space-between;">
-                <h3 style="margin: 0 0 8px; font-size: 1.1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                  ${vehicle.year} ${vehicle.make} ${vehicle.model}
-                </h3>
-                <p style="margin: 0 0 8px;">${vehicle.condition || "N/A"} | Trim: ${vehicle.trim || "N/A"}</p>
-                <p style="margin: 0 0 8px; font-size: 1.2rem; font-weight: bold;">$${formatNumber(vehicle.price)}</p>
+              <div class="lotlinx-offer-card-content">
+                <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
+                <p>${vehicle.condition || "N/A"} | Trim: ${vehicle.trim || "N/A"}</p>
+                <p>$${formatNumber(vehicle.price)}</p>
                 <div>
-                  <p style="margin: 0 0 4px;">Mileage: ${vehicle.mileage ? formatNumber(vehicle.mileage) + " miles" : "N/A"}</p>
-                  <p style="margin: 0 0 4px;">Color: ${vehicle.exterior_color || "N/A"}</p>
-                  <p style="margin: 0;">${vehicle.city}, ${vehicle.state} - ${vehicle.distance ? formatNumber(vehicle.distance) + " miles" : "N/A"}</p>
+                  <p>Mileage: ${vehicle.mileage ? formatNumber(vehicle.mileage) + " miles" : "N/A"}</p>
+                  <p>Color: ${vehicle.exterior_color || "N/A"}</p>
+                  <p>${vehicle.city}, ${vehicle.state} - ${vehicle.distance ? formatNumber(vehicle.distance) + " miles" : "N/A"}</p>
                 </div>
-                <a href="${vehicle.url}" target="_blank" style="display: block; margin-top: 16px; text-align: center; background-color: #e13c16; color: white; padding: 10px; border-radius: 4px; text-decoration: none; font-weight: bold;">
-                  See Details
-                </a>
+                <a href="${vehicle.url}" target="_blank" class="offer-cta">See Details</a>
               </div>
             `;
             carouselContainer.appendChild(card);
@@ -128,7 +206,6 @@
       else carousel.prepend(cards[cards.length - 1]); // Move the last card to the beginning
     }
 
-    // Initialize Lotlinx ads
     initializeAds();
   </script>
   <script src="https://ads.lotlinx.com/load.js" async></script>
