@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LotLinx Custom Carousel</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
   <style>
     body {
       font-family: 'Montserrat', sans-serif;
@@ -22,6 +23,7 @@
 
     .carousel-header {
       text-align: center;
+      margin-bottom: 20px;
     }
 
     .carousel-header h1 {
@@ -104,106 +106,107 @@
     .cta:hover {
       background: #b91c1c;
     }
-
-    @media screen and (max-width: 768px) {
-      .card {
-        min-width: 200px;
-      }
-    }
   </style>
 </head>
 
 <body>
   <div class="carousel-container">
-    <h1>Shop Pre-Owned</h1>
-    <p>Here are some great deals near you!</p>
-    <div class="carousel">
-      <button class="carousel-button left" id="prev-btn">&#8249;</button>
-      <div class="carousel-track"></div>
-      <button class="carousel-button right" id="next-btn">&#8250;</button>
+    <div class="carousel-header">
+      <h1>Shop Pre-Owned</h1>
+      <p>Here are some great deals near you!</p>
+    </div>
+    <div class="swiper">
+      <div class="swiper-wrapper">
+        <!-- Cards will be dynamically populated -->
+      </div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
     </div>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
   <script>
-    // Function to detect ZIP code (stub function)
+    // Function to detect ZIP code
     async function detectZipCode() {
-        try {
-          const response = await fetch("https://ipapi.co/json/");
-          const data = await response.json();
-          return data.postal || "60435"; // Fallback ZIP if detection fails
-        } catch (error) {
-          console.error("Error detecting ZIP code:", error);
-        }
+      try {
+        const response = await fetch("https://ipapi.co/json/");
+        const data = await response.json();
+        return data.postal || "60435"; // Fallback ZIP if detection fails
+      } catch (error) {
+        console.error("Error detecting ZIP code:", error);
+        return "60435"; // Fallback ZIP
+      }
+    }
 
-        // Function to initialize LotLinx ads
-        async function initializeAds() {
-          const detectedZip = await detectZipCode();
-          const queryParams = new URLSearchParams(window.location.search);
-          const channel = queryParams.get("gid") || "default-channel";
-          const query = queryParams.get("makesmodels") || "2017-2024 SUV";
+    // Initialize LotLinx ads
+    async function initializeAds() {
+      const detectedZip = await detectZipCode();
+      const queryParams = new URLSearchParams(window.location.search);
+      const channel = queryParams.get("gid") || "default-channel";
+      const query = queryParams.get("makesmodels") || "2017-2024 SUV";
 
-          // LotLinx API Integration
-          window.VinAds = window.VinAds || [];
-          window.VinAds.push({
-            op: "setPage",
-            pubid: "201000",
-            zip: detectedZip,
-            channel: channel,
-            q: query,
-            test: true,
-            debug: true,
-          });
+      // LotLinx API Integration
+      window.VinAds = window.VinAds || [];
+      window.VinAds.push({
+        op: "setPage",
+        pubid: "201000",
+        zip: detectedZip,
+        channel: channel,
+        q: query,
+        test: true,
+        debug: true,
+      });
 
-          window.VinAds.push({
-            op: "buildCustom",
-            numresults: 8,
-            callback: populateCarousel,
-          });
-        }
+      window.VinAds.push({
+        op: "buildCustom",
+        numresults: 8,
+        callback: populateCarousel,
+      });
+    }
 
-        // Function to populate the carousel
-        function populateCarousel(vehicles) {
-          const track = document.querySelector('.carousel-track');
-          track.innerHTML = ""; // Clear existing cards
+    // Populate the carousel
+    function populateCarousel(vehicles) {
+      const swiperWrapper = document.querySelector('.swiper-wrapper');
+      swiperWrapper.innerHTML = ""; // Clear existing cards
 
-          vehicles.forEach(vehicle => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `
-          <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
-          <div class="card-content">
-            <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
-            <p>Trim: ${vehicle.trim || "N/A"}</p>
-            <p>Price: $${vehicle.price.toLocaleString()}</p>
-            <p>Mileage: ${vehicle.mileage.toLocaleString()} miles</p>
-            <p>Color: ${vehicle.exterior_color || "Unknown Color"}</p>
-            <p>${vehicle.city}, ${vehicle.state}</p>
-            <a href="${vehicle.url}" class="cta" target="_blank">See Details</a>
+      vehicles.forEach(vehicle => {
+        const card = document.createElement('div');
+        card.className = 'swiper-slide';
+        card.innerHTML = `
+          <div class="card">
+            <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
+            <div class="card-content">
+              <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
+              <p>Used | Trim: ${vehicle.trim || "N/A"}</p>
+              <p>Price: $${vehicle.price.toLocaleString()}</p>
+              <p>Mileage: ${vehicle.mileage.toLocaleString()} miles</p>
+              <p>Color: ${vehicle.exterior_color || "Unknown Color"}</p>
+              <div class="divider"></div>
+              <p>${vehicle.city}, ${vehicle.state}</p>
+              <a href="${vehicle.url}" class="cta" target="_blank">See Details</a>
+            </div>
           </div>
         `;
-            track.appendChild(card);
-          });
+        swiperWrapper.appendChild(card);
+      });
 
-          initializeCarousel(track);
-        }
+      new Swiper('.swiper', {
+        slidesPerView: 3,
+        spaceBetween: 24,
+        loop: true,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+          768: { slidesPerView: 1 },
+          1024: { slidesPerView: 2 },
+          1200: { slidesPerView: 3 },
+        },
+      });
+    }
 
-        // Carousel functionality
-        function initializeCarousel(track) {
-          let currentIndex = 0;
-
-          document.getElementById('prev-btn').addEventListener('click', () => {
-            currentIndex = Math.max(currentIndex - 1, 0);
-            track.style.transform = `translateX(-${currentIndex * 320}px)`;
-          });
-
-          document.getElementById('next-btn').addEventListener('click', () => {
-            currentIndex = Math.min(currentIndex + 1, track.childElementCount - 1);
-            track.style.transform = `translateX(-${currentIndex * 320}px)`;
-          });
-        }
-
-        // Initialize on page load
-        initializeAds();
+    initializeAds();
   </script>
   <script src="https://ads.lotlinx.com/load.js" async></script>
 </body>
