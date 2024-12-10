@@ -138,6 +138,18 @@
   <script>
     window.VinAds = window.VinAds || [];
 
+    // Function to detect user's ZIP code using IP lookup
+    async function detectZipCode() {
+      try {
+        const response = await fetch("https://ipapi.co/json/");
+        const data = await response.json();
+        return data.postal || "60435"; // Default ZIP code fallback
+      } catch (error) {
+        console.error("Error detecting ZIP code:", error);
+        return "60435"; // Default ZIP code fallback
+      }
+    }
+
     // Function to parse URL params
     function parseURLParams() {
       const params = new URLSearchParams(window.location.search);
@@ -148,12 +160,14 @@
     }
 
     // Function to initialize ads
-    function initializeAds() {
+    async function initializeAds() {
+      const detectedZip = await detectZipCode();
       const { channel, query } = parseURLParams();
 
       window.VinAds.push({
         op: "setPage",
         pubid: "201000",
+        zip: detectedZip,
         channel: channel,
         q: query,
         test: true,
