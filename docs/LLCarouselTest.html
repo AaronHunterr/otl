@@ -2,162 +2,75 @@
 <html lang="en">
 
 <head>
-  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Ad Carousel</title>
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <title>Custom Ad Carousel</title>
-  <style>
-    body {
-      font-family: 'Montserrat', sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-
-    .lotlinx-carousel-wrapper {
-      position: relative;
-      width: 100%;
-      overflow: hidden;
-      background-color: #f9f9f9;
-      padding: 20px;
-    }
-
-    .lotlinx-carousel-container {
-      display: flex;
-      gap: 20px;
-      scroll-behavior: smooth;
-      overflow-x: auto;
-    }
-
-    .lotlinx-offer-card {
-      flex: 0 0 calc(25% - 20px);
-      max-width: 300px;
-      border-radius: 6px;
-      transition: transform 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .lotlinx-offer-card-content {
-      background-color: white;
-      border-radius: 4px;
-      box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
-      border: 1px solid rgb(212, 212, 212);
-      padding: 20px;
-      text-align: left;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      height: 100%;
-    }
-
-    .lotlinx-offer-image img {
-      width: 100%;
-      height: 150px;
-      /* Adjusted height for uniformity */
-      object-fit: cover;
-      border-radius: 4px;
-    }
-
-    .offer-cta a {
-      display: block;
-      text-align: center;
-      background-color: #e13c16;
-      color: white;
-      padding: 10px;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .offer-cta a:hover {
-      background-color: #cf3511;
-    }
-
-    .lotlinx-carousel-arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background-color: rgba(0, 0, 0, 0.5);
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      cursor: pointer;
-      border-radius: 50%;
-      z-index: 10;
-    }
-
-    .lotlinx-carousel-arrow.left {
-      left: 10px;
-    }
-
-    .lotlinx-carousel-arrow.right {
-      right: 10px;
-    }
-
-    .lotlinx-carousel-arrow:hover {
-      background-color: rgba(0, 0, 0, 0.7);
-    }
-
-    @media (max-width: 768px) {
-      .lotlinx-offer-card {
-        flex: 0 0 calc(80% - 20px);
-        /* Show one full card and part of the next */
-        max-width: none;
-      }
-
-      .lotlinx-carousel-container {
-        gap: 10px;
-        overflow-x: scroll;
-      }
-
-      .lotlinx-carousel-wrapper {
-        padding: 10px;
-      }
-    }
-  </style>
 </head>
 
 <body>
   <header>
-    <h1 style="text-align: center;">Custom Ad Carousel</h1>
+    <h1 style="text-align: center; font-family: 'Montserrat', sans-serif;">Custom Ad Carousel</h1>
   </header>
-  <main class="container">
-    <div class="lotlinx-carousel-wrapper">
-      <button class="lotlinx-carousel-arrow left" onclick="scrollCarousel('left')">&lt;</button>
-      <div class="lotlinx-carousel-container">
-        <!-- Cards will be dynamically injected here -->
+  <main>
+    <div style="position: relative; width: 100%; overflow: hidden; background-color: #f9f9f9; padding: 20px;">
+      <!-- Carousel Wrapper -->
+      <button style="position: absolute; top: 50%; transform: translateY(-50%); left: 10px; background-color: rgba(0, 0, 0, 0.5); color: white; border: none; padding: 10px; border-radius: 50%; cursor: pointer; z-index: 10;"
+        onclick="scrollCarousel('left')">
+        &lt;
+      </button>
+      <div class="lotlinx-carousel-container" style="display: flex; gap: 16px; overflow-x: auto; scroll-behavior: smooth; padding: 0 20px;">
+        <!-- Cards will be dynamically injected -->
       </div>
-      <button class="lotlinx-carousel-arrow right" onclick="scrollCarousel('right')">&gt;</button>
+      <button style="position: absolute; top: 50%; transform: translateY(-50%); right: 10px; background-color: rgba(0, 0, 0, 0.5); color: white; border: none; padding: 10px; border-radius: 50%; cursor: pointer; z-index: 10;"
+        onclick="scrollCarousel('right')">
+        &gt;
+      </button>
     </div>
   </main>
+
   <script>
     window.VinAds = window.VinAds || [];
 
+    // Format numbers with commas
     function formatNumber(num) {
       return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
+    // Detect ZIP code from IP
     async function detectZipCode() {
       try {
         const response = await fetch("https://ipapi.co/json/");
         const data = await response.json();
-        return data.postal || "60435";
+        return data.postal || "60435"; // Default fallback ZIP
       } catch (error) {
         console.error("Error detecting ZIP code:", error);
-        return "60435";
+        return "60435"; // Default fallback ZIP
       }
     }
 
+    // Extract query parameters from URL
+    function getQueryParameter(key) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(key);
+    }
+
+    // Initialize ads with Lotlinx
     async function initializeAds() {
       const detectedZip = await detectZipCode();
 
+      // Extract "gid" for channel and "makesmodels" for the query (or use default)
+      const channel = getQueryParameter("gid") || "default-channel";
+      const query = getQueryParameter("makesmodels") || "2017-2024 SUV";
+
+      // Lotlinx settings
       window.VinAds.push({
         op: "setPage",
         pubid: "201000",
         zip: detectedZip,
-        make: "Toyota",
-        model: "Tacoma",
+        channel: channel,
+        q: query,
         test: true,
         debug: true,
       });
@@ -169,56 +82,53 @@
           const carouselContainer = document.querySelector(".lotlinx-carousel-container");
 
           vehicles.forEach(vehicle => {
-            const offerCard = document.createElement("div");
-            offerCard.classList.add("lotlinx-offer-card");
-
-            const locationDisplay = vehicle.distance ?
-              `${vehicle.city}, ${vehicle.state} - ${vehicle.distance} miles` :
-              `${vehicle.city}, ${vehicle.state}`;
-
-            offerCard.innerHTML = `
-              <div class="lotlinx-offer-card-content">
-                <div class="offer-header">
-                  <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
-                  <p>${vehicle.condition ? vehicle.condition : ''} ${vehicle.trim ? `| Trim: ${vehicle.trim}` : ''}</p>
+            const card = document.createElement("div");
+            card.style.cssText = `
+              flex: 0 0 calc(25% - 16px);
+              max-width: 300px;
+              background-color: #fff;
+              border: 1px solid #ddd;
+              border-radius: 8px;
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              scroll-snap-align: center;
+            `;
+            card.innerHTML = `
+              <div style="width: 100%; height: 150px; overflow: hidden; border-radius: 4px;">
+                <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make}" style="width: 100%; height: 100%; object-fit: cover;">
+              </div>
+              <div style="padding: 16px; display: flex; flex-direction: column; justify-content: space-between;">
+                <h3 style="margin: 0 0 8px; font-size: 1.1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                  ${vehicle.year} ${vehicle.make} ${vehicle.model}
+                </h3>
+                <p style="margin: 0 0 8px;">${vehicle.condition || "N/A"} | Trim: ${vehicle.trim || "N/A"}</p>
+                <p style="margin: 0 0 8px; font-size: 1.2rem; font-weight: bold;">$${formatNumber(vehicle.price)}</p>
+                <div>
+                  <p style="margin: 0 0 4px;">Mileage: ${vehicle.mileage ? formatNumber(vehicle.mileage) + " miles" : "N/A"}</p>
+                  <p style="margin: 0 0 4px;">Color: ${vehicle.exterior_color || "N/A"}</p>
+                  <p style="margin: 0;">${vehicle.city}, ${vehicle.state} - ${vehicle.distance ? formatNumber(vehicle.distance) + " miles" : "N/A"}</p>
                 </div>
-                <div class="offer-price">
-                  <p>$${formatNumber(vehicle.price)}</p>
-                  <p>${vehicle.monthly_payment ? `Est. $${formatNumber(vehicle.monthly_payment)}/mo` : ''}</p>
-                </div>
-                <div class="lotlinx-offer-image">
-                  <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
-                </div>
-                <div class="offer-details">
-                  <p>Mileage: ${vehicle.mileage ? `${formatNumber(vehicle.mileage)} miles` : 'N/A'}</p>
-                  <p>Color: ${vehicle.exterior_color ? vehicle.exterior_color : 'N/A'}</p>
-                </div>
-                <hr>
-                <div class="offer-location">
-                  <p>${locationDisplay}</p>
-                </div>
-                <div class="offer-cta">
-                  <a href="${vehicle.url}" target="_blank">See Details</a>
-                </div>
+                <a href="${vehicle.url}" target="_blank" style="display: block; margin-top: 16px; text-align: center; background-color: #e13c16; color: white; padding: 10px; border-radius: 4px; text-decoration: none; font-weight: bold;">
+                  See Details
+                </a>
               </div>
             `;
-
-            carouselContainer.appendChild(offerCard);
+            carouselContainer.appendChild(card);
           });
         },
       });
     }
 
+    // Carousel scrolling logic
     function scrollCarousel(direction) {
       const carousel = document.querySelector(".lotlinx-carousel-container");
       const cards = Array.from(carousel.children);
-      if (direction === "right") {
-        carousel.appendChild(cards[0]);
-      } else {
-        carousel.prepend(cards[cards.length - 1]);
-      }
+      if (direction === "right") carousel.appendChild(cards[0]); // Move the first card to the end
+      else carousel.prepend(cards[cards.length - 1]); // Move the last card to the beginning
     }
 
+    // Initialize Lotlinx ads
     initializeAds();
   </script>
   <script src="https://ads.lotlinx.com/load.js" async></script>
