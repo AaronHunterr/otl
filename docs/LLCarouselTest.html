@@ -9,10 +9,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <style>
     /* Scoped Carousel Styles */
+    body {
+      margin: 0;
+      overflow-x: hidden; /* Prevent horizontal scrolling */
+    }
+
     .lotlinx-carousel-wrapper {
       position: relative;
-      width: 90%;
-      margin: 0 auto; /* Center the carousel */
+      width: 90%; /* Limit carousel width */
+      margin: 0 auto;
       overflow: hidden;
       background-color: #f9f9f9;
       padding: 20px;
@@ -27,7 +32,7 @@
     }
 
     .lotlinx-offer-card {
-      flex: 0 0 calc(33.33% - 16px); /* Show 3 full cards */
+      flex: 0 0 calc(33.33% - 16px); /* Show 3 full cards with previews */
       max-width: 300px;
       background-color: #fff;
       border: 1px solid #ddd;
@@ -93,7 +98,7 @@
       }
 
       .lotlinx-offer-card {
-        flex: 0 0 calc(80% - 16px); /* Show 1 full card and partial next */
+        flex: 0 0 calc(80% - 16px); /* Show 1 full card with previews */
       }
 
       .lotlinx-carousel-container {
