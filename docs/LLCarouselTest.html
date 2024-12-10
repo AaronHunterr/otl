@@ -6,60 +6,93 @@
   <link rel="stylesheet" href="styles.css">
   <title>Custom Ad Carousel</title>
   <style>
-    /* Carousel Wrapper */
+    /* General Carousel Wrapper */
     .lotlinx-carousel-wrapper {
-      flex: 1;
-      max-width: 100%;
-      padding-bottom: 4px;
-      display: flex;
-      justify-content: center;
-      overflow: hidden;
-      background-color: #f9f9f9;
-    }
-
-    /* Container */
-    .lotlinx-carousel-container {
       position: relative;
       width: 100%;
-      height: 100%;
-      z-index: 1;
-      display: flex;
-      gap: 20px;
-      transition-property: transform;
-      box-sizing: content-box;
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow: hidden;
+      background-color: #f9f9f9;
+      padding: 20px 0;
     }
 
-    /* Card */
+    /* Carousel Container */
+    .lotlinx-carousel-container {
+      display: flex;
+      gap: 16px;
+      /* Reduced gap for tighter alignment */
+      scroll-behavior: smooth;
+      overflow: hidden;
+      padding: 10px;
+      justify-content: flex-start;
+    }
+
+    /* Offer Card */
     .lotlinx-offer-card {
-      border: 1px solid var(--neutral--300);
-      background-color: #fff;
-      border-radius: 4px;
-      flex-flow: column;
-      flex: 1;
-      align-items: center;
+      flex: 0 0 25%;
       min-width: 224px;
       min-height: 420px;
-      margin-bottom: 0;
-      padding-top: 0;
+      background: #fff;
+      border: 1px solid var(--neutral--300);
+      border-radius: 4px;
       display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 20px;
       box-shadow: 0 1px 3px #0003, 0 1px 2px -1px #0000001a;
-      text-align: center;
-      transition: transform 0.3s ease;
+      text-align: left;
+      /* Correct alignment */
     }
 
+    /* Image Inside Card */
     .lotlinx-offer-card-content img {
       width: 100%;
-      height: auto;
+      height: 150px;
       object-fit: cover;
-      border-radius: 4px 4px 0 0;
+      border-radius: 4px;
+      margin-bottom: 16px;
     }
 
-    /* Button */
+    /* Offer Card Details */
+    .lotlinx-offer-card-content .offer-header h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      text-align: left;
+      /* Ensure left alignment */
+    }
+
+    .lotlinx-offer-card-content .offer-details {
+      margin-top: auto;
+      width: 100%;
+    }
+
+    .lotlinx-offer-card-content .offer-details p {
+      margin: 4px 0;
+      font-size: 0.9rem;
+    }
+
+    /* Separator Line */
+    .offer-details hr {
+      margin: 10px 0;
+      border: 0.5px solid rgb(212, 212, 212);
+      width: 100%;
+    }
+
+    /* CTA Button */
+    .lotlinx-offer-cta {
+      text-align: center;
+      margin-top: 12px;
+    }
+
     .lotlinx-offer-cta a {
       display: block;
-      width: 75%;
+      width: 85%;
+      /* Button size adjustment */
       margin: 0 auto;
-      padding: 10px 15px;
+      padding: 10px 12px;
+      font-size: 0.9rem;
       text-align: center;
       background-color: #e13c16;
       color: #fff;
@@ -71,12 +104,6 @@
 
     .lotlinx-offer-cta a:hover {
       background-color: #cf3511;
-    }
-
-    /* Separator Line */
-    .offer-details hr {
-      margin: 10px 0;
-      border: 0.5px solid rgb(212, 212, 212);
     }
 
     /* Arrows */
@@ -94,31 +121,46 @@
     }
 
     .lotlinx-carousel-arrow.left {
-      left: 10px;
+      left: -25px;
+      /* Move closer to content */
     }
 
     .lotlinx-carousel-arrow.right {
-      right: 10px;
+      right: -25px;
+      /* Move closer to content */
     }
 
     .lotlinx-carousel-arrow:hover {
       background-color: rgba(0, 0, 0, 0.7);
     }
 
-    /* Mobile Adjustments */
+    /* Mobile Responsiveness */
     @media (max-width: 768px) {
       .lotlinx-offer-card {
+        flex: 0 0 80%;
         min-width: 80%;
-        max-width: 80%;
-        min-height: 400px;
+        margin: 0 auto;
       }
 
       .lotlinx-carousel-wrapper {
-        padding: 0 15px;
+        padding: 10px;
       }
 
       .lotlinx-carousel-container {
-        gap: 10px;
+        gap: 8px;
+        /* Reduce spacing further for mobile */
+      }
+
+      .lotlinx-offer-card-content img {
+        height: 120px;
+      }
+
+      .lotlinx-carousel-arrow.left {
+        left: 10px;
+      }
+
+      .lotlinx-carousel-arrow.right {
+        right: 10px;
       }
     }
   </style>
@@ -157,11 +199,10 @@
       const params = new URLSearchParams(window.location.search);
       return {
         channel: params.get("gid") || "default-channel",
-        query:
-          params
-            .get("makesmodels")
-            ?.replace(/\./g, " ")
-            .replace(/,/g, ", ") || "2017-2024 SUV",
+        query: params
+          .get("makesmodels")
+          ?.replace(/\./g, " ")
+          .replace(/,/g, ", ") || "2017-2024 SUV",
       };
     }
 
@@ -172,7 +213,10 @@
 
     // Function to initialize ads
     async function initializeAds() {
-      const { channel, query } = parseURLParams();
+      const {
+        channel,
+        query
+      } = parseURLParams();
       const detectedZip = await detectZipCode();
 
       window.VinAds.push({
@@ -188,7 +232,7 @@
       window.VinAds.push({
         op: "buildCustom",
         numresults: 8,
-        callback: function (vehicles) {
+        callback: function(vehicles) {
           const carouselContainer = document.querySelector(".lotlinx-carousel-container");
           carouselContainer.innerHTML = ""; // Clear existing cards
 
