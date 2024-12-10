@@ -5,30 +5,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Custom Ad Carousel</title>
+  <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* Carousel Wrapper */
+    /* Scoped Carousel Styles */
     .lotlinx-carousel-wrapper {
       position: relative;
-      width: 100%;
+      width: 90%;
+      margin: 0 auto; /* Center the carousel */
       overflow: hidden;
-      padding: 20px;
       background-color: #f9f9f9;
+      padding: 20px;
     }
 
-    /* Carousel Container */
     .lotlinx-carousel-container {
       display: flex;
       gap: 16px;
-      overflow: hidden;
-      /* Hide scrollbar */
+      overflow: hidden; /* Hide scrollbar */
       scroll-behavior: smooth;
+      padding: 0 10px;
     }
 
-    /* Individual Cards */
     .lotlinx-offer-card {
-      flex: 0 0 calc(30% - 16px);
-      /* Show 3 cards with space */
+      flex: 0 0 calc(33.33% - 16px); /* Show 3 full cards */
       max-width: 300px;
       background-color: #fff;
       border: 1px solid #ddd;
@@ -46,7 +45,6 @@
       object-fit: cover;
     }
 
-    /* Card Content */
     .lotlinx-offer-card-content {
       padding: 16px;
       display: flex;
@@ -54,7 +52,6 @@
       justify-content: space-between;
     }
 
-    /* CTA Button */
     .offer-cta a {
       text-align: center;
       background-color: #e13c16;
@@ -69,7 +66,6 @@
       background-color: #cf3511;
     }
 
-    /* Arrows */
     .lotlinx-carousel-arrow {
       position: absolute;
       top: 50%;
@@ -91,11 +87,13 @@
       right: 10px;
     }
 
-    /* Mobile View */
     @media (max-width: 768px) {
+      .lotlinx-carousel-wrapper {
+        width: 100%;
+      }
+
       .lotlinx-offer-card {
-        flex: 0 0 calc(80% - 16px);
-        /* Show 1 full card and partial next */
+        flex: 0 0 calc(80% - 16px); /* Show 1 full card and partial next */
       }
 
       .lotlinx-carousel-container {
@@ -170,7 +168,7 @@
       window.VinAds.push({
         op: "buildCustom",
         numresults: 8,
-        callback: function(vehicles) {
+        callback: function (vehicles) {
           const carouselContainer = document.querySelector(".lotlinx-carousel-container");
 
           vehicles.forEach(vehicle => {
