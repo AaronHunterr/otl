@@ -20,29 +20,27 @@
     /* Carousel Container */
     .lotlinx-carousel-container {
       display: flex;
-      gap: 16px;
-      /* Reduced gap for tighter alignment */
+      gap: 16px; /* Reduced gap for better alignment */
       scroll-behavior: smooth;
       overflow: hidden;
-      padding: 10px;
       justify-content: flex-start;
     }
 
     /* Offer Card */
     .lotlinx-offer-card {
-      flex: 0 0 25%;
+      flex: 0 0 calc(25% - 16px); /* Four cards fit in the container width */
+      max-width: 280px;
       min-width: 224px;
-      min-height: 420px;
+      min-height: 400px;
       background: #fff;
-      border: 1px solid var(--neutral--300);
+      border: 1px solid #d4d4d4;
       border-radius: 4px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      padding: 20px;
-      box-shadow: 0 1px 3px #0003, 0 1px 2px -1px #0000001a;
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
       text-align: left;
-      /* Correct alignment */
     }
 
     /* Image Inside Card */
@@ -51,7 +49,7 @@
       height: 150px;
       object-fit: cover;
       border-radius: 4px;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
 
     /* Offer Card Details */
@@ -59,8 +57,6 @@
       font-size: 1rem;
       font-weight: 600;
       margin-bottom: 8px;
-      text-align: left;
-      /* Ensure left alignment */
     }
 
     .lotlinx-offer-card-content .offer-details {
@@ -76,7 +72,7 @@
     /* Separator Line */
     .offer-details hr {
       margin: 10px 0;
-      border: 0.5px solid rgb(212, 212, 212);
+      border: 0.5px solid #d4d4d4;
       width: 100%;
     }
 
@@ -88,10 +84,9 @@
 
     .lotlinx-offer-cta a {
       display: block;
-      width: 85%;
-      /* Button size adjustment */
+      width: 85%; /* Slightly smaller button */
       margin: 0 auto;
-      padding: 10px 12px;
+      padding: 10px;
       font-size: 0.9rem;
       text-align: center;
       background-color: #e13c16;
@@ -121,13 +116,11 @@
     }
 
     .lotlinx-carousel-arrow.left {
-      left: -25px;
-      /* Move closer to content */
+      left: 10px; /* Close to the carousel */
     }
 
     .lotlinx-carousel-arrow.right {
-      right: -25px;
-      /* Move closer to content */
+      right: 10px; /* Close to the carousel */
     }
 
     .lotlinx-carousel-arrow:hover {
@@ -137,8 +130,9 @@
     /* Mobile Responsiveness */
     @media (max-width: 768px) {
       .lotlinx-offer-card {
-        flex: 0 0 80%;
-        min-width: 80%;
+        flex: 0 0 calc(80% - 16px); /* Center main card with partial views of others */
+        max-width: 100%;
+        min-width: auto;
         margin: 0 auto;
       }
 
@@ -147,8 +141,7 @@
       }
 
       .lotlinx-carousel-container {
-        gap: 8px;
-        /* Reduce spacing further for mobile */
+        gap: 8px; /* Tighter spacing for mobile */
       }
 
       .lotlinx-offer-card-content img {
@@ -156,13 +149,14 @@
       }
 
       .lotlinx-carousel-arrow.left {
-        left: 10px;
+        left: 5px;
       }
 
       .lotlinx-carousel-arrow.right {
-        right: 10px;
+        right: 5px;
       }
     }
+
   </style>
 </head>
 
