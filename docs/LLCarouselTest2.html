@@ -46,37 +46,24 @@
       justify-content: center;
     }
 
-    .card {
+    .card, .promotionalcard {
       background: #fff;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      max-width: 280px;
-      min-width: 240px;
+      width: 280px;
+      height: 420px;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
-    }
-
-    .promotionalcard {
-      border: 1px solid var(--rydeshopper--800);
-      background-color: #fff;
-      border-radius: 4px;
-      flex-flow: column;
-      justify-content: flex-start;
-      align-items: center;
-      min-width: 224px;
-      min-height: 420px;
-      display: flex;
-      position: relative;
-      box-shadow: 0 1px 2px -1px #0000001a, 0 1px 3px #0003;
     }
 
     .promotionalcard img {
       width: 100%;
+      height: auto;
       object-fit: cover;
     }
 
-    .vehicle-cta-copy {
+    .cta, .vehicle-cta-copy {
       display: block;
       text-align: center;
       background: #dc2626;
@@ -88,13 +75,13 @@
       font-weight: 600;
     }
 
-    .vehicle-cta-copy:hover {
+    .cta:hover, .vehicle-cta-copy:hover {
       background: #b91c1c;
     }
 
     @media screen and (max-width: 768px) {
-      .card {
-        min-width: 200px;
+      .swiper-slide {
+        width: 85%;
       }
     }
   </style>
@@ -102,11 +89,13 @@
 
 <body>
   <div class="carousel-container">
-    <h1>Shop Pre-Owned</h1>
-    <p>Here are some great deals near you!</p>
+    <div class="carousel-header">
+      <h1>Shop Pre-Owned</h1>
+      <p>Here are some great deals near you!</p>
+    </div>
     <div class="swiper">
       <div class="swiper-wrapper">
-        <!-- Cards will be dynamically inserted here -->
+        <!-- Cards dynamically added here -->
       </div>
       <div class="swiper-button-next"></div>
       <div class="swiper-button-prev"></div>
@@ -120,19 +109,9 @@
         const response = await fetch("https://ipapi.co/json/");
         const data = await response.json();
         return data.postal || "60435";
-      } catch (error) {
-        console.error("Error detecting ZIP code:", error);
+      } catch {
         return "60435";
       }
-    }
-
-    function getPromoCardHTML(type, zip, gid, cid) {
-      const promoCards = {
-        Truck: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div><img src="https://dtprodvehicleimages.blob.core.windows.net/assets/webflow/wf17b/logo-rydeshoppermarketplace.svg" alt="Rydeshopper Marketplace"><img src="https://content.rydeshopper.com/assets/webflow/wf17/02-truck/01-silverado1500/00-silverado1500-b.webp" alt="Silverado 1500" class="img-4"><a href="https://marketplace.rydeshopper.com/search-results?zip=${zip}&bodytypes=Pickup&gid=${gid}&cid=${cid}&sid=browsecardTruck" class="vehicle-cta-copy w-inline-block"><div>BROWSE&nbsp;ALL TRUCKS</div></a><div class="promotionalcard-gradient"></div></div>`,
-        SUV: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div><img src="https://dtprodvehicleimages.blob.core.windows.net/assets/webflow/wf17b/logo-rydeshoppermarketplace.svg" alt="Rydeshopper Marketplace"><img src="https://content.rydeshopper.com/assets/webflow/wf17/04-suv3row/03-suburban/00-suburban-a.webp" alt="Suburban" class="img-4"><a href="https://marketplace.rydeshopper.com/search-results?zip=${zip}&bodytypes=SUV%2FCrossover&gid=${gid}&cid=${cid}&sid=browsecard3RowSUV" class="vehicle-cta-copy w-inline-block"><div>BROWSE&nbsp;ALL SUVS</div></a><div class="promotionalcard-gradient"></div></div>`,
-        Car: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div><img src="https://dtprodvehicleimages.blob.core.windows.net/assets/webflow/wf17b/logo-rydeshoppermarketplace.svg" alt="Rydeshopper Marketplace"><img src="https://content.rydeshopper.com/assets/webflow/wf17/05-car/01-malibu/00-malibu-a.webp" alt="Malibu" class="img-4"><a href="https://marketplace.rydeshopper.com/search-results?zip=${zip}&bodytypes=Sedan&gid=${gid}&cid=${cid}&sid=browsecardCar" class="vehicle-cta-copy w-inline-block"><div>BROWSE&nbsp;ALL CARS</div></a><div class="promotionalcard-gradient"></div></div>`
-      };
-      return promoCards[type];
     }
 
     async function initializeAds() {
@@ -142,7 +121,6 @@
       const cid = queryParams.get("cid") || "Undefined";
       const query = queryParams.get("makesmodels") || "2017-2024 SUV";
 
-      // LotLinx API Integration
       window.VinAds = window.VinAds || [];
       window.VinAds.push({
         op: "setPage",
@@ -157,73 +135,72 @@
       window.VinAds.push({
         op: "buildCustom",
         numresults: 8,
-        callback: populateCarousel,
+        callback: function (vehicles) {
+          populateCarousel(vehicles, detectedZip, gid, cid);
+        },
       });
     }
 
-    function populateCarousel(vehicles) {
+    function populateCarousel(vehicles, zip, gid, cid) {
       const swiperWrapper = document.querySelector(".swiper-wrapper");
 
-      if (vehicles.length > 0) {
-        vehicles.forEach(vehicle => {
-          const card = document.createElement("div");
-          card.className = "swiper-slide";
-          card.innerHTML = `
-                  <div class="card">
-                    <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
-                    <div class="card-content">
-                      <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
-                      <p>${vehicle.condition || "Unknown"} | Trim: ${vehicle.trim || "N/A"}</p>
-                      <p>Price: $${vehicle.price.toLocaleString()}</p>
-                      <p>Mileage: ${vehicle.mileage.toLocaleString()} miles</p>
-                      <p>Color: ${vehicle.exterior_color || "Unknown Color"}</p>
-                      <div class="divider"></div>
-                      <p>${vehicle.city}, ${vehicle.state}</p>
-                      <a href="${vehicle.url}" class="cta" target="_blank">See Details</a>
-                    </div>
-                  </div>
-                `;
-          swiperWrapper.appendChild(card);
-        });
-      }
+      vehicles.forEach(vehicle => {
+        const card = document.createElement("div");
+        card.className = "swiper-slide";
+        card.innerHTML = `
+          <div class="card">
+            <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
+            <div class="card-content">
+              <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
+              <p>${vehicle.condition || "Unknown"} | Trim: ${vehicle.trim || "N/A"}</p>
+              <p>Price: $${vehicle.price.toLocaleString()}</p>
+              <p>Mileage: ${vehicle.mileage.toLocaleString()} miles</p>
+              <div>${vehicle.city}, ${vehicle.state}</div>
+            </div>
+          </div>
+        `;
+        swiperWrapper.appendChild(card);
+      });
 
-      // Adding Promo Card
-      const promoType = vehicles.length > 0 ? mapBodyStyleToPromo(vehicles[0].bodystyle) : "SUV";
-      const promoCardHTML = getPromoCardHTML(promoType, detectedZip, gid, cid);
+      const promoType = mapBodyStyleToPromo(vehicles[0]?.bodystyle || "SUV");
+      const promoHTML = getPromoCardHTML(promoType, zip, gid, cid);
 
       const promoCard = document.createElement("div");
       promoCard.className = "swiper-slide";
-      promoCard.innerHTML = promoCardHTML;
+      promoCard.innerHTML = promoHTML;
       swiperWrapper.appendChild(promoCard);
 
-      // Initialize Swiper
-      const swiper = new Swiper('.swiper', {
+      new Swiper('.swiper', {
         followFinger: true,
         slidesPerView: 1.5,
-        spaceBetween: 24,
+        spaceBetween: 24, // Adjust spacing between cards
         centeredSlides: true,
         loop: true,
         breakpoints: {
+          // mobile landscape
           480: {
             slidesPerView: 1.5,
             spaceBetween: 24
           },
           768: {
-            slidesPerView: 2,
+            slidesPerView: 2, // Center one card with slivers in mobile view
             spaceBetween: 12
           },
+          // desktop
           992: {
             slidesPerView: 3.5,
             spaceBetween: 24
           },
+          // 1280px and up
           1280: {
-            slidesPerView: 3.5,
+            slidesPerView: 3.5, // Maintain three visible cards in desktop
             spaceBetween: 24
           },
+          // 1440px and up
           1440: {
             slidesPerView: 3.5,
             spaceBetween: 24
-          },
+          }
         },
         navigation: {
           nextEl: '.swiper-button-next',
@@ -244,13 +221,14 @@
         wagon: "SUV",
         hatchback: "Car",
         sedan: "Car",
-        default: "SUV"
+        default: "SUV",
       };
-      return map[bodystyle?.toLowerCase()] || map.default;
+      return map[bodystyle.toLowerCase()] || "SUV";
     }
 
     initializeAds();
   </script>
+  <script src="https://ads.lotlinx.com/load.js" async></script>
 </body>
 
 </html>
