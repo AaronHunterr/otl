@@ -142,24 +142,24 @@
       const cid = queryParams.get("cid") || "Undefined";
       const query = queryParams.get("makesmodels") || "2017-2024 SUV";
 
-            // LotLinx API Integration
-            window.VinAds = window.VinAds || [];
-            window.VinAds.push({
-              op: "setPage",
-              pubid: "201000",
-              zip: detectedZip,
-              channel: gid,
-              q: query,
-              test: true,
-              debug: true,
-            });
+      // LotLinx API Integration
+      window.VinAds = window.VinAds || [];
+      window.VinAds.push({
+        op: "setPage",
+        pubid: "201000",
+        zip: detectedZip,
+        channel: gid,
+        q: query,
+        test: true,
+        debug: true,
+      });
 
-            window.VinAds.push({
-              op: "buildCustom",
-              numresults: 8,
-              callback: populateCarousel,
-            });
-          }
+      window.VinAds.push({
+        op: "buildCustom",
+        numresults: 8,
+        callback: populateCarousel,
+      });
+    }
 
     function populateCarousel(vehicles) {
       const swiperWrapper = document.querySelector(".swiper-wrapper");
@@ -167,59 +167,63 @@
       if (vehicles.length > 0) {
         vehicles.forEach(vehicle => {
           const card = document.createElement("div");
-          card.className = "swiper-slide card";
+          card.className = "swiper-slide";
           card.innerHTML = `
-            <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
-            <div class="card-content">
-              <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
-              <p>${vehicle.mileage.toLocaleString()} miles</p>
-              <p>${vehicle.city}, ${vehicle.state}</p>
-            </div>
-          `;
+                  <div class="card">
+                    <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
+                    <div class="card-content">
+                      <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
+                      <p>${vehicle.condition || "Unknown"} | Trim: ${vehicle.trim || "N/A"}</p>
+                      <p>Price: $${vehicle.price.toLocaleString()}</p>
+                      <p>Mileage: ${vehicle.mileage.toLocaleString()} miles</p>
+                      <p>Color: ${vehicle.exterior_color || "Unknown Color"}</p>
+                      <div class="divider"></div>
+                      <p>${vehicle.city}, ${vehicle.state}</p>
+                      <a href="${vehicle.url}" class="cta" target="_blank">See Details</a>
+                    </div>
+                  </div>
+                `;
           swiperWrapper.appendChild(card);
         });
       }
 
-
+      // Adding Promo Card
       const promoType = vehicles.length > 0 ? mapBodyStyleToPromo(vehicles[0].bodystyle) : "SUV";
-      const promoCardHTML = getPromoCardHTML(promoType, zip, gid, cid);
+      const promoCardHTML = getPromoCardHTML(promoType, detectedZip, gid, cid);
 
       const promoCard = document.createElement("div");
       promoCard.className = "swiper-slide";
       promoCard.innerHTML = promoCardHTML;
       swiperWrapper.appendChild(promoCard);
 
+      // Initialize Swiper
       const swiper = new Swiper('.swiper', {
         followFinger: true,
         slidesPerView: 1.5,
-        spaceBetween: 24, // Adjust spacing between cards
+        spaceBetween: 24,
         centeredSlides: true,
         loop: true,
         breakpoints: {
-          // mobile landscape
           480: {
             slidesPerView: 1.5,
             spaceBetween: 24
           },
           768: {
-            slidesPerView: 2, // Center one card with slivers in mobile view
+            slidesPerView: 2,
             spaceBetween: 12
           },
-          // desktop
           992: {
             slidesPerView: 3.5,
             spaceBetween: 24
           },
-          // 1280px and up
           1280: {
-            slidesPerView: 3.5, // Maintain three visible cards in desktop
+            slidesPerView: 3.5,
             spaceBetween: 24
           },
-          // 1440px and up
           1440: {
             slidesPerView: 3.5,
             spaceBetween: 24
-          }
+          },
         },
         navigation: {
           nextEl: '.swiper-button-next',
