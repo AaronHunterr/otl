@@ -19,6 +19,8 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
+      overflow: hidden; /* Ensure overflow is clipped */
+      position: relative; /* For proper button positioning */
     }
 
     .carousel-header {
@@ -42,7 +44,16 @@
       overflow: hidden;
     }
 
+    .swiper-wrapper {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+      gap: 20px; /* Add space between cards */
+    }
+
     .swiper-slide {
+      flex: 0 0 25%; /* Show 25% of outer cards */
+      max-width: 25%;
+      transition: transform 0.5s ease-in-out;
       display: flex;
       justify-content: center;
     }
@@ -106,7 +117,19 @@
     .cta:hover {
       background: #b91c1c;
     }
-  </style>
+
+    @media screen and (max-width: 768px) {
+      .swiper-wrapper {
+        justify-content: center;
+      }
+
+      .swiper-slide {
+        flex: 0 0 75%; /* Center one card fully */
+        max-width: 75%;
+        padding: 0 10px; /* Smaller gap */
+      }
+    }
+</style>
 </head>
 
 <body>
