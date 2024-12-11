@@ -141,11 +141,30 @@
       const gid = queryParams.get("gid") || "default-channel";
       const cid = queryParams.get("cid") || "Undefined";
 
-      const lotLinxData = await fetchLotLinxData(); // Stub for LotLinx API
+            // LotLinx API Integration
+            window.VinAds = window.VinAds || [];
+            window.VinAds.push({
+              op: "setPage",
+              pubid: "201000",
+              zip: detectedZip,
+              channel: gid,
+              q: query,
+              test: true,
+              debug: true,
+            });
+
+            window.VinAds.push({
+              op: "buildCustom",
+              numresults: 8,
+              callback: populateCarousel,
+            });
+          }
+
+    function populateCarousel(vehicles) {
       const swiperWrapper = document.querySelector(".swiper-wrapper");
 
-      if (lotLinxData.length > 0) {
-        lotLinxData.forEach(vehicle => {
+      if (vehicles.length > 0) {
+        vehicles.forEach(vehicle => {
           const card = document.createElement("div");
           card.className = "swiper-slide card";
           card.innerHTML = `
@@ -160,7 +179,8 @@
         });
       }
 
-      const promoType = lotLinxData.length > 0 ? mapBodyStyleToPromo(lotLinxData[0].bodystyle) : "SUV";
+
+      const promoType = vehicles.length > 0 ? mapBodyStyleToPromo(vehicles[0].bodystyle) : "SUV";
       const promoCardHTML = getPromoCardHTML(promoType, zip, gid, cid);
 
       const promoCard = document.createElement("div");
@@ -168,17 +188,45 @@
       promoCard.innerHTML = promoCardHTML;
       swiperWrapper.appendChild(promoCard);
 
-      new Swiper(".swiper", {
-        slidesPerView: 3.5,
-        spaceBetween: 24,
+      const swiper = new Swiper('.swiper', {
+        followFinger: true,
+        slidesPerView: 1.5,
+        spaceBetween: 24, // Adjust spacing between cards
+        centeredSlides: true,
         loop: true,
+        breakpoints: {
+          // mobile landscape
+          480: {
+            slidesPerView: 1.5,
+            spaceBetween: 24
+          },
+          768: {
+            slidesPerView: 2, // Center one card with slivers in mobile view
+            spaceBetween: 12
+          },
+          // desktop
+          992: {
+            slidesPerView: 3.5,
+            spaceBetween: 24
+          },
+          // 1280px and up
+          1280: {
+            slidesPerView: 3.5, // Maintain three visible cards in desktop
+            spaceBetween: 24
+          },
+          // 1440px and up
+          1440: {
+            slidesPerView: 3.5,
+            spaceBetween: 24
+          }
+        },
         navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        }
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
       });
     }
-
+    
     function mapBodyStyleToPromo(bodystyle) {
       const map = {
         convertible: "Car",
