@@ -136,7 +136,7 @@
     }
 
     async function initializeAds() {
-      const zip = await detectZipCode();
+      const detectedZip = await detectZipCode();
       const queryParams = new URLSearchParams(window.location.search);
       const gid = queryParams.get("gid") || "default-channel";
       const cid = queryParams.get("cid") || "Undefined";
@@ -226,7 +226,7 @@
         },
       });
     }
-    
+
     function mapBodyStyleToPromo(bodystyle) {
       const map = {
         convertible: "Car",
