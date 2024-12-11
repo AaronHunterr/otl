@@ -19,8 +19,6 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
-      overflow: hidden; /* Ensure overflow is clipped */
-      position: relative; /* For proper button positioning */
     }
 
     .carousel-header {
@@ -44,18 +42,10 @@
       overflow: hidden;
     }
 
-    .swiper-wrapper {
-      display: flex;
-      transition: transform 0.5s ease-in-out;
-      gap: 20px; /* Add space between cards */
-    }
-
     .swiper-slide {
-      flex: 0 0 25%; /* Show 25% of outer cards */
-      max-width: 25%;
-      transition: transform 0.5s ease-in-out;
       display: flex;
       justify-content: center;
+      transition: transform 0.3s ease-in-out;
     }
 
     .card {
@@ -119,17 +109,36 @@
     }
 
     @media screen and (max-width: 768px) {
-      .swiper-wrapper {
-        justify-content: center;
+      .swiper-slide {
+        flex-shrink: 0;
+        width: 90%;
       }
 
-      .swiper-slide {
-        flex: 0 0 75%; /* Center one card fully */
-        max-width: 75%;
-        padding: 0 10px; /* Smaller gap */
+      .swiper-slide:nth-child(n + 2):nth-last-child(n + 2) {
+        transform: scale(0.9);
+      }
+
+      .swiper-slide:first-child {
+        margin-left: -25%;
       }
     }
-</style>
+
+    @media screen and (min-width: 769px) {
+      .swiper-slide {
+        flex-shrink: 0;
+        width: calc(100% / 3.5);
+        padding: 0 10px;
+      }
+
+      .swiper-slide:first-child {
+        margin-left: -25%;
+      }
+
+      .swiper-slide:nth-child(n + 2):nth-last-child(n + 2) {
+        transform: scale(0.95);
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -222,9 +231,15 @@
           prevEl: '.swiper-button-prev',
         },
         breakpoints: {
-          768: { slidesPerView: 1 },
-          1024: { slidesPerView: 2 },
-          1200: { slidesPerView: 3 },
+          768: {
+            slidesPerView: 1
+          },
+          1024: {
+            slidesPerView: 2
+          },
+          1200: {
+            slidesPerView: 3
+          },
         },
       });
     }
