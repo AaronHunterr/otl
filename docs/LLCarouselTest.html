@@ -207,37 +207,21 @@
         swiperWrapper.appendChild(card);
       });
 
-      const swiper = new Swiper($(this).find(".swiper")[0], {
-        speed: sliderDuration,
-        loop: loopMode,
-        autoHeight: false,
-        centeredSlides: loopMode,
+      const swiper = new Swiper('.swiper', {
         followFinger: true,
-        freeMode: false,
-        preventClicks: true,
-        preventClicksPropagation: true,
         slidesPerView: 1.5,
-        spaceBetween: 24,
-        rewind: false,
-        loopAdditionalSlides: 4,
-        touchEventsTarget: 'container',
-        mousewheel: {
-          forceToAxis: true
-        },
-        keyboard: {
-          enabled: true,
-          onlyInViewport: true
-        },
+        spaceBetween: 24, // Adjust spacing between cards
+        centeredSlides: true,
+        loop: true,
         breakpoints: {
           // mobile landscape
           480: {
             slidesPerView: 1.5,
             spaceBetween: 24
           },
-          // tablet
           768: {
-            slidesPerView: 2,
-            spaceBetween: 24
+            slidesPerView: 2, // Center one card with slivers in mobile view
+            spaceBetween: 12
           },
           // desktop
           992: {
@@ -246,7 +230,7 @@
           },
           // 1280px and up
           1280: {
-            slidesPerView: 3.5,
+            slidesPerView: 3.5, // Maintain three visible cards in desktop
             spaceBetween: 24
           },
           // 1440px and up
@@ -255,26 +239,10 @@
             spaceBetween: 24
           }
         },
-        pagination: {
-          el: $(this).find(".swiper-bullet-wrapper")[0],
-          bulletActiveClass: "is-active",
-          bulletClass: "swiper-bullet",
-          bulletElement: "button",
-          clickable: true
-        },
         navigation: {
-          nextEl: $(this).find(".swiper-next")[0],
-          prevEl: $(this).find(".swiper-prev")[0],
-          disabledClass: "is-disabled"
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
         },
-        scrollbar: {
-          el: $(this).find(".swiper-drag-wrapper")[0],
-          draggable: true,
-          dragClass: "swiper-drag",
-          snapOnRelease: true
-        },
-        slideActiveClass: "is-active",
-        slideDuplicateActiveClass: "is-active"
       });
     }
 
