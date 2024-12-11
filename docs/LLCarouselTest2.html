@@ -46,7 +46,8 @@
       justify-content: center;
     }
 
-    .card, .promotionalcard {
+    .card,
+    .promotionalcard {
       background: #fff;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -63,7 +64,8 @@
       object-fit: cover;
     }
 
-    .cta, .vehicle-cta-copy {
+    .cta,
+    .vehicle-cta-copy {
       display: block;
       text-align: center;
       background: #dc2626;
@@ -75,7 +77,8 @@
       font-weight: 600;
     }
 
-    .cta:hover, .vehicle-cta-copy:hover {
+    .cta:hover,
+    .vehicle-cta-copy:hover {
       background: #b91c1c;
     }
 
@@ -135,10 +138,17 @@
       window.VinAds.push({
         op: "buildCustom",
         numresults: 8,
-        callback: function (vehicles) {
+        callback: function(vehicles) {
           populateCarousel(vehicles, detectedZip, gid, cid);
         },
       });
+    }
+
+    console.log('Vehicles:', vehicles);
+
+    if (!Array.isArray(vehicles) || vehicles.length === 0) {
+      console.error('Vehicles data is not an array or is empty');
+      return;
     }
 
     function populateCarousel(vehicles, zip, gid, cid) {
@@ -164,6 +174,11 @@
 
       const promoType = mapBodyStyleToPromo(vehicles[0]?.bodystyle || "SUV");
       const promoHTML = getPromoCardHTML(promoType, zip, gid, cid);
+
+      if (!promoHTML) {
+        console.error('Promo card HTML generation failed');
+        return;
+      }
 
       const promoCard = document.createElement("div");
       promoCard.className = "swiper-slide";
@@ -220,6 +235,10 @@
       });
     }
 
+    console.log('Swiper initialized with:', new Swiper('.swiper', {
+      ...
+    }));
+
     function mapBodyStyleToPromo(bodystyle) {
       const map = {
         convertible: "Car",
@@ -235,6 +254,15 @@
         default: "SUV",
       };
       return map[bodystyle.toLowerCase()] || "SUV";
+    }
+
+    function getPromoCardHTML(type, zip, gid, cid) {
+      const promoCards = {
+        Truck: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div><img src="https://dtprodvehicleimages.blob.core.windows.net/assets/webflow/wf17b/logo-rydeshoppermarketplace.svg" alt="Rydeshopper Marketplace"><img src="https://content.rydeshopper.com/assets/webflow/wf17/02-truck/01-silverado1500/00-silverado1500-b.webp" alt="Silverado 1500" class="img-4"><a href="https://marketplace.rydeshopper.com/search-results?zip=${zip}&bodytypes=Pickup&gid=${gid}&cid=${cid}&sid=browsecardTruck" class="vehicle-cta-copy w-inline-block"><div>BROWSE&nbsp;ALL TRUCKS</div></a><div class="promotionalcard-gradient"></div></div>`,
+        SUV: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div><img src="https://dtprodvehicleimages.blob.core.windows.net/assets/webflow/wf17b/logo-rydeshoppermarketplace.svg" alt="Rydeshopper Marketplace"><img src="https://content.rydeshopper.com/assets/webflow/wf17/04-suv3row/03-suburban/00-suburban-a.webp" alt="Suburban" class="img-4"><a href="https://marketplace.rydeshopper.com/search-results?zip=${zip}&bodytypes=SUV%2FCrossover&gid=${gid}&cid=${cid}&sid=browsecardSUV" class="vehicle-cta-copy w-inline-block"><div>BROWSE&nbsp;ALL SUVS</div></a><div class="promotionalcard-gradient"></div></div>`,
+        Car: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div><img src="https://dtprodvehicleimages.blob.core.windows.net/assets/webflow/wf17b/logo-rydeshoppermarketplace.svg" alt="Rydeshopper Marketplace"><img src="https://content.rydeshopper.com/assets/webflow/wf17/05-car/01-malibu/00-malibu-a.webp" alt="Malibu" class="img-4"><a href="https://marketplace.rydeshopper.com/search-results?zip=${zip}&bodytypes=Sedan&gid=${gid}&cid=${cid}&sid=browsecardCar" class="vehicle-cta-copy w-inline-block"><div>BROWSE&nbsp;ALL CARS</div></a><div class="promotionalcard-gradient"></div></div>`
+      };
+      return promoCards[type] || promoCards["SUV"];
     }
 
     initializeAds();
