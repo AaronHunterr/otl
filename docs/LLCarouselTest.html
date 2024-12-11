@@ -213,14 +213,30 @@
         centeredSlides: true,
         loop: true,
         breakpoints: {
+          // mobile landscape
+          480: {
+            slidesPerView: 1.5,
+            spaceBetween: 24
+          },
           768: {
             slidesPerView: 1.2, // Center one card with slivers in mobile view
-            spaceBetween: 12,
+            spaceBetween: 12
           },
-          1024: {
-            slidesPerView: 3, // Maintain three visible cards in desktop
-            spaceBetween: 16,
+          // desktop
+          992: {
+            slidesPerView: 3.5,
+            spaceBetween: 24
           },
+          // 1280px and up
+          1280: {
+            slidesPerView: 3.5, // Maintain three visible cards in desktop
+            spaceBetween: 24
+          },
+          // 1440px and up
+          1440: {
+            slidesPerView: 3.5,
+            spaceBetween: 24
+          }
         },
         navigation: {
           nextEl: '.swiper-button-next',
