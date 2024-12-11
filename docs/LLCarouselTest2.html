@@ -135,7 +135,7 @@
       return promoCards[type];
     }
 
-    async function initializeCarousel() {
+    async function initializeAds() {
       const zip = await detectZipCode();
       const queryParams = new URLSearchParams(window.location.search);
       const gid = queryParams.get("gid") || "default-channel";
@@ -196,7 +196,7 @@
       return map[bodystyle?.toLowerCase()] || map.default;
     }
 
-    initializeCarousel();
+    initializeAds();
   </script>
 </body>
 
