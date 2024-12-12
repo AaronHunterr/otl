@@ -261,7 +261,6 @@
         op: "setPage",
         pubid: "201000",
         zip: detectedZip,
-        channel: gid,
         q: query,
         test: false,
         debug: false,
@@ -270,6 +269,7 @@
       window.VinAds.push({
         op: "buildCustom",
         numresults: 8,
+        channel: gid,
         callback: function(vehicles) {
           if (!Array.isArray(vehicles) || vehicles.length === 0) {
             console.error('Vehicles data is not an array or is empty');
