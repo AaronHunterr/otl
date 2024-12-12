@@ -170,23 +170,23 @@
       });
 
       const promoType = mapBodyStyleToPromo(vehicles[0]?.bodystyle || "SUV");
-      const promoHTML = getPromoCardHTML(promoType, zip, gid, cid);
 
-      if (!promoHTML) {
-        console.error('Promo card HTML generation failed');
-        return;
+      // Call getPromoCardHTML and validate its return
+      let promoHTML = getPromoCardHTML(promoType, zip, gid, cid);
+
+      if (!promoHTML || typeof promoHTML !== 'string') {
+        console.error('Promo card HTML generation failed or is invalid');
+        promoHTML = `<div class="promotionalcard">Promo card unavailable</div>`; // Fallback card
       }
 
       const promoCard = document.createElement("div");
       promoCard.className = "swiper-slide";
       promoCard.innerHTML = promoHTML;
       swiperWrapper.appendChild(promoCard);
+
+      initializeSwiper();
     }
 
-      const promoCard = document.createElement("div");
-      promoCard.className = "swiper-slide";
-      promoCard.innerHTML = promoHTML;
-      swiperWrapper.appendChild(promoCard);
 
       function initializeSwiper() {
       new Swiper('.swiper', {
