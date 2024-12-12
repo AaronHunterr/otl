@@ -181,7 +181,14 @@
       promoCard.className = "swiper-slide";
       promoCard.innerHTML = promoHTML;
       swiperWrapper.appendChild(promoCard);
+    }
 
+      const promoCard = document.createElement("div");
+      promoCard.className = "swiper-slide";
+      promoCard.innerHTML = promoHTML;
+      swiperWrapper.appendChild(promoCard);
+
+      function initializeSwiper() {
       new Swiper('.swiper', {
         speed: 300,
         loop: true,
@@ -190,22 +197,18 @@
         centeredSlides: true,
         loopAdditionalSlides: 4,
         breakpoints: {
-          // Mobile
           480: {
             slidesPerView: 1.5,
             spaceBetween: 24,
           },
-          // Tablet
           768: {
             slidesPerView: 2,
             spaceBetween: 12,
           },
-          // Desktop
           992: {
             slidesPerView: 3.5,
             spaceBetween: 24,
           },
-          // Larger screens
           1280: {
             slidesPerView: 3.5,
             spaceBetween: 24,
