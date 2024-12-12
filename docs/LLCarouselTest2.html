@@ -138,18 +138,13 @@
       window.VinAds.push({
         op: "buildCustom",
         numresults: 8,
-        callback: function(vehicles) {
-          if (!Array.isArray(vehicles) || vehicles.length === 0) {
-            console.error('Vehicles data is not an array or is empty');
-            return;
-          }
-          populateCarousel(vehicles, detectedZip, gid, cid);
-        },
+        callback: populateCarousel,
       });
     }
 
-    function populateCarousel(vehicles, zip, gid, cid) {
-      const swiperWrapper = document.querySelector(".swiper-wrapper");
+    function populateCarousel(vehicles) {
+      const swiperWrapper = document.querySelector('.swiper-wrapper');
+      swiperWrapper.innerHTML = ""; //
 
       vehicles.forEach(vehicle => {
         const card = document.createElement("div");
