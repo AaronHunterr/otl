@@ -260,11 +260,11 @@
 
     function initializeSwiper(totalSlides) {
         new Swiper('.swiper', {
-            speed: 300,
-            loop: totalSlides > 1, // Enable loop only if there are multiple slides
-            slidesPerView: Math.min(totalSlides, 3.5), // Adjust based on number of slides
-            spaceBetween: 24,
-            centeredSlides: totalSlides > 1,
+            followFinger: true,
+            slidesPerView: 1.5,
+            spaceBetween: 24, // Adjust spacing between cards
+            centeredSlides: true,
+            loop: totalSlides > 1,
             breakpoints: {
               // mobile landscape
               480: {
