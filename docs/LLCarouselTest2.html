@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LotLinx Advanced Carousel with Promo Cards</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
   <style>
     body {
       font-family: 'Montserrat', sans-serif;
@@ -311,6 +312,7 @@
           sedan: "Car",
           default: "SUV",
         };
+
         return map[bodystyle.toLowerCase()] || "SUV";
       }
 
@@ -340,8 +342,8 @@
         };
         return promoCards[type] || '';
       }
-
-      initializeAds();
+    }
+    initializeAds();
   </script>
   <script src="https://ads.lotlinx.com/load.js" async></script>
 </body>
