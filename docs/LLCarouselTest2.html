@@ -326,12 +326,26 @@
 
       // Initialize the Swiper carousel
       new Swiper('.swiper', {
+        speed: sliderDuration,
+        loop: loopMode,
+        autoHeight: false,
+        centeredSlides: loopMode,
         followFinger: true,
+        freeMode: false,
+        preventClicks: true,
+        preventClicksPropagation: true,
         slidesPerView: 1.5,
-        spaceBetween: 24, // Adjust spacing between cards
-        centeredSlides: true,
-        loop: true,
+        spaceBetween: 24,
+        rewind: false,
         loopAdditionalSlides: additionalSlides,
+        touchEventsTarget: 'container',
+        mousewheel: {
+          forceToAxis: true
+        },
+        keyboard: {
+          enabled: true,
+          onlyInViewport: true
+        },
         breakpoints: {
           // mobile landscape
           480: {
