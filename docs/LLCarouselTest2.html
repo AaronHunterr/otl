@@ -95,18 +95,12 @@
     }
 
     .card h3 {
-      text-align: left;
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0 0 8px;
       white-space: nowrap;
-      text-overflow: ellipsis;
-      width: 100%;
-      max-width: 100%;
-      padding-top: 12px;
-      padding-left: 16px;
-      padding-right: 16px;
-      font-size: 16px;
-      font-weight: 700;
-      line-height: 108%;
       overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .card p {
@@ -214,7 +208,7 @@
       }
 
       .promotionalcard {
-        min-height: 477px;
+        min-width: 85%;
       }
 
       .swiper-slide {
@@ -326,26 +320,13 @@
 
       // Initialize the Swiper carousel
       new Swiper('.swiper', {
-        speed: sliderDuration,
-        loop: loopMode,
-        autoHeight: false,
-        centeredSlides: loopMode,
         followFinger: true,
-        freeMode: false,
-        preventClicks: true,
-        preventClicksPropagation: true,
+        centeredSlides: loopMode,
         slidesPerView: 1.5,
-        spaceBetween: 24,
-        rewind: false,
+        spaceBetween: 24, // Adjust spacing between cards
+        centeredSlides: true,
+        loop: true,
         loopAdditionalSlides: additionalSlides,
-        touchEventsTarget: 'container',
-        mousewheel: {
-          forceToAxis: true
-        },
-        keyboard: {
-          enabled: true,
-          onlyInViewport: true
-        },
         breakpoints: {
           // mobile landscape
           480: {
