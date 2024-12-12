@@ -138,96 +138,93 @@
       window.VinAds.push({
         op: "buildCustom",
         numresults: 8,
-        callback: populateCarousel,
+        callback: function(vehicles) {
+          if (!Array.isArray(vehicles) || vehicles.length === 0) {
+            console.error('Vehicles data is not an array or is empty');
+            return;
+          }
+          populateCarousel(vehicles, detectedZip, gid, cid);
+        },
       });
     }
 
-    function populateCarousel(vehicles) {
-      const swiperWrapper = document.querySelector('.swiper-wrapper');
-      swiperWrapper.innerHTML = ""; //
+    function populateCarousel(vehicles, zip, gid, cid) {
+        const swiperWrapper = document.querySelector(".swiper-wrapper");
+        swiperWrapper.innerHTML = ""; // Clear existing slides
 
-      vehicles.forEach(vehicle => {
-        const card = document.createElement("div");
-        card.className = "swiper-slide";
-        card.innerHTML = `
-          <div class="card">
-            <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
-            <div class="card-content">
-              <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
-              <p>${vehicle.condition || "Unknown"} | Trim: ${vehicle.trim || "N/A"}</p>
-              <p>Price: $${vehicle.price.toLocaleString()}</p>
-              <p>Mileage: ${vehicle.mileage.toLocaleString()} miles</p>
-              <div>${vehicle.city}, ${vehicle.state}</div>
-            </div>
-          </div>
-        `;
-        swiperWrapper.appendChild(card);
-      });
+        // Add vehicle cards to the carousel
+        vehicles.forEach(vehicle => {
+            const card = document.createElement("div");
+            card.className = "swiper-slide";
+            card.innerHTML = `
+              <div class="card">
+                <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
+                <div class="card-content">
+                  <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
+                  <p>${vehicle.condition || "Unknown"} | Trim: ${vehicle.trim || "N/A"}</p>
+                  <p>Price: $${vehicle.price.toLocaleString()}</p>
+                  <p>Mileage: ${vehicle.mileage.toLocaleString()} miles</p>
+                  <div>${vehicle.city}, ${vehicle.state}</div>
+                </div>
+              </div>
+            `;
+            swiperWrapper.appendChild(card);
+        });
 
-      const promoType = mapBodyStyleToPromo(vehicles[0]?.bodystyle || "SUV");
+        // Add a promotional card to the carousel
+        const promoType = mapBodyStyleToPromo(vehicles[0]?.bodystyle || "SUV");
+        let promoHTML = getPromoCardHTML(promoType, zip, gid, cid);
+        if (!promoHTML || typeof promoHTML !== 'string') {
+            console.error("Promo card generation failed");
+            promoHTML = `<div class="promotionalcard">Promo card unavailable</div>`;
+        }
+        const promoCard = document.createElement("div");
+        promoCard.className = "swiper-slide";
+        promoCard.innerHTML = promoHTML;
+        swiperWrapper.appendChild(promoCard);
 
-      // Call getPromoCardHTML and validate its return
-      let promoHTML = getPromoCardHTML(promoType, zip, gid, cid);
-
-      if (!promoHTML || typeof promoHTML !== 'string') {
-        console.error('Promo card HTML generation failed or is invalid');
-        promoHTML = `<div class="promotionalcard">Promo card unavailable</div>`; // Fallback card
-      }
-
-      const promoCard = document.createElement("div");
-      promoCard.className = "swiper-slide";
-      promoCard.innerHTML = promoHTML;
-      swiperWrapper.appendChild(promoCard);
-
-      initializeSwiper();
+        // Initialize Swiper with dynamic slide count
+        initializeSwiper(vehicles.length + 1); // Vehicles + 1 promo card
     }
 
-
-      function initializeSwiper() {
-      new Swiper('.swiper', {
-        speed: 300,
-        loop: true,
-        slidesPerView: 1.5,
-        spaceBetween: 24,
-        centeredSlides: true,
-        loopAdditionalSlides: 4,
-        breakpoints: {
-          480: {
-            slidesPerView: 1.5,
+    function initializeSwiper(totalSlides) {
+        new Swiper('.swiper', {
+            speed: 300,
+            loop: totalSlides > 1, // Enable loop only if there are multiple slides
+            slidesPerView: Math.min(totalSlides, 3.5), // Adjust based on number of slides
             spaceBetween: 24,
-          },
-          768: {
-            slidesPerView: 2,
-            spaceBetween: 12,
-          },
-          992: {
-            slidesPerView: 3.5,
-            spaceBetween: 24,
-          },
-          1280: {
-            slidesPerView: 3.5,
-            spaceBetween: 24,
-          },
-        },
-        navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
-          disabledClass: 'is-disabled',
-        },
-        pagination: {
-          el: '.swiper-pagination',
-          clickable: true,
-          bulletClass: 'swiper-bullet',
-          bulletActiveClass: 'is-active',
-        },
-        scrollbar: {
-          el: '.swiper-scrollbar',
-          draggable: true,
-          dragClass: 'swiper-drag',
-        },
-        slideActiveClass: 'is-active',
-        slideDuplicateActiveClass: 'is-active',
-      });
+            centeredSlides: totalSlides > 1,
+            breakpoints: {
+              // mobile landscape
+              480: {
+                slidesPerView: 1.5,
+                spaceBetween: 24
+              },
+              768: {
+                slidesPerView: 2, // Center one card with slivers in mobile view
+                spaceBetween: 12
+              },
+              // desktop
+              992: {
+                slidesPerView: 3.5,
+                spaceBetween: 24
+              },
+              // 1280px and up
+              1280: {
+                slidesPerView: 3.5, // Maintain three visible cards in desktop
+                spaceBetween: 24
+              },
+              // 1440px and up
+              1440: {
+                slidesPerView: 3.5,
+                spaceBetween: 24
+              }
+            },
+            navigation: {
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev',
+            },
+          });
     }
 
     function mapBodyStyleToPromo(bodystyle) {
