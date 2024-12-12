@@ -228,17 +228,17 @@
         const card = document.createElement("div");
         card.className = "swiper-slide";
         card.innerHTML = `
-              <div class="card">
-                <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
-                <div class="card-content">
-                  <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
-                  <p>${vehicle.condition || "Unknown"} | Trim: ${vehicle.trim || "N/A"}</p>
-                  <p>Price: $${vehicle.price.toLocaleString()}</p>
-                  <p>Mileage: ${vehicle.mileage.toLocaleString()} miles</p>
-                  <div>${vehicle.city}, ${vehicle.state}</div>
-                </div>
-              </div>
-            `;
+          <div class="card">
+            <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
+            <div class="card-content">
+              <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
+              <p>${vehicle.condition || "Unknown"} | Trim: ${vehicle.trim || "N/A"}</p>
+              <p>Price: $${vehicle.price.toLocaleString()}</p>
+              <p>Mileage: ${vehicle.mileage.toLocaleString()} miles</p>
+              <div>${vehicle.city}, ${vehicle.state}</div>
+            </div>
+          </div>
+        `;
         swiperWrapper.appendChild(card);
       });
 
@@ -253,94 +253,95 @@
       promoCard.className = "swiper-slide";
       promoCard.innerHTML = promoHTML;
       swiperWrapper.appendChild(promoCard);
-    }
 
-    const additionalSlides = (vehicles?.length || 0) + 1;
+      // Calculate loopAdditionalSlides dynamically
+      const additionalSlides = vehicles.length + 1;
 
-    const swiper = new Swiper('.swiper', {
-      followFinger: true,
-      slidesPerView: 1.5,
-      spaceBetween: 24, // Adjust spacing between cards
-      centeredSlides: true,
-      loop: true,
-      loopAdditionalSlides: additionalSlides,
-      breakpoints: {
-        // mobile landscape
-        480: {
-          slidesPerView: 1.5,
-          spaceBetween: 24
+      // Initialize the Swiper carousel
+      new Swiper('.swiper', {
+        followFinger: true,
+        slidesPerView: 1.5,
+        spaceBetween: 24, // Adjust spacing between cards
+        centeredSlides: true,
+        loop: true,
+        loopAdditionalSlides: additionalSlides,
+        breakpoints: {
+          // mobile landscape
+          480: {
+            slidesPerView: 1.5,
+            spaceBetween: 24
+          },
+          768: {
+            slidesPerView: 2, // Center one card with slivers in mobile view
+            spaceBetween: 12
+          },
+          // desktop
+          992: {
+            slidesPerView: 3.5,
+            spaceBetween: 24
+          },
+          // 1280px and up
+          1280: {
+            slidesPerView: 3.5, // Maintain three visible cards in desktop
+            spaceBetween: 24
+          },
+          // 1440px and up
+          1440: {
+            slidesPerView: 3.5,
+            spaceBetween: 24
+          }
         },
-        768: {
-          slidesPerView: 2, // Center one card with slivers in mobile view
-          spaceBetween: 12
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
         },
-        // desktop
-        992: {
-          slidesPerView: 3.5,
-          spaceBetween: 24
-        },
-        // 1280px and up
-        1280: {
-          slidesPerView: 3.5, // Maintain three visible cards in desktop
-          spaceBetween: 24
-        },
-        // 1440px and up
-        1440: {
-          slidesPerView: 3.5,
-          spaceBetween: 24
-        }
-      },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-    });
+      });
 
-    function mapBodyStyleToPromo(bodystyle) {
-      const map = {
-        convertible: "Car",
-        suv: "SUV",
-        coupe: "Car",
-        minivan: "SUV",
-        chassis: "Truck",
-        commercial: "Truck",
-        pickup: "Truck",
-        wagon: "SUV",
-        hatchback: "Car",
-        sedan: "Car",
-        default: "SUV",
-      };
-      return map[bodystyle.toLowerCase()] || "SUV";
-    }
+      function mapBodyStyleToPromo(bodystyle) {
+        const map = {
+          convertible: "Car",
+          suv: "SUV",
+          coupe: "Car",
+          minivan: "SUV",
+          chassis: "Truck",
+          commercial: "Truck",
+          pickup: "Truck",
+          wagon: "SUV",
+          hatchback: "Car",
+          sedan: "Car",
+          default: "SUV",
+        };
+        return map[bodystyle.toLowerCase()] || "SUV";
+      }
 
-    function getPromoCardHTML(type, zip, gid, cid) {
-      const promoCards = {
-        Truck: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div>
+      function getPromoCardHTML(type, zip, gid, cid) {
+        const promoCards = {
+          Truck: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div>
           <img src="https://dtprodvehicleimages.blob.core.windows.net/assets/webflow/wf17b/logo-rydeshoppermarketplace.svg" alt="Rydeshopper Marketplace">
           <img src="https://content.rydeshopper.com/assets/webflow/wf17/02-truck/01-silverado1500/00-silverado1500-b.webp" alt="Silverado 1500" class="img-4">
           <a href="https://marketplace.rydeshopper.com/search-results?zip=${zip}&bodytypes=Pickup&gid=${gid}&cid=${cid}&sid=browsecardTruck" class="vehicle-cta-copy w-inline-block">
             <div>BROWSE&nbsp;ALL TRUCKS</div>
           </a>
           <div class="promotionalcard-gradient"></div></div>`,
-        SUV: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div>
+          SUV: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div>
           <img src="https://dtprodvehicleimages.blob.core.windows.net/assets/webflow/wf17b/logo-rydeshoppermarketplace.svg" alt="Rydeshopper Marketplace">
           <img src="https://content.rydeshopper.com/assets/webflow/wf17/04-suv3row/03-suburban/00-suburban-a.webp" alt="Suburban" class="img-4">
           <a href="https://marketplace.rydeshopper.com/search-results?zip=${zip}&bodytypes=SUV%2FCrossover&gid=${gid}&cid=${cid}&sid=browsecard3RowSUV" class="vehicle-cta-copy w-inline-block">
             <div>BROWSE&nbsp;ALL SUVS</div>
           </a>
           <div class="promotionalcard-gradient"></div></div>`,
-        Car: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div>
+          Car: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div>
           <img src="https://dtprodvehicleimages.blob.core.windows.net/assets/webflow/wf17b/logo-rydeshoppermarketplace.svg" alt="Rydeshopper Marketplace">
           <img src="https://content.rydeshopper.com/assets/webflow/wf17/05-car/01-malibu/00-malibu-a.webp" alt="Malibu" class="img-4">
           <a href="https://marketplace.rydeshopper.com/search-results?zip=${zip}&bodytypes=Sedan&gid=${gid}&cid=${cid}&sid=browsecardCar" class="vehicle-cta-copy w-inline-block">
             <div>BROWSE&nbsp;ALL CARS</div>
           </a>
           <div class="promotionalcard-gradient"></div></div>`
-      };
-      return promoCards[type] || '';
-    }
+        };
+        return promoCards[type] || '';
+      }
 
-    initializeAds();
+      initializeAds();
   </script>
   <script src="https://ads.lotlinx.com/load.js" async></script>
 </body>
