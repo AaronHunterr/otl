@@ -255,12 +255,15 @@
       swiperWrapper.appendChild(promoCard);
     }
 
+    const additionalSlides = (vehicles?.length || 0) + 1;
+
     const swiper = new Swiper('.swiper', {
       followFinger: true,
       slidesPerView: 1.5,
       spaceBetween: 24, // Adjust spacing between cards
       centeredSlides: true,
       loop: true,
+      loopAdditionalSlides: additionalSlides,
       breakpoints: {
         // mobile landscape
         480: {
