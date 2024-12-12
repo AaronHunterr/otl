@@ -220,14 +220,14 @@
     }
 
     function populateCarousel(vehicles, zip, gid, cid) {
-        const swiperWrapper = document.querySelector(".swiper-wrapper");
-        swiperWrapper.innerHTML = ""; // Clear existing slides
+      const swiperWrapper = document.querySelector(".swiper-wrapper");
+      swiperWrapper.innerHTML = ""; // Clear existing slides
 
-        // Add vehicle cards to the carousel
-        vehicles.forEach(vehicle => {
-            const card = document.createElement("div");
-            card.className = "swiper-slide";
-            card.innerHTML = `
+      // Add vehicle cards to the carousel
+      vehicles.forEach(vehicle => {
+        const card = document.createElement("div");
+        card.className = "swiper-slide";
+        card.innerHTML = `
               <div class="card">
                 <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
                 <div class="card-content">
@@ -239,63 +239,59 @@
                 </div>
               </div>
             `;
-            swiperWrapper.appendChild(card);
-        });
+        swiperWrapper.appendChild(card);
+      });
 
-        // Add a promotional card to the carousel
-        const promoType = mapBodyStyleToPromo(vehicles[0]?.bodystyle || "SUV");
-        let promoHTML = getPromoCardHTML(promoType, zip, gid, cid);
-        if (!promoHTML || typeof promoHTML !== 'string') {
-            console.error("Promo card generation failed");
-            promoHTML = `<div class="promotionalcard">Promo card unavailable</div>`;
-        }
-        const promoCard = document.createElement("div");
-        promoCard.className = "swiper-slide";
-        promoCard.innerHTML = promoHTML;
-        swiperWrapper.appendChild(promoCard);
-
-        // Initialize Swiper with dynamic slide count
-        initializeSwiper(vehicles.length + 1); // Vehicles + 1 promo card
+      // Add a promotional card to the carousel
+      const promoType = mapBodyStyleToPromo(vehicles[0]?.bodystyle || "SUV");
+      let promoHTML = getPromoCardHTML(promoType, zip, gid, cid);
+      if (!promoHTML || typeof promoHTML !== 'string') {
+        console.error("Promo card generation failed");
+        promoHTML = `<div class="promotionalcard">Promo card unavailable</div>`;
+      }
+      const promoCard = document.createElement("div");
+      promoCard.className = "swiper-slide";
+      promoCard.innerHTML = promoHTML;
+      swiperWrapper.appendChild(promoCard);
     }
 
-    function initializeSwiper(totalSlides) {
-        new Swiper('.swiper', {
-            followFinger: true,
-            slidesPerView: 1.5,
-            spaceBetween: 24, // Adjust spacing between cards
-            centeredSlides: true,
-            loop: totalSlides > 1,
-            breakpoints: {
-              // mobile landscape
-              480: {
-                slidesPerView: 1.5,
-                spaceBetween: 24
-              },
-              768: {
-                slidesPerView: 2, // Center one card with slivers in mobile view
-                spaceBetween: 12
-              },
-              // desktop
-              992: {
-                slidesPerView: 3.5,
-                spaceBetween: 24
-              },
-              // 1280px and up
-              1280: {
-                slidesPerView: 3.5, // Maintain three visible cards in desktop
-                spaceBetween: 24
-              },
-              // 1440px and up
-              1440: {
-                slidesPerView: 3.5,
-                spaceBetween: 24
-              }
-            },
-            navigation: {
-              nextEl: '.swiper-button-next',
-              prevEl: '.swiper-button-prev',
-            },
-          });
+    const swiper = new Swiper('.swiper', {
+      followFinger: true,
+      slidesPerView: 1.5,
+      spaceBetween: 24, // Adjust spacing between cards
+      centeredSlides: true,
+      loop: totalSlides > 1,
+      breakpoints: {
+        // mobile landscape
+        480: {
+          slidesPerView: 1.5,
+          spaceBetween: 24
+        },
+        768: {
+          slidesPerView: 2, // Center one card with slivers in mobile view
+          spaceBetween: 12
+        },
+        // desktop
+        992: {
+          slidesPerView: 3.5,
+          spaceBetween: 24
+        },
+        // 1280px and up
+        1280: {
+          slidesPerView: 3.5, // Maintain three visible cards in desktop
+          spaceBetween: 24
+        },
+        // 1440px and up
+        1440: {
+          slidesPerView: 3.5,
+          spaceBetween: 24
+        }
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    });
     }
 
     function mapBodyStyleToPromo(bodystyle) {
