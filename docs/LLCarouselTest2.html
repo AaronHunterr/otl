@@ -30,6 +30,7 @@
     }
 
     .w-inline-block {
+      background-color: #b01313;
       max-width: 100%;
       display: inline-block;
     }
@@ -92,6 +93,8 @@
 
     .card-content {
       padding: 16px;
+      width: fit-content;
+      max-width: 100%
     }
 
     .card h3 {
@@ -167,7 +170,6 @@
     }
 
     .promo-vehicle-cta-copy {
-      background-color: #b91clc;
       color: #fff;
       text-align: center;
       border-radius: 4px;
@@ -183,7 +185,6 @@
 
     .cta,
     .vehicle-cta-copy {
-      background-color: #b91clc;
       color: #fff;
       text-align: center;
       border-radius: 4px;
@@ -315,9 +316,6 @@
       promoCard.innerHTML = promoHTML;
       swiperWrapper.appendChild(promoCard);
 
-      // Calculate loopAdditionalSlides dynamically
-      const additionalSlides = vehicles.length + 1;
-
       // Initialize the Swiper carousel
       new Swiper('.swiper', {
         followFinger: true,
@@ -325,7 +323,6 @@
         spaceBetween: 24, // Adjust spacing between cards
         centeredSlides: true,
         loop: true,
-        loopAdditionalSlides: additionalSlides,
         breakpoints: {
           // mobile landscape
           480: {
