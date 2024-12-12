@@ -114,33 +114,50 @@
 
     .card,
     .promotionalcard {
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      width: 280px;
-      height: 420px;
-      overflow: hidden;
+      border: 1px solid var(--rydeshopper--800);
+      background-color: #fff;
+      border-radius: 4px;
+      flex-flow: column;
+      justify-content: flex-start;
+      align-items: center;
+      min-width: 224px;
+      min-height: 420px;
       display: flex;
-      flex-direction: column;
+      position: relative;
+      box-shadow: 0 1px 2px -1px #0000001a, 0 1px 3px #0003;
+    }
+
+    .text-block-153 {
+      margin-top: 24px;
+    }
+
+    .promotionalcard-gradient {
+      border-bottom: 1px solid var(--neutral--300);
+      background-image: linear-gradient(#0000, #0000001a);
+      height: 42%;
+      display: flex;
+      position: absolute;
+      inset: 0% 0% auto;
     }
 
     .promotionalcard img {
-      width: 100%;
-      height: auto;
-      object-fit: cover;
+      z-index: 3;
+      position: relative;
     }
 
     .cta,
     .vehicle-cta-copy {
-      display: block;
-      text-align: center;
-      background: #dc2626;
+      background-color: var(--rydeshopper--800);
       color: #fff;
-      padding: 10px 0;
-      text-decoration: none;
+      text-align: center;
       border-radius: 4px;
-      margin-top: 12px;
-      font-weight: 600;
+      justify-content: center;
+      align-self: stretch;
+      margin: auto 16px 16px;
+      padding: 8px 16px;
+      font-weight: 700;
+      text-decoration: none;
+      display: flex;
     }
 
     .cta:hover,
@@ -152,6 +169,10 @@
       .card {
         min-width: 85%;
         /* Ensure proper visibility on mobile */
+      }
+
+      .promotionalcard {
+        min-height: 477px;
       }
 
       .swiper-slide {
