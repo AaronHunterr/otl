@@ -174,7 +174,7 @@
 
     .cta,
     .vehicle-cta-copy {
-      background-color: var(--rydeshopper--800);
+      background-color: #b91clc;
       color: #fff;
       text-align: center;
       border-radius: 4px;
@@ -277,16 +277,19 @@
         const card = document.createElement("div");
         card.className = "swiper-slide";
         card.innerHTML = `
-          <div class="card">
-            <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
-            <div class="card-content">
-              <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
-              <p>${vehicle.condition || "Unknown"} | Trim: ${vehicle.trim || "N/A"}</p>
-              <p>Price: $${vehicle.price.toLocaleString()}</p>
-              <p>Mileage: ${vehicle.mileage.toLocaleString()} miles</p>
-              <div>${vehicle.city}, ${vehicle.state}</div>
-            </div>
+        <div class="card">
+          <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
+          <div class="card-content">
+            <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
+            <p>${vehicle.condition} | Trim: ${vehicle.trim || "N/A"}</p>
+            <p>Price: $${vehicle.price.toLocaleString()}</p>
+            <p>Mileage: ${vehicle.mileage.toLocaleString()} miles</p>
+            <p>Color: ${vehicle.exterior_color || "Unknown Color"}</p>
+            <div class="divider"></div>
+            <p>${vehicle.city}, ${vehicle.state}</p>
+            <a href="${vehicle.url}" class="cta" target="_blank">See Details</a>
           </div>
+        </div>
         `;
         swiperWrapper.appendChild(card);
       });
