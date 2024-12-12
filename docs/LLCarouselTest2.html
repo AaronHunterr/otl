@@ -70,16 +70,18 @@
     }
 
     .card {
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      max-width: 280px;
-      min-width: 240px;
-      width: 90%;
-      /* Adjust width for better sliver visibility */
+      border: 1px solid var(--neutral--300);
+      background-color: #fff;
+      border-radius: 4px;
+      flex-flow: column;
+      flex: 1;
+      align-items: center;
+      min-width: 224px;
+      min-height: 420px;
+      margin-bottom: 0;
+      padding-top: 0;
       display: flex;
-      flex-direction: column;
-      overflow: hidden;
+      box-shadow: 0 1px 3px #0003, 0 1px 2px -1px #0000001a;
     }
 
     .card img {
@@ -93,12 +95,18 @@
     }
 
     .card h3 {
-      font-size: 18px;
-      font-weight: 600;
-      margin: 0 0 8px;
+      text-align: left;
       white-space: nowrap;
-      overflow: hidden;
       text-overflow: ellipsis;
+      width: 100%;
+      max-width: 100%;
+      padding-top: 12px;
+      padding-left: 16px;
+      padding-right: 16px;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 108%;
+      overflow: hidden;
     }
 
     .card p {
@@ -133,7 +141,7 @@
 
     .card,
     .promotionalcard {
-      border: 1px solid var(--rydeshopper--800);
+      border: 1px solid #b20b0b;
       background-color: #fff;
       border-radius: 4px;
       flex-flow: column;
