@@ -254,11 +254,29 @@
 
     function getPromoCardHTML(type, zip, gid, cid) {
       const promoCards = {
-        Truck: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div><img src="https://dtprodvehicleimages.blob.core.windows.net/assets/webflow/wf17b/logo-rydeshoppermarketplace.svg" alt="Rydeshopper Marketplace"><img src="https://content.rydeshopper.com/assets/webflow/wf17/02-truck/01-silverado1500/00-silverado1500-b.webp" alt="Silverado 1500" class="img-4"><a href="https://marketplace.rydeshopper.com/search-results?zip=${zip}&bodytypes=Pickup&gid=${gid}&cid=${cid}&sid=browsecardTruck" class="vehicle-cta-copy w-inline-block"><div>BROWSE&nbsp;ALL TRUCKS</div></a><div class="promotionalcard-gradient"></div></div>`,
-        SUV: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div><img src="https://dtprodvehicleimages.blob.core.windows.net/assets/webflow/wf17b/logo-rydeshoppermarketplace.svg" alt="Rydeshopper Marketplace"><img src="https://content.rydeshopper.com/assets/webflow/wf17/04-suv3row/03-suburban/00-suburban-a.webp" alt="Suburban" class="img-4"><a href="https://marketplace.rydeshopper.com/search-results?zip=${zip}&bodytypes=SUV%2FCrossover&gid=${gid}&cid=${cid}&sid=browsecard3RowSUV" class="vehicle-cta-copy w-inline-block"><div>BROWSE&nbsp;ALL SUVS</div></a><div class="promotionalcard-gradient"></div></div>`,
-        Car: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div><img src="https://dtprodvehicleimages.blob.core.windows.net/assets/webflow/wf17b/logo-rydeshoppermarketplace.svg" alt="Rydeshopper Marketplace"><img src="https://content.rydeshopper.com/assets/webflow/wf17/05-car/01-malibu/00-malibu-a.webp" alt="Malibu" class="img-4"><a href="https://marketplace.rydeshopper.com/search-results?zip=${zip}&bodytypes=Sedan&gid=${gid}&cid=${cid}&sid=browsecardCar" class="vehicle-cta-copy w-inline-block"><div>BROWSE&nbsp;ALL CARS</div></a><div class="promotionalcard-gradient"></div></div>`
+        Truck: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div>
+          <img src="https://dtprodvehicleimages.blob.core.windows.net/assets/webflow/wf17b/logo-rydeshoppermarketplace.svg" alt="Rydeshopper Marketplace">
+          <img src="https://content.rydeshopper.com/assets/webflow/wf17/02-truck/01-silverado1500/00-silverado1500-b.webp" alt="Silverado 1500" class="img-4">
+          <a href="https://marketplace.rydeshopper.com/search-results?zip=${zip}&bodytypes=Pickup&gid=${gid}&cid=${cid}&sid=browsecardTruck" class="vehicle-cta-copy w-inline-block">
+            <div>BROWSE&nbsp;ALL TRUCKS</div>
+          </a>
+          <div class="promotionalcard-gradient"></div></div>`,
+        SUV: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div>
+          <img src="https://dtprodvehicleimages.blob.core.windows.net/assets/webflow/wf17b/logo-rydeshoppermarketplace.svg" alt="Rydeshopper Marketplace">
+          <img src="https://content.rydeshopper.com/assets/webflow/wf17/04-suv3row/03-suburban/00-suburban-a.webp" alt="Suburban" class="img-4">
+          <a href="https://marketplace.rydeshopper.com/search-results?zip=${zip}&bodytypes=SUV%2FCrossover&gid=${gid}&cid=${cid}&sid=browsecard3RowSUV" class="vehicle-cta-copy w-inline-block">
+            <div>BROWSE&nbsp;ALL SUVS</div>
+          </a>
+          <div class="promotionalcard-gradient"></div></div>`,
+        Car: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div>
+          <img src="https://dtprodvehicleimages.blob.core.windows.net/assets/webflow/wf17b/logo-rydeshoppermarketplace.svg" alt="Rydeshopper Marketplace">
+          <img src="https://content.rydeshopper.com/assets/webflow/wf17/05-car/01-malibu/00-malibu-a.webp" alt="Malibu" class="img-4">
+          <a href="https://marketplace.rydeshopper.com/search-results?zip=${zip}&bodytypes=Sedan&gid=${gid}&cid=${cid}&sid=browsecardCar" class="vehicle-cta-copy w-inline-block">
+            <div>BROWSE&nbsp;ALL CARS</div>
+          </a>
+          <div class="promotionalcard-gradient"></div></div>`
       };
-      return promoCards[type] || promoCards["SUV"];
+      return promoCards[type] || '';
     }
 
     initializeAds();
