@@ -110,7 +110,7 @@
     .cta:hover {
       background: #b91c1c;
     }
-    
+
     .card,
     .promotionalcard {
       background: #fff;
@@ -148,8 +148,14 @@
     }
 
     @media screen and (max-width: 768px) {
+      .card {
+        min-width: 85%;
+        /* Ensure proper visibility on mobile */
+      }
+
       .swiper-slide {
         width: 85%;
+        /* Match card width */
       }
     }
   </style>
