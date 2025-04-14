@@ -252,20 +252,52 @@
       }
     }
 
-    async function initializeAds() {
+    function mapTabToBodystyle(tabName) {
+      const map = {
+        Truck: "pickup",
+        SUV: "suv",
+        "SUV 3 Row": "suv",
+        Car: "sedan",
+      };
+      return map[tabName] || "pickup"; // Default to "pickup" if tabName is not recognized
+    }
+
+    function isElementVisible(element) {
+      return element && element.offsetParent !== null; // Checks if the element is visible
+    }
+
+    const initializedTabs = new Set();
+
+    async function initializeAds(tabType = "pickup") {
+      const tabPane = document.querySelector(`#${tabType}-tab-pane`); // Assuming IDs follow this format
+      if (!tabPane || tabPane.style.display === "none") {
+        console.log(`Tab content for ${tabType} is not visible. Initialization delayed.`);
+        return;
+      }
+
+      if (initializedTabs.has(tabType)) {
+        console.log(`Ads already initialized for tab: ${tabType}`);
+        return;
+      }
+      initializedTabs.add(tabType);
+
       const detectedZip = await detectZipCode();
+      console.log(`Initializing ads for tabType: ${tabType}, detectedZip: ${detectedZip}`);
+
       const queryParams = new URLSearchParams(window.location.search);
       const gid = queryParams.get("gid") || "default-channel";
       const cid = queryParams.get("cid") || "Undefined";
       const query = queryParams.get("makesmodels") || "2017-2024 SUV";
 
-      window.VinAds = window.VinAds || [];
+      // Clear and reinitialize LotLinx
+      window.VinAds = [];
       window.VinAds.push({
         op: "setPage",
         pubid: "201000",
         zip: detectedZip,
-        q: '2010-2023',
-        make: 'Chevrolet',
+        make: "Chevrolet",
+        bodystyle: tabType,
+        q: query,
         test: false,
         debug: false,
       });
@@ -276,7 +308,7 @@
         channel: gid,
         callback: function(vehicles) {
           if (!Array.isArray(vehicles) || vehicles.length === 0) {
-            console.error('Vehicles data is not an array or is empty');
+            console.error("Vehicles data is not an array or is empty");
             return;
           }
           populateCarousel(vehicles, detectedZip, gid, cid);
@@ -285,181 +317,103 @@
     }
 
     function populateCarousel(vehicles, zip, gid, cid) {
-      const swiperWrapper = document.querySelector('.swiper-wrapper');
-      swiperWrapper.innerHTML = ''; // Clear existing slides
+      const swiperWrapper = document.querySelector(".swiper-wrapper");
+      swiperWrapper.innerHTML = ""; // Clear existing slides
 
-      // Add vehicle cards to the carousel
-      vehicles.forEach(vehicle => {
-        const card = document
-          .createElement("div");
+      // Add vehicle cards
+      vehicles.forEach((vehicle) => {
+        const card = document.createElement("div");
         card.className = "swiper-slide";
         card.innerHTML = `
-        <div class="card">
-          <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
-          <div class="card-content">
-            <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
-            <p>${vehicle.condition} | Trim: ${vehicle.trim || "N/A"}</p>
-            <p>Price: $${vehicle.price.toLocaleString()}</p>
-            <p>Mileage: ${vehicle.mileage.toLocaleString()} miles</p>
-            <p>Color: ${vehicle.exterior_color || "Unknown Color"}</p>
-            <div class="divider"></div>
-            <p>${vehicle.city}, ${vehicle.state}</p>
-            <a href="${vehicle.url}" class="cta" target="_blank">See Details</a>
-          </div>
-        </div>
-        `;
+          <div class="card">
+            <img src="${vehicle.image_url}" alt="${vehicle.year} ${vehicle.make} ${vehicle.model}">
+            <div class="card-content">
+              <h3>${vehicle.year} ${vehicle.make} ${vehicle.model}</h3>
+              <p>${vehicle.condition} | Trim: ${vehicle.trim || "N/A"}</p>
+              <p>Price: $${vehicle.price.toLocaleString()}</p>
+              <p>Mileage: ${vehicle.mileage.toLocaleString()} miles</p>
+              <p>Color: ${vehicle.exterior_color || "Unknown Color"}</p>
+              <div class="divider"></div>
+              <p>${vehicle.city}, ${vehicle.state}</p>
+              <a href="${vehicle.url}" class="cta" target="_blank">See Details</a>
+            </div>
+          </div>`;
         swiperWrapper.appendChild(card);
       });
 
-      // Add a promotional card to the carousel
-      const promoType = mapBodyStyleToPromo(vehicles[0]?.bodystyle || "SUV");
-      let promoHTML = getPromoCardHTML(promoType, zip, gid, cid);
-      if (!promoHTML || typeof promoHTML !== 'string') {
-        console.error("Promo card generation failed");
-        promoHTML = `<div class="promotionalcard">Promo card unavailable</div>`;
+      // Reinitialize Swiper
+      if (window.swiperInstance) {
+        window.swiperInstance.destroy(true, true); // Destroy previous instance
       }
-      const promoCard = document.createElement("div");
-      promoCard.className = "swiper-slide";
-      promoCard.innerHTML = promoHTML;
-      swiperWrapper.appendChild(promoCard);
-
-      // Initialize the Swiper carousel
-      new Swiper('.swiper', {
+      window.swiperInstance = new Swiper(".swiper", {
         followFinger: true,
-        initialSlide: 2,
+        initialSlide: 0,
         slidesPerView: 1.5,
-        spaceBetween: 18, // Adjust spacing between cards
+        spaceBetween: 18,
         centeredSlides: true,
         loop: true,
-        breakpoints: {
-          // mobile landscape
-          480: {
-            slidesPerView: 1.5,
-            spaceBetween: 18
-          },
-          768: {
-            slidesPerView: 2, // Center one card with slivers in mobile view
-            spaceBetween: 12
-          },
-          // desktop
-          992: {
-            slidesPerView: 3.5,
-            spaceBetween: 20
-          },
-          // 1280px and up
-          1280: {
-            slidesPerView: 3.5, // Maintain three visible cards in desktop
-            spaceBetween: 18
-          },
-          // 1440px and up
-          1440: {
-            slidesPerView: 3.5,
-            spaceBetween: 18
-          }
-        },
         navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
         },
       });
+    }
 
-      function mapBodyStyleToPromo(bodystyle) {
-        const map = {
-          convertible: "Car",
-          suv: "SUV",
-          coupe: "Car",
-          minivan: "SUV",
-          chassis: "Truck",
-          commercial: "Truck",
-          pickup: "Truck",
-          wagon: "SUV",
-          hatchback: "Car",
-          sedan: "Car",
-          default: "SUV",
-        };
+    document.addEventListener("DOMContentLoaded", () => {
+      console.log("DOM fully loaded.");
 
-        return map[bodystyle.toLowerCase()] || "SUV";
-      }
+      // MutationObserver to watch for tab visibility changes
+      const tabsContent = document.querySelector(".tabs-content");
+      const observer = new MutationObserver(() => {
+        const activeTab = document.querySelector(".tab-pane[style*='display: block']"); // Adjust if necessary
+        if (activeTab) {
+          const tabName = activeTab.getAttribute("data-w-tab");
+          console.log(`Tab switched to: ${tabName}`);
+          initializeAds(mapTabToBodystyle(tabName));
+        }
+      });
 
-      function getPromoCardHTML(type, zip, gid, cid) {
-        const promoCards = {
-          Truck: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div>
+      observer.observe(tabsContent, {
+        attributes: true,
+        childList: true,
+        subtree: true,
+      });
+
+      // Initialize the default tab
+      const defaultTab = document.querySelector(".tab-link.w--current");
+      const defaultTabName = defaultTab?.getAttribute("data-w-tab") || "Truck";
+      console.log(`Initializing default tab: ${defaultTabName}`);
+      initializeAds(mapTabToBodystyle(defaultTabName));
+    });
+
+    function getPromoCardHTML(type, zip, gid, cid) {
+      const promoCards = {
+        Truck: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div>
           <img src="https://dtprodvehicleimages.blob.core.windows.net/assets/webflow/wf17b/logo-rydeshoppermarketplace.svg" alt="Rydeshopper Marketplace">
           <img src="https://content.rydeshopper.com/assets/webflow/wf17/02-truck/01-silverado1500/00-silverado1500-b.webp" alt="Silverado 1500" class="img-4">
           <a href="https://marketplace.rydeshopper.com/search-results?zip=${zip}&bodytypes=Pickup&gid=${gid}&cid=${cid}&sid=browsecardTruck" class="promo-vehicle-cta-copy w-inline-block">
             <div>BROWSE&nbsp;ALL TRUCKS</div>
           </a>
           <div class="promotionalcard-gradient"></div></div>`,
-          SUV: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div>
+        SUV: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div>
           <img src="https://dtprodvehicleimages.blob.core.windows.net/assets/webflow/wf17b/logo-rydeshoppermarketplace.svg" alt="Rydeshopper Marketplace">
           <img src="https://content.rydeshopper.com/assets/webflow/wf17/04-suv3row/03-suburban/00-suburban-a.webp" alt="Suburban" class="img-4">
           <a href="https://marketplace.rydeshopper.com/search-results?zip=${zip}&bodytypes=SUV%2FCrossover&gid=${gid}&cid=${cid}&sid=browsecard3RowSUV" class="promo-vehicle-cta-copy w-inline-block">
             <div>BROWSE&nbsp;ALL SUVS</div>
           </a>
           <div class="promotionalcard-gradient"></div></div>`,
-          Car: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div>
+        Car: `<div class="promotionalcard"><div class="text-block-153">Find Even More:</div>
           <img src="https://dtprodvehicleimages.blob.core.windows.net/assets/webflow/wf17b/logo-rydeshoppermarketplace.svg" alt="Rydeshopper Marketplace">
           <img src="https://content.rydeshopper.com/assets/webflow/wf17/05-car/01-malibu/00-malibu-a.webp" alt="Malibu" class="img-4">
           <a href="https://marketplace.rydeshopper.com/search-results?zip=${zip}&bodytypes=Sedan&gid=${gid}&cid=${cid}&sid=browsecardCar" class="promo-vehicle-cta-copy w-inline-block">
             <div>BROWSE&nbsp;ALL CARS</div>
           </a>
-          <div class="promotionalcard-gradient"></div></div>`
-        };
-        return promoCards[type] || '';
-      }
+          <div class="promotionalcard-gradient"></div></div>`,
+      };
+      return promoCards[type] || "";
     }
-    initializeAds();
-    document.querySelectorAll('.tab-link').forEach(tab => {
-      tab.addEventListener('click', async function(event) {
-        event.preventDefault();
-
-        // Get the bodystyle from the clicked tab
-        const tabType = tab.getAttribute('data-w-tab') || "pickup";
-
-        // Update active class
-        document.querySelectorAll('.tab-link').forEach(t => t.classList.remove('is-active'));
-        tab.classList.add('is-active');
-
-        // Clear the carousel
-        const swiperWrapper = document.querySelector('.swiper-wrapper');
-        swiperWrapper.innerHTML = ""; // Clear the carousel
-
-        // Get required parameters for the API call
-        const detectedZip = await detectZipCode();
-        const queryParams = new URLSearchParams(window.location.search);
-        const gid = queryParams.get("gid") || "default-channel";
-        const cid = queryParams.get("cid") || "Undefined";
-        const query = queryParams.get("makesmodels") || "2017-2024 SUV";
-
-        // Update LotLinx Ads for the new tab
-        window.VinAds.push({
-          op: "setPage",
-          pubid: "201000",
-          zip: detectedZip,
-          make: "Chevrolet",
-          bodystyle: tabType, // Set bodystyle for the selected tab
-          q: query,
-          test: false,
-          debug: false,
-        });
-
-        window.VinAds.push({
-          op: "buildCustom",
-          numresults: 8,
-          channel: gid,
-          callback: function(vehicles) {
-            if (!Array.isArray(vehicles) || vehicles.length === 0) {
-              console.error("Vehicles data is not an array or is empty");
-              return;
-            }
-
-            // Populate carousel with new data
-            populateCarousel(vehicles, detectedZip, gid, cid);
-          },
-        });
-      });
-    });
   </script>
   <script src="https://ads.lotlinx.com/load.js" async></script>
 </body>
+
 </html>
